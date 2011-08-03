@@ -31,17 +31,13 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 		// Search for symbol
 		long offset = code - low;
 		
-		// Linear search
-		int total = freq.getTotal();
-		int symbol = -1;
-		for (int i = 0; i < freq.getSymbolLimit(); i++) {
-			if (offset < freq.getHigh(i) * range / total) {
-				symbol = i;
-				break;
-			}
+		// A kind of binary search
+		int symbol = 0;
+		for (int step = 256; step >= 1; step /= 2) {
+			symbol += step;
+			if (symbol >= freq.getSymbolLimit() || freq.getLow(symbol) * range / freq.getTotal() > offset)
+				symbol -= step;
 		}
-		if (symbol == -1)
-			throw new AssertionError("Symbol not found");
 		
 		update(freq, symbol);
 		return symbol;
