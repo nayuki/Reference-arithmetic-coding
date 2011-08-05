@@ -23,6 +23,7 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	
 	
 	
+	// Decodes and returns a symbol.
 	public int read(FrequencyTable freq) throws IOException {
 		long range = high - low + 1;
 		if (code < low || code > high)
@@ -44,7 +45,7 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	}
 	
 	
-	protected void overflow() throws IOException {
+	protected void shift() throws IOException {
 		code = ((code << 1) & MASK) | readCodeBit();
 	}
 	

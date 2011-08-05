@@ -24,6 +24,7 @@ public abstract class ArithmeticCoderBase {
 	
 	
 	
+	// Update the range as a result of seeing the symbol, i.e. update low and high.
 	protected void update(FrequencyTable freq, int symbol) throws IOException {
 		long range = high - low + 1;
 		long total = freq.getTotal();
@@ -32,12 +33,12 @@ public abstract class ArithmeticCoderBase {
 		
 		if (symLow == symHigh)
 			throw new IllegalArgumentException("Symbol has zero frequency");
-		if (low > high || (low & MASK) != low || (high & MASK) != high)
+		if (low >= high || (low & MASK) != low || (high & MASK) != high)
 			throw new AssertionError("Low or high out of range");
 		if (range < MIN_RANGE || range > MAX_RANGE)
 			throw new AssertionError("Range out of range");
 		if (total > MIN_RANGE || Long.MAX_VALUE / total < MAX_RANGE)
-			throw new AssertionError("Cannot code symbol in range");
+			throw new IllegalArgumentException("Cannot code symbol in range");
 		
 		// Update range
 		long newLow  = low + symLow  * range / total;
@@ -47,7 +48,7 @@ public abstract class ArithmeticCoderBase {
 		
 		// While the highest bits are equal
 		while (((low ^ high) & TOP_MASK) == 0) {
-			overflow();
+			shift();
 			low = (low << 1) & MASK;
 			high = ((high << 1) & MASK) | 1;
 		}
@@ -61,8 +62,10 @@ public abstract class ArithmeticCoderBase {
 	}
 	
 	
-	protected abstract void overflow() throws IOException;
+	// Called when the top bit of low and high are equal.
+	protected abstract void shift() throws IOException;
 	
+	// Called when low=01xxxx and high=10yyyy.
 	protected abstract void underflow() throws IOException;
 	
 }
