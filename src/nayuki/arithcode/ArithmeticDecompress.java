@@ -44,7 +44,7 @@ public class ArithmeticDecompress {
 	}
 	
 	
-	private static void decompress(FrequencyTable freq, BitInputStream in, OutputStream out) throws IOException {
+	static void decompress(FrequencyTable freq, BitInputStream in, OutputStream out) throws IOException {
 		ArithmeticDecoder dec = new ArithmeticDecoder(in);
 		while (true) {
 			int symbol = dec.read(freq);

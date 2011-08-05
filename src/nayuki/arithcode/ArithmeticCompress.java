@@ -63,7 +63,7 @@ public class ArithmeticCompress {
 	}
 	
 	
-	private static void compress(FrequencyTable freq, InputStream in, BitOutputStream out) throws IOException {
+	static void compress(FrequencyTable freq, InputStream in, BitOutputStream out) throws IOException {
 		ArithmeticEncoder enc = new ArithmeticEncoder(out);
 		while (true) {
 			int b = in.read();
