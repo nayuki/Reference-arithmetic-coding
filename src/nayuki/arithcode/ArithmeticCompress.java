@@ -27,7 +27,7 @@ public class ArithmeticCompress {
 		FrequencyTable freq = getFrequencies(inputFile);
 		freq.increment(256);  // EOF symbol gets a frequency of 1
 		
-		// Read input file again, compress with Arithmetic coding, and write output file
+		// Read input file again, compress with arithmetic coding, and write output file
 		InputStream in = new BufferedInputStream(new FileInputStream(inputFile));
 		BitOutputStream out = new BitOutputStream(new BufferedOutputStream(new FileOutputStream(outputFile)));
 		try {
@@ -81,7 +81,7 @@ public class ArithmeticCompress {
 			throw new IllegalArgumentException();
 		
 		for (int i = 0; i < numBits; i++)
-			out.write(value >>> i & 1);
+			out.write(value >>> i & 1);  // Little endian
 	}
 	
 }
