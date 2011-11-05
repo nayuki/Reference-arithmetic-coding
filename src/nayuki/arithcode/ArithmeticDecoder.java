@@ -34,11 +34,13 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 		
 		// A kind of binary search
 		int symbol = 0;
-		for (int step = 256; step >= 1; step /= 2) {
+		for (int step = floorToPowerOf2(freq.getSymbolLimit() - 1); step != 0; step /= 2) {
 			symbol += step;
 			if (symbol >= freq.getSymbolLimit() || freq.getLow(symbol) * range / freq.getTotal() > offset)
 				symbol -= step;
 		}
+		if (freq.getLow(symbol) * range / freq.getTotal() > offset || freq.getHigh(symbol) * range / freq.getTotal() <= offset)
+			throw new AssertionError();
 		
 		update(freq, symbol);
 		return symbol;
@@ -61,6 +63,18 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 			return temp;
 		else  // Treat end of stream as an infinite number of trailing zeros
 			return 0;
+	}
+	
+	
+	private static int floorToPowerOf2(int x) {
+		if (x <= 0)
+			throw new IllegalArgumentException("Non-positive argument");
+		x |= x >>>  1;
+		x |= x >>>  2;
+		x |= x >>>  4;
+		x |= x >>>  8;
+		x |= x >>> 16;
+		return x ^ (x >>> 1);
 	}
 	
 }
