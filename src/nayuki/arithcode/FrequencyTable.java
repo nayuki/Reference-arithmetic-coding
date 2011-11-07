@@ -19,8 +19,8 @@ public final class FrequencyTable {
 	public FrequencyTable(int[] freqs) {
 		if (freqs == null)
 			throw new NullPointerException("Argument is null");
-		if (freqs.length < 2)
-			throw new IllegalArgumentException("At least 2 symbols needed");
+		if (freqs.length == 0)
+			throw new IllegalArgumentException("At least 1 symbol needed");
 		
 		frequencies = freqs.clone();  // Defensive copy
 		total = 0;

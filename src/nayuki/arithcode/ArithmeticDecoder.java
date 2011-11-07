@@ -34,10 +34,12 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 		
 		// A kind of binary search
 		int symbol = 0;
-		for (int step = floorToPowerOf2(freq.getSymbolLimit() - 1); step != 0; step /= 2) {
-			symbol += step;
-			if (symbol >= freq.getSymbolLimit() || freq.getLow(symbol) * range / freq.getTotal() > offset)
-				symbol -= step;
+		if (freq.getSymbolLimit() > 1) {
+			for (int step = floorToPowerOf2(freq.getSymbolLimit() - 1); step != 0; step /= 2) {
+				symbol += step;
+				if (symbol >= freq.getSymbolLimit() || freq.getLow(symbol) * range / freq.getTotal() > offset)
+					symbol -= step;
+			}
 		}
 		if (freq.getLow(symbol) * range / freq.getTotal() > offset || freq.getHigh(symbol) * range / freq.getTotal() <= offset)
 			throw new AssertionError();
