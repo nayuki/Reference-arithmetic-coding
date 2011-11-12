@@ -29,15 +29,16 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 		if (code < low || code > high)
 			throw new AssertionError("Code out of range");
 		
-		// Search for symbol
+		// Translate scales
 		long offset = code - low;
+		long value = ((offset + 1) * freq.getTotal() - 1) / range;
 		
 		// A kind of binary search
 		int symbol = 0;
 		if (freq.getSymbolLimit() > 1) {
 			for (int step = floorToPowerOf2(freq.getSymbolLimit() - 1); step != 0; step /= 2) {
 				symbol += step;
-				if (symbol >= freq.getSymbolLimit() || freq.getLow(symbol) * range / freq.getTotal() > offset)
+				if (symbol >= freq.getSymbolLimit() || freq.getLow(symbol) > value)
 					symbol -= step;
 			}
 		}
