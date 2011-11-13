@@ -40,7 +40,7 @@ public class ArithmeticDecompress {
 		for (int i = 0; i < 256; i++)
 			freqs[i] = readInt(in, 32);
 		freqs[256] = 1;  // EOF symbol
-		return new FrequencyTable(freqs);
+		return new SimpleFrequencyTable(freqs);
 	}
 	
 	

@@ -41,7 +41,7 @@ public class ArithmeticCompress {
 	
 	
 	private static FrequencyTable getFrequencies(File file) throws IOException {
-		FrequencyTable freq = new FrequencyTable(new int[257]);
+		FrequencyTable freq = new SimpleFrequencyTable(new int[257]);
 		InputStream input = new BufferedInputStream(new FileInputStream(file));
 		try {
 			while (true) {

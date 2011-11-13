@@ -90,7 +90,7 @@ public class ArithmeticCodingTest {
 	
 	// Makes the optimal static code for the given bytes
 	private static FrequencyTable makeCode(byte[] b) {
-		FrequencyTable freq = new FrequencyTable(new int[257]);
+		FrequencyTable freq = new SimpleFrequencyTable(new int[257]);
 		for (byte x : b)
 			freq.increment(x & 0xFF);
 		freq.increment(256);  // EOF symbol
