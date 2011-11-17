@@ -32,6 +32,8 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 		// Translate scales
 		long offset = code - low;
 		long value = ((offset + 1) * freq.getTotal() - 1) / range;
+		if (value * range / freq.getTotal() > offset)
+			throw new AssertionError();
 		
 		// A kind of binary search
 		int start = 0;
