@@ -3,14 +3,13 @@ package nayuki.arithcode;
 
 /**
  * A table of symbol frequencies. Mutable.
- * Each symbol has a frequency, which is a non-negative integer.
- * The total of all symbol frequencies must not exceed Integer.MAX_VALUE.
+ * The current algorithm for calculating cumulative frequencies takes linear time, but there exist better algorithms.
  */
 public final class SimpleFrequencyTable implements FrequencyTable {
 	
 	private int[] frequencies;
 	
-	private int[] cumulative;  // Initialized lazily
+	private int[] cumulative;  // Initialized lazily. When this is not null, the data is valid.
 	
 	private int total;
 	
@@ -52,6 +51,9 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	public void set(int symbol, int freq) {
 		if (symbol < 0 || symbol >= frequencies.length)
 			throw new IllegalArgumentException("Symbol out of range");
+		if (freq < 0)
+			throw new IllegalArgumentException("Negative frequency");
+		
 		total = checkedAdd(total - frequencies[symbol], freq);
 		frequencies[symbol] = freq;
 		cumulative = null;
@@ -64,7 +66,8 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 			throw new IllegalArgumentException("Symbol out of range");
 		if (frequencies[symbol] == Integer.MAX_VALUE)
 			throw new RuntimeException("Arithmetic overflow");
-		total = checkedAdd(1, total);
+		
+		total = checkedAdd(total, 1);
 		frequencies[symbol]++;
 		cumulative = null;
 	}
@@ -80,6 +83,7 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	public int getLow(int symbol) {
 		if (symbol < 0 || symbol >= frequencies.length)
 			throw new IllegalArgumentException("Symbol out of range");
+		
 		if (cumulative == null)
 			initCumulative();
 		return cumulative[symbol];
@@ -90,6 +94,7 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	public int getHigh(int symbol) {
 		if (symbol < 0 || symbol >= frequencies.length)
 			throw new IllegalArgumentException("Symbol out of range");
+		
 		if (cumulative == null)
 			initCumulative();
 		return cumulative[symbol + 1];
@@ -100,12 +105,11 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 		cumulative = new int[frequencies.length + 1];
 		int sum = 0;
 		for (int i = 0; i < frequencies.length; i++) {
-			cumulative[i] = sum;
 			sum = checkedAdd(frequencies[i], sum);
+			cumulative[i + 1] = sum;
 		}
 		if (sum != total)
 			throw new AssertionError();
-		cumulative[frequencies.length] = sum;
 	}
 	
 	

@@ -49,6 +49,11 @@ public final class FlatFrequencyTable implements FrequencyTable {
 	}
 	
 	
+	public String toString() {
+		return Integer.toString(numSymbols);
+	}
+	
+	
 	public void set(int symbol, int freq) {
 		throw new UnsupportedOperationException();
 	}

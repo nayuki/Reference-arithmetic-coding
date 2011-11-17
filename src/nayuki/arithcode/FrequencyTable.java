@@ -1,6 +1,11 @@
 package nayuki.arithcode;
 
 
+/**
+ * A table of symbol frequencies. Possibly mutable. Primarily used for getting cumulative symbol frequencies.
+ * Each symbol has a frequency, which is a non-negative integer.
+ * The total of all symbol frequencies must not exceed Integer.MAX_VALUE.
+ */
 public interface FrequencyTable {
 	
 	// Returns the number of symbols in this table.
