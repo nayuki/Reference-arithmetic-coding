@@ -66,25 +66,33 @@ public class ArithmeticCodingTest {
 	private static void test(byte[] b) {
 		try {
 			FrequencyTable freq = makeCode(b);
-			
-			InputStream original = new ByteArrayInputStream(b);
-			ByteArrayOutputStream compressedOut = new ByteArrayOutputStream();
-			BitOutputStream compressedOutBit = new BitOutputStream(compressedOut);
-			ArithmeticCompress.compress(freq, original, compressedOutBit);
-			compressedOutBit.close();
-			byte[] compressed = compressedOut.toByteArray();
-			
-			InputStream compressedIn = new ByteArrayInputStream(compressed);
-			BitInputStream compressedInBit = new BitInputStream(compressedIn);
-			ByteArrayOutputStream decompressed = new ByteArrayOutputStream();
-			ArithmeticDecompress.decompress(freq, compressedInBit, decompressed);
-			
-			assertArrayEquals(b, decompressed.toByteArray());
+			byte[] compressed = compress(b, freq);
+			byte[] decompressed = decompress(compressed, freq);
+			assertArrayEquals(b, decompressed);
 		} catch (EOFException e) {
 			fail("Unexpected EOF");
 		} catch (IOException e) {
 			throw new AssertionError(e);
 		}
+	}
+	
+	
+	private static byte[] compress(byte[] b, FrequencyTable freq) throws IOException {
+		InputStream byteIn = new ByteArrayInputStream(b);
+		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+		BitOutputStream bitOut = new BitOutputStream(byteOut);
+		ArithmeticCompress.compress(freq, byteIn, bitOut);
+		bitOut.close();
+		return byteOut.toByteArray();
+	}
+	
+	
+	private static byte[] decompress(byte[] b, FrequencyTable freq) throws IOException {
+		InputStream byteIn = new ByteArrayInputStream(b);
+		BitInputStream bitIn = new BitInputStream(byteIn);
+		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+		ArithmeticDecompress.decompress(freq, bitIn, byteOut);
+		return byteOut.toByteArray();
 	}
 	
 	
