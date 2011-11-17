@@ -26,7 +26,7 @@ public abstract class ArithmeticCoderBase {
 	
 	
 	// Update the range as a result of seeing the symbol, i.e. update low and high.
-	protected void update(FrequencyTable freq, int symbol) throws IOException {
+	protected void update(CheckedFrequencyTable freq, int symbol) throws IOException {
 		// State check
 		long range = high - low + 1;
 		if (low >= high || (low & MASK) != low || (high & MASK) != high)
@@ -34,12 +34,10 @@ public abstract class ArithmeticCoderBase {
 		if (range < MIN_RANGE || range > MAX_RANGE)
 			throw new AssertionError("Range out of range");
 		
-		// Frequency table usage check
+		// Frequency table values check
 		long total = freq.getTotal();
 		long symLow = freq.getLow(symbol);
 		long symHigh = freq.getHigh(symbol);
-		if (!(total > 0 && 0 <= symLow && symLow <= symHigh && symHigh <= total))
-			throw new IllegalArgumentException("Illegal values from frequency table");
 		if (symLow == symHigh)
 			throw new IllegalArgumentException("Symbol has zero frequency");
 		if (total > MAX_TOTAL)

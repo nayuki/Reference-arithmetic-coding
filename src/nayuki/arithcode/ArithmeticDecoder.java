@@ -23,8 +23,13 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	
 	
 	
-	// Decodes and returns a symbol.
 	public int read(FrequencyTable freq) throws IOException {
+		return read(new CheckedFrequencyTable(freq));
+	}
+	
+	
+	// Decodes and returns a symbol.
+	public int read(CheckedFrequencyTable freq) throws IOException {
 		if (code < low || code > high)
 			throw new AssertionError("Code out of range");
 		

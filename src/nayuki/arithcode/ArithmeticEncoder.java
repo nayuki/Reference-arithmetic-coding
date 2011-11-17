@@ -22,8 +22,13 @@ public final class ArithmeticEncoder extends ArithmeticCoderBase {
 	
 	
 	
-	// Encodes a symbol.
 	public void write(FrequencyTable freq, int symbol) throws IOException {
+		write(new CheckedFrequencyTable(freq), symbol);
+	}
+	
+	
+	// Encodes a symbol.
+	public void write(CheckedFrequencyTable freq, int symbol) throws IOException {
 		update(freq, symbol);
 	}
 	
