@@ -25,14 +25,15 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	
 	// Decodes and returns a symbol.
 	public int read(FrequencyTable freq) throws IOException {
-		long range = high - low + 1;
 		if (code < low || code > high)
 			throw new AssertionError("Code out of range");
 		
 		// Translate scales
+		long range = high - low + 1;
 		long offset = code - low;
-		long value = ((offset + 1) * freq.getTotal() - 1) / range;
-		if (value * range / freq.getTotal() > offset)
+		long total = freq.getTotal();
+		long value = ((offset + 1) * total - 1) / range;
+		if (value * range / total > offset)
 			throw new AssertionError();
 		
 		// A kind of binary search
@@ -45,11 +46,12 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 			else
 				start = middle;
 		}
-		int symbol = start;
-		
-		if (freq.getLow(symbol) * range / freq.getTotal() > offset || freq.getHigh(symbol) * range / freq.getTotal() <= offset)
+		if (start == end)
 			throw new AssertionError();
 		
+		int symbol = start;
+		if (freq.getLow(symbol) * range / total > offset || freq.getHigh(symbol) * range / total <= offset)
+			throw new AssertionError();
 		update(freq, symbol);
 		return symbol;
 	}
