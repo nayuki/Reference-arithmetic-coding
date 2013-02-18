@@ -3,18 +3,14 @@ package nayuki.arithcode;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.fail;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Random;
 
 import org.junit.Test;
 
 
-// Tests ArithmeticCompress coupled with ArithmeticDecompress.
-public class ArithmeticCodingTest {
+public abstract class ArithmeticCodingTest {
 	
 	@Test
 	public void testEmpty() {
@@ -63,11 +59,10 @@ public class ArithmeticCodingTest {
 	private static Random random = new Random();
 	
 	
-	private static void test(byte[] b) {
+	private void test(byte[] b) {
 		try {
-			FrequencyTable freq = makeCode(b);
-			byte[] compressed = compress(b, freq);
-			byte[] decompressed = decompress(compressed, freq);
+			byte[] compressed = compress(b);
+			byte[] decompressed = decompress(compressed);
 			assertArrayEquals(b, decompressed);
 		} catch (EOFException e) {
 			fail("Unexpected EOF");
@@ -77,32 +72,8 @@ public class ArithmeticCodingTest {
 	}
 	
 	
-	private static byte[] compress(byte[] b, FrequencyTable freq) throws IOException {
-		InputStream byteIn = new ByteArrayInputStream(b);
-		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-		BitOutputStream bitOut = new BitOutputStream(byteOut);
-		ArithmeticCompress.compress(freq, byteIn, bitOut);
-		bitOut.close();
-		return byteOut.toByteArray();
-	}
+	protected abstract byte[] compress(byte[] b) throws IOException;
 	
-	
-	private static byte[] decompress(byte[] b, FrequencyTable freq) throws IOException {
-		InputStream byteIn = new ByteArrayInputStream(b);
-		BitInputStream bitIn = new BitInputStream(byteIn);
-		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-		ArithmeticDecompress.decompress(freq, bitIn, byteOut);
-		return byteOut.toByteArray();
-	}
-	
-	
-	// Makes the optimal static code for the given bytes
-	private static FrequencyTable makeCode(byte[] b) {
-		FrequencyTable freq = new SimpleFrequencyTable(new int[257]);
-		for (byte x : b)
-			freq.increment(x & 0xFF);
-		freq.increment(256);  // EOF symbol
-		return freq;
-	}
+	protected abstract byte[] decompress(byte[] b) throws IOException;
 	
 }

@@ -35,7 +35,7 @@ public class ArithmeticDecompress {
 	}
 	
 	
-	private static FrequencyTable readFrequencies(BitInputStream in) throws IOException {
+	static FrequencyTable readFrequencies(BitInputStream in) throws IOException {
 		int[] freqs = new int[257];
 		for (int i = 0; i < 256; i++)
 			freqs[i] = readInt(in, 32);

@@ -57,7 +57,7 @@ public class ArithmeticCompress {
 	}
 	
 	
-	private static void writeFrequencies(BitOutputStream out, FrequencyTable freq) throws IOException {
+	static void writeFrequencies(BitOutputStream out, FrequencyTable freq) throws IOException {
 		for (int i = 0; i < 256; i++)
 			writeInt(out, 32, freq.get(i));
 	}
