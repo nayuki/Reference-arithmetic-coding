@@ -1,8 +1,12 @@
 package nayuki.arithcode;
 
 
+/**
+ * A wrapper that checks the preconditions (arguments) and postconditions (return value) of all the frequency table methods. Useful for finding faults in a frequency table implementation.
+ */
 public final class CheckedFrequencyTable implements FrequencyTable {
 	
+	// The underlying frequency table that holds the data.
 	private FrequencyTable freqTable;
 	
 	
