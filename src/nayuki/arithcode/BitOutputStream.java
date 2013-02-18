@@ -5,18 +5,22 @@ import java.io.OutputStream;
 
 
 /**
- * A stream where bits can be written to.
+ * A stream where bits can be written to. Because they are written to an underlying byte stream, the end of the stream is padded with 0's up to a multiple of 8 bits. The bits are written in big endian.
  */
 public final class BitOutputStream {
 	
-	private OutputStream output;  // Underlying byte stream to write to
+	// Underlying byte stream to write to.
+	private OutputStream output;
 	
-	private int currentByte;  // Always in the range 0x00 to 0xFF
+	// The accumulated bits for the current byte. Always in the range 0x00 to 0xFF.
+	private int currentByte;
 	
-	private int numBitsInCurrentByte;  // Always between 0 and 7, inclusive
+	// The number of accumulated bits in the current byte. Always between 0 and 7 (inclusive).
+	private int numBitsInCurrentByte;
 	
 	
 	
+	// Creates a bit output stream based on the given byte output stream.
 	public BitOutputStream(OutputStream out) {
 		if (out == null)
 			throw new NullPointerException("Argument is null");
@@ -40,7 +44,8 @@ public final class BitOutputStream {
 	}
 	
 	
-	// Closes this stream and the underlying OutputStream. If called when this bit stream is not at a byte boundary, then the minimum number of zeros (between 0 and 7) are written as padding to reach a byte boundary.
+	// Closes this stream and the underlying OutputStream. If called when this bit stream is not at a byte boundary,
+	// then the minimum number of "0" bits (between 0 and 7 of them) are written as padding to reach the next byte boundary.
 	public void close() throws IOException {
 		while (numBitsInCurrentByte != 0)
 			write(0);

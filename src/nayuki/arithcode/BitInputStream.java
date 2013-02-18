@@ -6,20 +6,24 @@ import java.io.InputStream;
 
 
 /**
- * A stream of bits that can be read.
+ * A stream of bits that can be read. Because they come from an underlying byte stream, the total number of bits is always a multiple of 8. The bits are read in big endian.
  */
 public final class BitInputStream {
 	
-	private InputStream input;  // Underlying byte stream to read from
+	// Underlying byte stream to read from.
+	private InputStream input;
 	
-	private int nextBits;  // Either in the range 0x00 to 0xFF, or -1 if the end of stream is reached
+	// Either in the range 0x00 to 0xFF if bits are available, or is -1 if the end of stream is reached.
+	private int nextBits;
 	
-	private int numBitsRemaining;  // Always between 0 and 7, inclusive
+	// Always between 0 and 7, inclusive.
+	private int numBitsRemaining;
 	
 	private boolean isEndOfStream;
 	
 	
 	
+	// Creates a bit input stream based on the given byte input stream.
 	public BitInputStream(InputStream in) {
 		if (in == null)
 			throw new NullPointerException("Argument is null");
