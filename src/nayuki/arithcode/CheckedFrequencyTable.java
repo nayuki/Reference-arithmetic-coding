@@ -2,7 +2,8 @@ package nayuki.arithcode;
 
 
 /**
- * A wrapper that checks the preconditions (arguments) and postconditions (return value) of all the frequency table methods. Useful for finding faults in a frequency table implementation.
+ * A wrapper that checks the preconditions (arguments) and postconditions (return value) of all the frequency table methods.
+ * Useful for finding faults in a frequency table implementation. Current this does not check arithmetic overflow conditions.
  */
 public final class CheckedFrequencyTable implements FrequencyTable {
 	
@@ -28,9 +29,7 @@ public final class CheckedFrequencyTable implements FrequencyTable {
 	
 	
 	public int get(int symbol) {
-		if (symbol < 0 || symbol >= getSymbolLimit())
-			throw new IllegalArgumentException("Symbol out of range");
-		
+		checkSymbolInRange(symbol);
 		int result = freqTable.get(symbol);
 		if (result < 0)
 			throw new IllegalStateException("Negative symbol frequency");
@@ -47,9 +46,7 @@ public final class CheckedFrequencyTable implements FrequencyTable {
 	
 	
 	public int getLow(int symbol) {
-		if (symbol < 0 || symbol >= getSymbolLimit())
-			throw new IllegalArgumentException("Symbol out of range");
-		
+		checkSymbolInRange(symbol);
 		int low   = freqTable.getLow (symbol);
 		int high  = freqTable.getHigh(symbol);
 		int total = freqTable.getTotal();
@@ -60,9 +57,7 @@ public final class CheckedFrequencyTable implements FrequencyTable {
 	
 	
 	public int getHigh(int symbol) {
-		if (symbol < 0 || symbol >= getSymbolLimit())
-			throw new IllegalArgumentException("Symbol out of range");
-		
+		checkSymbolInRange(symbol);
 		int low   = freqTable.getLow (symbol);
 		int high  = freqTable.getHigh(symbol);
 		int total = freqTable.getTotal();
@@ -73,25 +68,27 @@ public final class CheckedFrequencyTable implements FrequencyTable {
 	
 	
 	public String toString() {
-		return freqTable.toString();
+		return "CheckFrequencyTable (" + freqTable.toString() + ")";
 	}
 	
 	
 	public void set(int symbol, int freq) {
-		if (symbol < 0 || symbol >= getSymbolLimit())
-			throw new IllegalArgumentException("Symbol out of range");
+		checkSymbolInRange(symbol);
 		if (freq < 0)
 			throw new IllegalArgumentException("Negative symbol frequency");
-		
 		freqTable.set(symbol, freq);
 	}
 	
 	
 	public void increment(int symbol) {
+		checkSymbolInRange(symbol);
+		freqTable.increment(symbol);
+	}
+	
+	
+	private void checkSymbolInRange(int symbol) {
 		if (symbol < 0 || symbol >= getSymbolLimit())
 			throw new IllegalArgumentException("Symbol out of range");
-		
-		freqTable.increment(symbol);
 	}
 	
 }

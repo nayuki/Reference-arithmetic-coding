@@ -86,7 +86,7 @@ public final class FlatFrequencyTable implements FrequencyTable {
 	 * @return a string representation of this frequency table
 	 */
 	public String toString() {
-		return Integer.toString(numSymbols);
+		return "FlatFrequencyTable=" + numSymbols;
 	}
 	
 	

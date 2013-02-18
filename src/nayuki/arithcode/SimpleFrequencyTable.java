@@ -43,6 +43,32 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	}
 	
 	
+	/**
+	 * Creates a frequency table by copying the specified frequency table.
+	 * @param freqTab the frequency table to copy
+	 * @throws NullPointerException if {@code freqTab} is {@code null}
+	 * @throws IllegalArgumentException if {@code freqTab.getSymbolLimit()} &lt; 1 or any element {@code freqTab.get(i)} &lt; 0
+	 * @throws ArithmeticException if the total of all {@code freqTab} elements exceeds {@code Integer.MAX_VALUE}
+	 */
+	public SimpleFrequencyTable(FrequencyTable freqTab) {
+		if (freqTab == null)
+			throw new NullPointerException("Argument is null");
+		int numSym = freqTab.getSymbolLimit();
+		if (numSym < 0)
+			throw new IllegalArgumentException("At least 1 symbol needed");
+		frequencies = new int[numSym];
+		total = 0;
+		for (int i = 0; i < frequencies.length; i++) {
+			int x = freqTab.get(i);
+			if (x < 0)
+				throw new IllegalArgumentException("Negative frequency");
+			frequencies[i] = x;
+			total = checkedAdd(x, total);
+		}
+		cumulative = null;
+	}
+	
+	
 	
 	/**
 	 * Returns the number of symbols in this frequency table.
