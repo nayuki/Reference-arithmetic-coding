@@ -12,6 +12,7 @@ public final class ArithmeticEncoder extends ArithmeticCoderBase {
 	
 	
 	
+	// Creates an arithmetic coding encoder.
 	public ArithmeticEncoder(BitOutputStream out) {
 		super();
 		if (out == null)
@@ -22,6 +23,7 @@ public final class ArithmeticEncoder extends ArithmeticCoderBase {
 	
 	
 	
+	// Encodes a symbol.
 	public void write(FrequencyTable freq, int symbol) throws IOException {
 		write(new CheckedFrequencyTable(freq), symbol);
 	}
@@ -31,6 +33,13 @@ public final class ArithmeticEncoder extends ArithmeticCoderBase {
 	public void write(CheckedFrequencyTable freq, int symbol) throws IOException {
 		update(freq, symbol);
 	}
+	
+	
+	// Must be called at the end of the stream of input symbols, otherwise the output data cannot be decoded properly.
+	public void finish() throws IOException {
+		output.write(1);
+	}
+	
 	
 	
 	protected void shift() throws IOException {
@@ -47,11 +56,6 @@ public final class ArithmeticEncoder extends ArithmeticCoderBase {
 		if (underflow == Integer.MAX_VALUE)
 			throw new RuntimeException("Maximum underflow reached");
 		underflow++;
-	}
-	
-	
-	public void finish() throws IOException {
-		output.write(1);
 	}
 	
 }

@@ -7,10 +7,12 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	
 	private BitInputStream input;
 	
+	// The current code being read, which is always in the range [low, high].
 	private long code;
 	
 	
 	
+	// Creates an arithmetic coding decoder.
 	public ArithmeticDecoder(BitInputStream in) throws IOException {
 		super();
 		if (in == null)
@@ -23,6 +25,7 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	
 	
 	
+	// Decodes and returns a symbol.
 	public int read(FrequencyTable freq) throws IOException {
 		return read(new CheckedFrequencyTable(freq));
 	}
@@ -30,15 +33,16 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	
 	// Decodes and returns a symbol.
 	public int read(CheckedFrequencyTable freq) throws IOException {
-		if (code < low || code > high)
-			throw new AssertionError("Code out of range");
-		
-		// Translate scales
+		// Translate from coding range scale to frequency table scale
+		long total = freq.getTotal();
+		if (total > MAX_TOTAL)
+			throw new IllegalArgumentException("Cannot decode symbol because total is too large");
 		long range = high - low + 1;
 		long offset = code - low;
-		long total = freq.getTotal();
 		long value = ((offset + 1) * total - 1) / range;
 		if (value * range / total > offset)
+			throw new AssertionError();
+		if (value < 0 || value >= freq.getTotal())
 			throw new AssertionError();
 		
 		// A kind of binary search
@@ -58,6 +62,8 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 		if (freq.getLow(symbol) * range / total > offset || freq.getHigh(symbol) * range / total <= offset)
 			throw new AssertionError();
 		update(freq, symbol);
+		if (code < low || code > high)
+			throw new AssertionError("Code out of range");
 		return symbol;
 	}
 	

@@ -3,18 +3,21 @@ package nayuki.arithcode;
 import java.io.IOException;
 
 
+// A model of the state and behaviors that arithmetic coding encoders and decoders share.
 public abstract class ArithmeticCoderBase {
 	
-	protected final long STATE_SIZE  = 32;
-	protected final long MASK        = (1L << (STATE_SIZE - 0)) - 1;  //  111...111
-	protected final long TOP_MASK    = (1L << (STATE_SIZE - 1));      //  100...000
-	protected final long SECOND_MASK = (1L << (STATE_SIZE - 2));      //  010...000
-	protected final long MAX_RANGE   = (1L << (STATE_SIZE - 0));      // 1000...000
-	protected final long MIN_RANGE   = (1L << (STATE_SIZE - 2)) + 2;  //   10...010
-	protected final long MAX_TOTAL   = Math.min(Long.MAX_VALUE / MAX_RANGE, MIN_RANGE);
+	// Configuration and constants
+	protected final long STATE_SIZE  = 32;  // Number of bits for 'low' and 'high'. Must be in the range [1, 62] (and possibly more restricted).
+	protected final long MASK        = (1L << (STATE_SIZE - 0)) - 1;  //  111...111, all ones
+	protected final long TOP_MASK    = (1L << (STATE_SIZE - 1));      //  100...000, the top bit
+	protected final long SECOND_MASK = (1L << (STATE_SIZE - 2));      //  010...000, the next highest bit
+	protected final long MAX_RANGE   = (1L << (STATE_SIZE - 0));      // 1000...000, maximum range during coding (trivial)
+	protected final long MIN_RANGE   = (1L << (STATE_SIZE - 2)) + 2;  //   10...010, minimum range during coding (non-trivial)
+	protected final long MAX_TOTAL   = Math.min(Long.MAX_VALUE / MAX_RANGE, MIN_RANGE);  // Maximum allowed total frequency at all times during coding
 	
-	protected long low;   // Has an infinite number of trailing 0s
-	protected long high;  // Has an infinite number of trailing 1s
+	// The arithmetic coder's current range
+	protected long low;   // Conceptually has an infinite number of trailing 0s
+	protected long high;  // Conceptually has an infinite number of trailing 1s
 	
 	
 	
@@ -25,12 +28,12 @@ public abstract class ArithmeticCoderBase {
 	
 	
 	
-	// Update the range as a result of seeing the symbol, i.e. update low and high.
+	// Update the range as a result of seeing the given symbol - i.e. update low and high.
 	protected void update(CheckedFrequencyTable freq, int symbol) throws IOException {
 		// State check
-		long range = high - low + 1;
 		if (low >= high || (low & MASK) != low || (high & MASK) != high)
 			throw new AssertionError("Low or high out of range");
+		long range = high - low + 1;
 		if (range < MIN_RANGE || range > MAX_RANGE)
 			throw new AssertionError("Range out of range");
 		
@@ -41,7 +44,7 @@ public abstract class ArithmeticCoderBase {
 		if (symLow == symHigh)
 			throw new IllegalArgumentException("Symbol has zero frequency");
 		if (total > MAX_TOTAL)
-			throw new IllegalArgumentException("Cannot code symbol in range");
+			throw new IllegalArgumentException("Cannot code symbol because total is too large");
 		
 		// Update range
 		long newLow  = low + symLow  * range / total;
