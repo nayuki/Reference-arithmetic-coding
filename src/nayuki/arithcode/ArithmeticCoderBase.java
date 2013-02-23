@@ -28,7 +28,16 @@ public abstract class ArithmeticCoderBase {
 	
 	
 	
-	// Update the range as a result of seeing the given symbol - i.e. update low and high.
+	/* 
+	 * Updates the range as a result of seeing the given symbol - i.e. update low and high.
+	 * 
+	 * Invariants that are true before and after encoding/decoding each symbol:
+	 * - 0 <= low <= code <= high < 2^STATE_SIZE. ('code' exists only in the decoder.) Therefore these variables are unsigned integers of STATE_SIZE bits.
+	 * - low < 1/2 * 2^STATE_SIZE && high >= 1/2 * 2^STATE_SIZE. In other words, they are in different halves of the full range.
+	 * - low < 1/4 * 2^STATE_SIZE || high >= 3/4 * 2^STATE_SIZE. In other words, they are not both in the middle two quarters.
+	 * - Let range = high - low + 1, then MIN_RANGE <= range <= MAX_RANGE = 2^STATE_SIZE. In particular, range > MAX_RANGE/4.
+	 * The invariants for 'range' essentially dictate the maximum total that the incoming frequency table can have, such that intermediate calculations don't overflow.
+	 */
 	protected void update(CheckedFrequencyTable freq, int symbol) throws IOException {
 		// State check
 		if (low >= high || (low & MASK) != low || (high & MASK) != high)
