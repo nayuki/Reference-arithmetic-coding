@@ -1,6 +1,7 @@
 package nayuki.arithcode;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.io.EOFException;
@@ -46,11 +47,59 @@ public abstract class ArithmeticCodingTest {
 	
 	
 	@Test
-	public void testRandom() {
+	public void testUniformRandom() {
 		for (int i = 0; i < 100; i++) {
 			byte[] b = new byte[random.nextInt(1000)];
 			random.nextBytes(b);
 			test(b);
+		}
+	}
+	
+	
+	@Test
+	public void testRandomDistribution() {
+		for (int i = 0; i < 1000; i++) {
+			int m = random.nextInt(255) + 1;  // Number of different symbols present
+			int n = Math.max(random.nextInt(1000), m);  // Length of message
+			
+			// Create distribution
+			int[] freqs = new int[m];
+			int sum = 0;
+			for (int j = 0; j < freqs.length; j++) {
+				freqs[j] = random.nextInt(10000) + 1;
+				sum += freqs[j];
+			}
+			int total = sum;
+			
+			// Rescale frequencies
+			sum = 0;
+			int index = 0;
+			for (int j = 0; j < freqs.length; j++) {
+				int newsum = sum + freqs[j];
+				int newindex = (n - m) * newsum / total + j + 1;
+				freqs[j] = newindex - index;
+				sum = newsum;
+				index = newindex;
+			}
+			assertEquals(n, index);
+			
+			// Create symbols
+			byte[] message = new byte[n];
+			for (int k = 0, j = 0; k < freqs.length; k++) {
+				for (int l = 0; l < freqs[k]; l++, j++)
+					message[j] = (byte)k;
+			}
+			
+			// Shuffle message
+			for (int j = 0; j < message.length; j++) {
+				// Knuth shuffle
+				int k = random.nextInt(message.length - j) + j;
+				byte temp = message[j];
+				message[j] = message[k];
+				message[k] = temp;
+			}
+			
+			test(message);
 		}
 	}
 	
