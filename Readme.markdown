@@ -9,7 +9,7 @@ assertions to check correctness. It is not optimized for speed/memory/performanc
 Description
 -----------
 
-An overview of the code is given here: [http://nayuki.eigenstate.org/page/arithmetic-coding-java](http://nayuki.eigenstate.org/page/arithmetic-coding-java)
+An overview of the code is given here: [http://www.nayuki.io/page/arithmetic-coding-java](http://www.nayuki.io/page/arithmetic-coding-java)
 
 
 License
@@ -17,7 +17,7 @@ License
 
 (MIT License)
 
-Copyright © 2013 Nayuki Minase
+Copyright © 2014 Project Nayuki
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
