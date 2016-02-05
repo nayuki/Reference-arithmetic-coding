@@ -9,7 +9,7 @@ assertions to check correctness. It is not optimized for speed/memory/performanc
 Description
 -----------
 
-An overview of the code is given here: [http://www.nayuki.io/page/arithmetic-coding-java](http://www.nayuki.io/page/arithmetic-coding-java)
+An overview of the code is given here: [https://www.nayuki.io/page/arithmetic-coding-java](https://www.nayuki.io/page/arithmetic-coding-java)
 
 
 License
