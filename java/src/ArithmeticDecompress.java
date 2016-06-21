@@ -18,14 +18,12 @@ import java.io.OutputStream;
 public class ArithmeticDecompress {
 	
 	public static void main(String[] args) throws IOException {
-		// Show what command line arguments to use
-		if (args.length == 0) {
+		// Handle command line arguments
+		if (args.length != 2) {
 			System.err.println("Usage: java ArithmeticDecompress InputFile OutputFile");
 			System.exit(1);
 			return;
 		}
-		
-		// Otherwise, decompress
 		File inputFile  = new File(args[0]);
 		File outputFile = new File(args[1]);
 		

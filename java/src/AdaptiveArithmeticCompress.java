@@ -18,16 +18,15 @@ import java.io.InputStream;
 public class AdaptiveArithmeticCompress {
 	
 	public static void main(String[] args) throws IOException {
-		// Show what command line arguments to use
-		if (args.length == 0) {
-			System.err.println("Usage: java ArithmeticCompress InputFile OutputFile");
+		// Handle command line arguments
+		if (args.length != 2) {
+			System.err.println("Usage: java AdaptiveArithmeticCompress InputFile OutputFile");
 			System.exit(1);
 			return;
 		}
-		
-		// Otherwise, compress
 		File inputFile  = new File(args[0]);
 		File outputFile = new File(args[1]);
+		
 		InputStream in = new BufferedInputStream(new FileInputStream(inputFile));
 		BitOutputStream out = new BitOutputStream(new BufferedOutputStream(new FileOutputStream(outputFile)));
 		try {
