@@ -18,6 +18,7 @@ public class AdaptiveArithmeticCompressTest extends ArithmeticCodingTest {
 		InputStream in = new ByteArrayInputStream(b);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		BitOutputStream bitOut = new BitOutputStream(out);
+		
 		AdaptiveArithmeticCompress.compress(in, bitOut);
 		bitOut.close();
 		return out.toByteArray();

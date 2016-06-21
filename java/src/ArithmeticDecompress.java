@@ -26,7 +26,7 @@ public class ArithmeticDecompress {
 		}
 		
 		// Otherwise, decompress
-		File inputFile = new File(args[0]);
+		File inputFile  = new File(args[0]);
 		File outputFile = new File(args[1]);
 		
 		BitInputStream in = new BitInputStream(new BufferedInputStream(new FileInputStream(inputFile)));

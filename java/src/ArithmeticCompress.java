@@ -26,7 +26,7 @@ public class ArithmeticCompress {
 		}
 		
 		// Otherwise, compress
-		File inputFile = new File(args[0]);
+		File inputFile  = new File(args[0]);
 		File outputFile = new File(args[1]);
 		
 		// Read input file once to compute symbol frequencies
