@@ -12,64 +12,91 @@ import java.io.InputStream;
 
 
 /**
- * A stream of bits that can be read. Because they come from an underlying byte stream, the total number of bits is always a multiple of 8. The bits are read in big endian.
+ * A stream of bits that can be read. Because they come from an underlying byte stream,
+ * the total number of bits is always a multiple of 8. The bits are read in big endian.
+ * Mutable and not thread-safe.
+ * @see BitOutputStream
  */
 public final class BitInputStream {
 	
-	// Underlying byte stream to read from.
+	/* Fields */
+	
+	// The underlying byte stream to read from (not null).
 	private InputStream input;
 	
-	// Either in the range 0x00 to 0xFF if bits are available, or is -1 if the end of stream is reached.
-	private int nextBits;
+	// Either in the range [0x00, 0xFF] if bits are available, or -1 if end of stream is reached.
+	private int currentByte;
 	
-	// Always between 0 and 7, inclusive.
+	// Number of remaining bits in the current byte, always between 0 and 7 (inclusive).
 	private int numBitsRemaining;
 	
-	private boolean isEndOfStream;
 	
 	
+	/* Constructor */
 	
-	// Creates a bit input stream based on the given byte input stream.
+	/**
+	 * Constructs a bit input stream based on the specified byte input stream.
+	 * @param in the byte input stream
+	 * @throws NullPointerException if the input stream is {@code null}
+	 */
 	public BitInputStream(InputStream in) {
 		if (in == null)
-			throw new NullPointerException("Argument is null");
+			throw new NullPointerException();
 		input = in;
+		currentByte = 0;
 		numBitsRemaining = 0;
-		isEndOfStream = false;
 	}
 	
 	
 	
-	// Reads a bit from the stream. Returns 0 or 1 if a bit is available, or -1 if the end of stream is reached. The end of stream always occurs on a byte boundary.
+	/* Methods */
+	
+	/**
+	 * Reads a bit from this stream. Returns 0 or 1 if a bit is available, or -1 if
+	 * the end of stream is reached. The end of stream always occurs on a byte boundary.
+	 * @return the next bit of 0 or 1, or -1 for the end of stream
+	 * @throws IOException if an I/O exception occurred
+	 */
 	public int read() throws IOException {
-		if (isEndOfStream)
+		if (currentByte == -1)
 			return -1;
 		if (numBitsRemaining == 0) {
-			nextBits = input.read();
-			if (nextBits == -1) {
-				isEndOfStream = true;
+			currentByte = input.read();
+			if (currentByte == -1)
 				return -1;
-			}
 			numBitsRemaining = 8;
 		}
+		if (numBitsRemaining <= 0)
+			throw new AssertionError();
 		numBitsRemaining--;
-		return (nextBits >>> numBitsRemaining) & 1;
+		return (currentByte >>> numBitsRemaining) & 1;
 	}
 	
 	
-	// Reads a bit from the stream. Returns 0 or 1 if a bit is available, or throws an EOFException if the end of stream is reached.
+	/**
+	 * Reads a bit from this stream. Returns 0 or 1 if a bit is available, or throws an {@code EOFException}
+	 * if the end of stream is reached. The end of stream always occurs on a byte boundary.
+	 * @return the next bit of 0 or 1
+	 * @throws IOException if an I/O exception occurred
+	 * @throws EOFException if the end of stream is reached
+	 */
 	public int readNoEof() throws IOException {
 		int result = read();
 		if (result != -1)
 			return result;
 		else
-			throw new EOFException("End of stream reached");
+			throw new EOFException();
 	}
 	
 	
-	// Closes this stream and the underlying InputStream.
+	/**
+	 * Closes this stream and the underlying input stream.
+	 * @throws IOException if an I/O exception occurred
+	 */
 	public void close() throws IOException {
 		input.close();
+		currentByte = -1;
+		numBitsRemaining = 0;
 	}
 	
 }
