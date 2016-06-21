@@ -1,15 +1,11 @@
-Arithmetic Coding
-==============
+Reference arithmetic coding
+===========================
 
-This project is an open-source reference implementation of arithmetic coding
-in Java. The code is optimized for studying and extending, and contains extra
-assertions to check correctness. It is not optimized for speed/memory/performance.
+This project is a clear implementation of arithmetic coding, suitable as a reference for educational purposes. It is provided in Java, and is open source.
 
+The code can be used for study, and as a solid basis for modification and extension. Consequently, the codebase optimizes for readability and avoids fancy logic, and does not target the best speed/memory/performance.
 
-Description
------------
-
-An overview of the code is given here: [https://www.nayuki.io/page/arithmetic-coding-java](https://www.nayuki.io/page/arithmetic-coding-java)
+Home page with detailed description: [https://www.nayuki.io/page/reference-arithmetic-coding](https://www.nayuki.io/page/reference-arithmetic-coding)
 
 
 License
@@ -17,7 +13,7 @@ License
 
 (MIT License)
 
-Copyright © 2014 Project Nayuki
+Copyright © 2016 Project Nayuki
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
