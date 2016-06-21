@@ -1,3 +1,12 @@
+/* 
+ * Reference arithmetic coding
+ * Copyright (c) Project Nayuki
+ * 
+ * https://www.nayuki.io/page/reference-arithmetic-coding
+ * https://github.com/nayuki/Reference-arithmetic-coding
+ */
+
+
 /**
  * A wrapper that checks the preconditions (arguments) and postconditions (return value) of all the frequency table methods.
  * Useful for finding faults in a frequency table implementation. Current this does not check arithmetic overflow conditions.

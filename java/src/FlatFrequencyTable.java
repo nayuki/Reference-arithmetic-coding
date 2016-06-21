@@ -1,3 +1,12 @@
+/* 
+ * Reference arithmetic coding
+ * Copyright (c) Project Nayuki
+ * 
+ * https://www.nayuki.io/page/reference-arithmetic-coding
+ * https://github.com/nayuki/Reference-arithmetic-coding
+ */
+
+
 /**
  * An immutable frequency table where every symbol has the same frequency of 1. Useful as a fallback model when no statistics are available.
  */

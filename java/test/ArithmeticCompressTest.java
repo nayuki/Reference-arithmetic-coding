@@ -1,3 +1,11 @@
+/* 
+ * Reference arithmetic coding
+ * Copyright (c) Project Nayuki
+ * 
+ * https://www.nayuki.io/page/reference-arithmetic-coding
+ * https://github.com/nayuki/Reference-arithmetic-coding
+ */
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

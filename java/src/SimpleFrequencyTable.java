@@ -1,3 +1,12 @@
+/* 
+ * Reference arithmetic coding
+ * Copyright (c) Project Nayuki
+ * 
+ * https://www.nayuki.io/page/reference-arithmetic-coding
+ * https://github.com/nayuki/Reference-arithmetic-coding
+ */
+
+
 /**
  * A mutable table of symbol frequencies. The number of symbols cannot be changed after construction.
  * The current algorithm for calculating cumulative frequencies takes linear time, but there exist faster algorithms.
