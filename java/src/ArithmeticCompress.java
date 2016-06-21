@@ -63,12 +63,14 @@ public class ArithmeticCompress {
 	}
 	
 	
+	// To allow unit testing, this method is package-private instead of private.
 	static void writeFrequencies(BitOutputStream out, FrequencyTable freqs) throws IOException {
 		for (int i = 0; i < 256; i++)
 			writeInt(out, 32, freqs.get(i));
 	}
 	
 	
+	// To allow unit testing, this method is package-private instead of private.
 	static void compress(FrequencyTable freqs, InputStream in, BitOutputStream out) throws IOException {
 		ArithmeticEncoder enc = new ArithmeticEncoder(out);
 		while (true) {

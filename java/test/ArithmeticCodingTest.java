@@ -15,7 +15,12 @@ import java.util.Random;
 import org.junit.Test;
 
 
+/**
+ * Tests the compression and decompression of a complete arithmetic coding application, using the JUnit test framework.
+ */
 public abstract class ArithmeticCodingTest {
+	
+	/* Test cases */
 	
 	@Test public void testEmpty() {
 		test(new byte[0]);
@@ -87,9 +92,8 @@ public abstract class ArithmeticCodingTest {
 					message[j] = (byte)k;
 			}
 			
-			// Shuffle message
+			// Shuffle message (Durstenfeld algorithm)
 			for (int j = 0; j < message.length; j++) {
-				// Knuth shuffle
 				int k = random.nextInt(message.length - j) + j;
 				byte temp = message[j];
 				message[j] = message[k];
@@ -101,10 +105,12 @@ public abstract class ArithmeticCodingTest {
 	}
 	
 	
+	/* Utilities */
 	
 	private static Random random = new Random();
 	
 	
+	// Tests that the given byte array can be compressed and decompressed to the same data, and not throw any exceptions.
 	private void test(byte[] b) {
 		try {
 			byte[] compressed = compress(b);
@@ -118,8 +124,12 @@ public abstract class ArithmeticCodingTest {
 	}
 	
 	
+	/* Abstract methods */
+	
+	// Compression method that needs to be supplied by a subclass.
 	protected abstract byte[] compress(byte[] b) throws IOException;
 	
+	// Decompression method that needs to be supplied by a subclass.
 	protected abstract byte[] decompress(byte[] b) throws IOException;
 	
 }

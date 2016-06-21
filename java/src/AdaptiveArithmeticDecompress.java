@@ -39,6 +39,7 @@ public class AdaptiveArithmeticDecompress {
 	}
 	
 	
+	// To allow unit testing, this method is package-private instead of private.
 	static void decompress(BitInputStream in, OutputStream out) throws IOException {
 		FrequencyTable freqs = new SimpleFrequencyTable(new FlatFrequencyTable(257));  // Initialize with all symbol frequencies at 1
 		ArithmeticDecoder dec = new ArithmeticDecoder(in);

@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
+/**
+ * Tests {@link AdaptiveArithmeticCompress} coupled with {@link AdaptiveArithmeticDecompress}.
+ */
 public class AdaptiveArithmeticCompressTest extends ArithmeticCodingTest {
 	
 	protected byte[] compress(byte[] b) throws IOException {

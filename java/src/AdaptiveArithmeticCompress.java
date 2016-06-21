@@ -39,6 +39,7 @@ public class AdaptiveArithmeticCompress {
 	}
 	
 	
+	// To allow unit testing, this method is package-private instead of private.
 	static void compress(InputStream in, BitOutputStream out) throws IOException {
 		FrequencyTable freqs = new SimpleFrequencyTable(new FlatFrequencyTable(257));  // Initialize with all symbol frequencies at 1
 		ArithmeticEncoder enc = new ArithmeticEncoder(out);
@@ -50,7 +51,7 @@ public class AdaptiveArithmeticCompress {
 			freqs.increment(b);
 		}
 		enc.write(freqs, 256);  // EOF
-		enc.finish();
+		enc.finish();  // Flush remaining code bits
 	}
 	
 }
