@@ -1,5 +1,3 @@
-package nayuki.arithcode;
-
 import java.io.IOException;
 
 

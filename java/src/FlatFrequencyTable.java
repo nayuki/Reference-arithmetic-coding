@@ -1,6 +1,3 @@
-package nayuki.arithcode;
-
-
 /**
  * An immutable frequency table where every symbol has the same frequency of 1. Useful as a fallback model when no statistics are available.
  */

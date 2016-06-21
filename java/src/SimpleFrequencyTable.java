@@ -1,6 +1,3 @@
-package nayuki.arithcode;
-
-
 /**
  * A mutable table of symbol frequencies. The number of symbols cannot be changed after construction.
  * The current algorithm for calculating cumulative frequencies takes linear time, but there exist faster algorithms.
