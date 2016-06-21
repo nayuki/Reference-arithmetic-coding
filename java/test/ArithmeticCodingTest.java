@@ -19,26 +19,22 @@ import org.junit.Test;
 
 public abstract class ArithmeticCodingTest {
 	
-	@Test
-	public void testEmpty() {
+	@Test public void testEmpty() {
 		test(new byte[0]);
 	}
 	
 	
-	@Test
-	public void testOneSymbol() {
+	@Test public void testOneSymbol() {
 		test(new byte[10]);
 	}
 	
 	
-	@Test
-	public void testSimple() {
+	@Test public void testSimple() {
 		test(new byte[]{0, 3, 1, 2});
 	}
 	
 	
-	@Test
-	public void testEveryByteValue() {
+	@Test public void testEveryByteValue() {
 		byte[] b = new byte[256];
 		for (int i = 0; i < b.length; i++)
 			b[i] = (byte)i;
@@ -46,14 +42,12 @@ public abstract class ArithmeticCodingTest {
 	}
 	
 	
-	@Test
-	public void testUnderflow() {
+	@Test public void testUnderflow() {
 		test(new byte[]{0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2});
 	}
 	
 	
-	@Test
-	public void testUniformRandom() {
+	@Test public void testUniformRandom() {
 		for (int i = 0; i < 100; i++) {
 			byte[] b = new byte[random.nextInt(1000)];
 			random.nextBytes(b);
@@ -62,8 +56,7 @@ public abstract class ArithmeticCodingTest {
 	}
 	
 	
-	@Test
-	public void testRandomDistribution() {
+	@Test public void testRandomDistribution() {
 		for (int i = 0; i < 1000; i++) {
 			int m = random.nextInt(255) + 1;  // Number of different symbols present
 			int n = Math.max(random.nextInt(1000), m);  // Length of message
