@@ -49,10 +49,10 @@ public class ArithmeticCompress {
 		InputStream input = new BufferedInputStream(new FileInputStream(file));
 		try {
 			while (true) {
-				int b = input.read();
-				if (b == -1)
+				int symbol = input.read();
+				if (symbol == -1)
 					break;
-				freqs.increment(b);
+				freqs.increment(symbol);
 			}
 		} finally {
 			input.close();

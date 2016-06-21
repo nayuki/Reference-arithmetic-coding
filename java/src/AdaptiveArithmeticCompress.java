@@ -43,11 +43,11 @@ public class AdaptiveArithmeticCompress {
 		FrequencyTable freqs = new SimpleFrequencyTable(new FlatFrequencyTable(257));  // Initialize with all symbol frequencies at 1
 		ArithmeticEncoder enc = new ArithmeticEncoder(out);
 		while (true) {
-			int b = in.read();
-			if (b == -1)
+			int symbol = in.read();
+			if (symbol == -1)
 				break;
-			enc.write(freqs, b);
-			freqs.increment(b);
+			enc.write(freqs, symbol);
+			freqs.increment(symbol);
 		}
 		enc.write(freqs, 256);  // EOF
 		enc.finish();  // Flush remaining code bits

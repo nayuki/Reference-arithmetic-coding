@@ -18,11 +18,15 @@ import java.io.InputStream;
 public class ArithmeticCompressTest extends ArithmeticCodingTest {
 	
 	protected byte[] compress(byte[] b) throws IOException {
+		FrequencyTable freqs = new SimpleFrequencyTable(new int[257]);
+		for (byte x : b)
+			freqs.increment(x & 0xFF);
+		freqs.increment(256);  // EOF symbol gets a frequency of 1
+		
 		InputStream in = new ByteArrayInputStream(b);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		BitOutputStream bitOut = new BitOutputStream(out);
 		
-		FrequencyTable freqs = getFrequencies(b);
 		ArithmeticCompress.writeFrequencies(bitOut, freqs);
 		ArithmeticCompress.compress(freqs, in, bitOut);
 		bitOut.close();
@@ -38,15 +42,6 @@ public class ArithmeticCompressTest extends ArithmeticCodingTest {
 		FrequencyTable freqs = ArithmeticDecompress.readFrequencies(bitIn);
 		ArithmeticDecompress.decompress(freqs, bitIn, out);
 		return out.toByteArray();
-	}
-	
-	
-	private static FrequencyTable getFrequencies(byte[] b) {
-		FrequencyTable freqs = new SimpleFrequencyTable(new int[257]);
-		for (byte x : b)
-			freqs.increment(x & 0xFF);
-		freqs.increment(256);  // EOF symbol gets a frequency of 1
-		return freqs;
 	}
 	
 }
