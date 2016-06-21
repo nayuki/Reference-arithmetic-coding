@@ -40,16 +40,16 @@ public class AdaptiveArithmeticCompress {
 	
 	
 	static void compress(InputStream in, BitOutputStream out) throws IOException {
-		FrequencyTable freq = new SimpleFrequencyTable(new FlatFrequencyTable(257));  // Initialize with all symbol frequencies at 1
+		FrequencyTable freqs = new SimpleFrequencyTable(new FlatFrequencyTable(257));  // Initialize with all symbol frequencies at 1
 		ArithmeticEncoder enc = new ArithmeticEncoder(out);
 		while (true) {
 			int b = in.read();
 			if (b == -1)
 				break;
-			enc.write(freq, b);
-			freq.increment(b);
+			enc.write(freqs, b);
+			freqs.increment(b);
 		}
-		enc.write(freq, 256);  // EOF
+		enc.write(freqs, 256);  // EOF
 		enc.finish();
 	}
 	

@@ -19,9 +19,9 @@ public class ArithmeticCompressTest extends ArithmeticCodingTest {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		BitOutputStream bitOut = new BitOutputStream(out);
 		
-		FrequencyTable freq = getFrequencies(b);
-		ArithmeticCompress.writeFrequencies(bitOut, freq);
-		ArithmeticCompress.compress(freq, in, bitOut);
+		FrequencyTable freqs = getFrequencies(b);
+		ArithmeticCompress.writeFrequencies(bitOut, freqs);
+		ArithmeticCompress.compress(freqs, in, bitOut);
 		bitOut.close();
 		return out.toByteArray();
 	}
@@ -32,18 +32,18 @@ public class ArithmeticCompressTest extends ArithmeticCodingTest {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		BitInputStream bitIn = new BitInputStream(in);
 		
-		FrequencyTable freq = ArithmeticDecompress.readFrequencies(bitIn);
-		ArithmeticDecompress.decompress(freq, bitIn, out);
+		FrequencyTable freqs = ArithmeticDecompress.readFrequencies(bitIn);
+		ArithmeticDecompress.decompress(freqs, bitIn, out);
 		return out.toByteArray();
 	}
 	
 	
 	private static FrequencyTable getFrequencies(byte[] b) {
-		FrequencyTable freq = new SimpleFrequencyTable(new int[257]);
+		FrequencyTable freqs = new SimpleFrequencyTable(new int[257]);
 		for (byte x : b)
-			freq.increment(x & 0xFF);
-		freq.increment(256);  // EOF symbol gets a frequency of 1
-		return freq;
+			freqs.increment(x & 0xFF);
+		freqs.increment(256);  // EOF symbol gets a frequency of 1
+		return freqs;
 	}
 	
 }

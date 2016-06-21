@@ -30,15 +30,15 @@ public class ArithmeticCompress {
 		File outputFile = new File(args[1]);
 		
 		// Read input file once to compute symbol frequencies
-		FrequencyTable freq = getFrequencies(inputFile);
-		freq.increment(256);  // EOF symbol gets a frequency of 1
+		FrequencyTable freqs = getFrequencies(inputFile);
+		freqs.increment(256);  // EOF symbol gets a frequency of 1
 		
 		// Read input file again, compress with arithmetic coding, and write output file
 		InputStream in = new BufferedInputStream(new FileInputStream(inputFile));
 		BitOutputStream out = new BitOutputStream(new BufferedOutputStream(new FileOutputStream(outputFile)));
 		try {
-			writeFrequencies(out, freq);
-			compress(freq, in, out);
+			writeFrequencies(out, freqs);
+			compress(freqs, in, out);
 		} finally {
 			out.close();
 			in.close();
@@ -47,37 +47,37 @@ public class ArithmeticCompress {
 	
 	
 	private static FrequencyTable getFrequencies(File file) throws IOException {
-		FrequencyTable freq = new SimpleFrequencyTable(new int[257]);
+		FrequencyTable freqs = new SimpleFrequencyTable(new int[257]);
 		InputStream input = new BufferedInputStream(new FileInputStream(file));
 		try {
 			while (true) {
 				int b = input.read();
 				if (b == -1)
 					break;
-				freq.increment(b);
+				freqs.increment(b);
 			}
 		} finally {
 			input.close();
 		}
-		return freq;
+		return freqs;
 	}
 	
 	
-	static void writeFrequencies(BitOutputStream out, FrequencyTable freq) throws IOException {
+	static void writeFrequencies(BitOutputStream out, FrequencyTable freqs) throws IOException {
 		for (int i = 0; i < 256; i++)
-			writeInt(out, 32, freq.get(i));
+			writeInt(out, 32, freqs.get(i));
 	}
 	
 	
-	static void compress(FrequencyTable freq, InputStream in, BitOutputStream out) throws IOException {
+	static void compress(FrequencyTable freqs, InputStream in, BitOutputStream out) throws IOException {
 		ArithmeticEncoder enc = new ArithmeticEncoder(out);
 		while (true) {
 			int b = in.read();
 			if (b == -1)
 				break;
-			enc.write(freq, b);
+			enc.write(freqs, b);
 		}
-		enc.write(freq, 256);  // EOF
+		enc.write(freqs, 256);  // EOF
 		enc.finish();
 	}
 	

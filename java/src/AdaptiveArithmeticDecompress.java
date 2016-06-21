@@ -40,14 +40,14 @@ public class AdaptiveArithmeticDecompress {
 	
 	
 	static void decompress(BitInputStream in, OutputStream out) throws IOException {
-		FrequencyTable freq = new SimpleFrequencyTable(new FlatFrequencyTable(257));  // Initialize with all symbol frequencies at 1
+		FrequencyTable freqs = new SimpleFrequencyTable(new FlatFrequencyTable(257));  // Initialize with all symbol frequencies at 1
 		ArithmeticDecoder dec = new ArithmeticDecoder(in);
 		while (true) {
-			int symbol = dec.read(freq);
+			int symbol = dec.read(freqs);
 			if (symbol == 256)  // EOF symbol
 				break;
 			out.write(symbol);
-			freq.increment(symbol);
+			freqs.increment(symbol);
 		}
 	}
 	

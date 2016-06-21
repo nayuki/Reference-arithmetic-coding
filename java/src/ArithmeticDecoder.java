@@ -32,8 +32,8 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	
 	
 	// Decodes and returns a symbol.
-	public int read(FrequencyTable freq) throws IOException {
-		return read(new CheckedFrequencyTable(freq));
+	public int read(FrequencyTable freqs) throws IOException {
+		return read(new CheckedFrequencyTable(freqs));
 	}
 	
 	

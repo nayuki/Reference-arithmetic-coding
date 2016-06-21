@@ -32,8 +32,8 @@ public class ArithmeticDecompress {
 		BitInputStream in = new BitInputStream(new BufferedInputStream(new FileInputStream(inputFile)));
 		OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile));
 		try {
-			FrequencyTable freq = readFrequencies(in);
-			decompress(freq, in, out);
+			FrequencyTable freqs = readFrequencies(in);
+			decompress(freqs, in, out);
 		} finally {
 			out.close();
 			in.close();
@@ -50,10 +50,10 @@ public class ArithmeticDecompress {
 	}
 	
 	
-	static void decompress(FrequencyTable freq, BitInputStream in, OutputStream out) throws IOException {
+	static void decompress(FrequencyTable freqs, BitInputStream in, OutputStream out) throws IOException {
 		ArithmeticDecoder dec = new ArithmeticDecoder(in);
 		while (true) {
-			int symbol = dec.read(freq);
+			int symbol = dec.read(freqs);
 			if (symbol == 256)  // EOF symbol
 				break;
 			out.write(symbol);
