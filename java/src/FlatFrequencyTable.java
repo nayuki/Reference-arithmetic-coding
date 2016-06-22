@@ -47,8 +47,7 @@ public final class FlatFrequencyTable implements FrequencyTable {
 	 * @throws IllegalArgumentException if {@code symbol} &lt; 0 or {@code symbol} &ge; {@code getSymbolLimit()}
 	 */
 	public int get(int symbol) {
-		if (symbol < 0 || symbol >= numSymbols)
-			throw new IllegalArgumentException("Symbol out of range");
+		checkSymbol(symbol);
 		return 1;
 	}
 	
@@ -70,8 +69,7 @@ public final class FlatFrequencyTable implements FrequencyTable {
 	 * @throws IllegalArgumentException if {@code symbol} &lt; 0 or {@code symbol} &ge; {@code getSymbolLimit()}
 	 */
 	public int getLow(int symbol) {
-		if (symbol < 0 || symbol >= numSymbols)
-			throw new IllegalArgumentException("Symbol out of range");
+		checkSymbol(symbol);
 		return symbol;
 	}
 	
@@ -84,9 +82,15 @@ public final class FlatFrequencyTable implements FrequencyTable {
 	 * @throws IllegalArgumentException if {@code symbol} &lt; 0 or {@code symbol} &ge; {@code getSymbolLimit()}
 	 */
 	public int getHigh(int symbol) {
+		checkSymbol(symbol);
+		return symbol + 1;
+	}
+	
+	
+	// Returns silently if 0 <= symbol < numSymbols, otherwise throws an exception.
+	private void checkSymbol(int symbol) {
 		if (symbol < 0 || symbol >= numSymbols)
 			throw new IllegalArgumentException("Symbol out of range");
-		return symbol + 1;
 	}
 	
 	

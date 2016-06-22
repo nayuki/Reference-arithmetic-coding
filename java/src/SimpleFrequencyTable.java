@@ -95,8 +95,7 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	 * @throws IllegalArgumentException if {@code symbol} &lt; 0 or {@code symbol} &ge; {@code getSymbolLimit()}
 	 */
 	public int get(int symbol) {
-		if (symbol < 0 || symbol >= frequencies.length)
-			throw new IllegalArgumentException("Symbol out of range");
+		checkSymbol(symbol);
 		return frequencies[symbol];
 	}
 	
@@ -110,8 +109,7 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	 * @throws ArithmeticException if this set request would cause the total to exceed {@code Integer.MAX_VALUE}
 	 */
 	public void set(int symbol, int freq) {
-		if (symbol < 0 || symbol >= frequencies.length)
-			throw new IllegalArgumentException("Symbol out of range");
+		checkSymbol(symbol);
 		if (freq < 0)
 			throw new IllegalArgumentException("Negative frequency");
 		
@@ -127,8 +125,7 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	 * @throws IllegalArgumentException if {@code symbol} &lt; 0 or {@code symbol} &ge; {@code getSymbolLimit()}
 	 */
 	public void increment(int symbol) {
-		if (symbol < 0 || symbol >= frequencies.length)
-			throw new IllegalArgumentException("Symbol out of range");
+		checkSymbol(symbol);
 		if (frequencies[symbol] == Integer.MAX_VALUE)
 			throw new RuntimeException("Arithmetic overflow");
 		
@@ -156,9 +153,7 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	 * @throws IllegalArgumentException if {@code symbol} &lt; 0 or {@code symbol} &ge; {@code getSymbolLimit()}
 	 */
 	public int getLow(int symbol) {
-		if (symbol < 0 || symbol >= frequencies.length)
-			throw new IllegalArgumentException("Symbol out of range");
-		
+		checkSymbol(symbol);
 		if (cumulative == null)
 			initCumulative();
 		return cumulative[symbol];
@@ -173,9 +168,7 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	 * @throws IllegalArgumentException if {@code symbol} &lt; 0 or {@code symbol} &ge; {@code getSymbolLimit()}
 	 */
 	public int getHigh(int symbol) {
-		if (symbol < 0 || symbol >= frequencies.length)
-			throw new IllegalArgumentException("Symbol out of range");
-		
+		checkSymbol(symbol);
 		if (cumulative == null)
 			initCumulative();
 		return cumulative[symbol + 1];
@@ -194,6 +187,13 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 		}
 		if (sum != total)
 			throw new AssertionError();
+	}
+	
+	
+	// Returns silently if 0 <= symbol < frequencies.length, otherwise throws an exception.
+	private void checkSymbol(int symbol) {
+		if (symbol < 0 || symbol >= frequencies.length)
+			throw new IllegalArgumentException("Symbol out of range");
 	}
 	
 	
