@@ -92,22 +92,16 @@ public final class CheckedFrequencyTable implements FrequencyTable {
 	
 	
 	public void set(int symbol, int freq) {
-		if (isSymbolInRange(symbol) && freq >= 0)
-			freqTable.set(symbol, freq);
-		else {
-			freqTable.set(symbol, freq);
+		freqTable.set(symbol, freq);
+		if (!isSymbolInRange(symbol) || freq < 0)
 			throw new AssertionError("IllegalArgumentException expected");
-		}
 	}
 	
 	
 	public void increment(int symbol) {
-		if (isSymbolInRange(symbol))
-			freqTable.increment(symbol);
-		else {
-			freqTable.increment(symbol);
+		freqTable.increment(symbol);
+		if (!isSymbolInRange(symbol))
 			throw new AssertionError("IllegalArgumentException expected");
-		}
 	}
 	
 	

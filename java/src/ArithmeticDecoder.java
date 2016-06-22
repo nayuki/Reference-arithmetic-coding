@@ -48,7 +48,7 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 		long value = ((offset + 1) * total - 1) / range;
 		if (value * range / total > offset)
 			throw new AssertionError();
-		if (value < 0 || value >= freq.getTotal())
+		if (value < 0 || value >= total)
 			throw new AssertionError();
 		
 		// A kind of binary search
@@ -86,10 +86,9 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	
 	private int readCodeBit() throws IOException {
 		int temp = input.read();
-		if (temp != -1)
-			return temp;
-		else  // Treat end of stream as an infinite number of trailing zeros
-			return 0;
+		if (temp == -1)
+			temp = 0;
+		return temp;
 	}
 	
 }
