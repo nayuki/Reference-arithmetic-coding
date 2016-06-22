@@ -12,19 +12,58 @@ import java.io.IOException;
 // A model of the state and behaviors that arithmetic coding encoders and decoders share.
 public abstract class ArithmeticCoderBase {
 	
-	// Configuration and constants
-	protected final long STATE_SIZE  = 32;  // Number of bits for 'low' and 'high'. Must be in the range [1, 62] (and possibly more restricted).
-	protected final long MASK        = (1L << (STATE_SIZE - 0)) - 1;  //  111...111, all ones
-	protected final long TOP_MASK    = (1L << (STATE_SIZE - 1));      //  100...000, the top bit
-	protected final long SECOND_MASK = (1L << (STATE_SIZE - 2));      //  010...000, the next highest bit
-	protected final long MAX_RANGE   = (1L << (STATE_SIZE - 0));      // 1000...000, maximum range during coding (trivial)
-	protected final long MIN_RANGE   = (1L << (STATE_SIZE - 2)) + 2;  //   10...010, minimum range during coding (non-trivial)
-	protected final long MAX_TOTAL   = Math.min(Long.MAX_VALUE / MAX_RANGE, MIN_RANGE);  // Maximum allowed total frequency at all times during coding
+	/* Configuration */
 	
-	// The arithmetic coder's current range
-	protected long low;   // Conceptually has an infinite number of trailing 0s
-	protected long high;  // Conceptually has an infinite number of trailing 1s
+	/**
+	 * Number of bits for 'low' and 'high'. Configurable in the range [1, 62] (but possibly more restricted).
+	 */
+	protected final long STATE_SIZE = 32;
 	
+	
+	/* Constants */
+	
+	/**
+	 * Maximum range during coding (trivial), i.e. 1000...000.
+	 */
+	protected final long MAX_RANGE = 1L << STATE_SIZE;
+	
+	/**
+	 * Minimum range during coding (non-trivial), i.e. 010...010.
+	 */
+	protected final long MIN_RANGE = (1L << (STATE_SIZE - 2)) + 2;
+	
+	/**
+	 * Maximum allowed total frequency at all times during coding.
+	 */
+	protected final long MAX_TOTAL = Math.min(Long.MAX_VALUE / MAX_RANGE, MIN_RANGE);
+	
+	/**
+	 * Mask of STATE_SIZE ones, i.e. 111...111.
+	 */
+	protected final long MASK = MAX_RANGE - 1;
+	
+	/**
+	 * Mask of the top bit at width STATE_SIZE, i.e. 100...000.
+	 */
+	protected final long TOP_MASK = MAX_RANGE >>> 1;
+	
+	/**
+	 * Mask of the second highest bit at width STATE_SIZE, i.e. 010...000.
+	 */
+	protected final long SECOND_MASK = TOP_MASK >>> 1;
+	
+	
+	/* Fields */
+	
+	/**
+	 * Low end of this arithmetic coder's current range. Conceptually has an infinite number of trailing 0s.
+	 */
+	protected long low;
+	
+	/**
+	 * High end of this arithmetic coder's current range. Conceptually has an infinite number of trailing 1s.
+	 */
+	protected long high;
 	
 	
 	public ArithmeticCoderBase() {
