@@ -24,7 +24,7 @@ public final class FlatFrequencyTable implements FrequencyTable {
 	 * @throws IllegalArgumentException if the number of symbols is less than 1
 	 */
 	public FlatFrequencyTable(int numSyms) {
-		if (numSyms <= 0)
+		if (numSyms < 1)
 			throw new IllegalArgumentException("Number of symbols must be positive");
 		numSymbols = numSyms;
 	}

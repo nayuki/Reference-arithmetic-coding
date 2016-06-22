@@ -36,8 +36,8 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	 */
 	public SimpleFrequencyTable(int[] freqs) {
 		if (freqs == null)
-			throw new NullPointerException("Argument is null");
-		if (freqs.length == 0)
+			throw new NullPointerException();
+		if (freqs.length < 1)
 			throw new IllegalArgumentException("At least 1 symbol needed");
 		
 		frequencies = freqs.clone();  // Make copy
@@ -63,8 +63,9 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 		if (freqs == null)
 			throw new NullPointerException("Argument is null");
 		int numSym = freqs.getSymbolLimit();
-		if (numSym < 0)
+		if (numSym < 1)
 			throw new IllegalArgumentException("At least 1 symbol needed");
+		
 		frequencies = new int[numSym];
 		total = 0;
 		for (int i = 0; i < frequencies.length; i++) {
@@ -113,7 +114,10 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 		if (freq < 0)
 			throw new IllegalArgumentException("Negative frequency");
 		
-		total = checkedAdd(total - frequencies[symbol], freq);
+		int temp = total - frequencies[symbol];
+		if (temp < 0)
+			throw new AssertionError();
+		total = checkedAdd(temp, freq);
 		frequencies[symbol] = freq;
 		cumulative = null;
 	}
@@ -127,8 +131,7 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	public void increment(int symbol) {
 		checkSymbol(symbol);
 		if (frequencies[symbol] == Integer.MAX_VALUE)
-			throw new RuntimeException("Arithmetic overflow");
-		
+			throw new ArithmeticException("Arithmetic overflow");
 		total = checkedAdd(total, 1);
 		frequencies[symbol]++;
 		cumulative = null;
