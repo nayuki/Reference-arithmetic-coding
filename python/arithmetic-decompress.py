@@ -51,7 +51,7 @@ def decompress(freqs, bitin, out):
 def read_int(bitin, numbits):
 	result = 0
 	for i in range(numbits):
-		result |= bitin.read_no_eof() << i  # Little endian
+		result = (result << 1) | bitin.read_no_eof()  # Big endian
 	return result
 
 

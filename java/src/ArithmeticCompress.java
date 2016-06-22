@@ -89,7 +89,7 @@ public class ArithmeticCompress {
 		if (numBits < 0 || numBits > 32)
 			throw new IllegalArgumentException();
 		
-		for (int i = 0; i < numBits; i++)
+		for (int i = numBits - 1; i >= 0; i--)
 			out.write((value >>> i) & 1);  // Little endian
 	}
 	

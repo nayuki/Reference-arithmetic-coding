@@ -68,8 +68,8 @@ def compress(freqs, inp, bitout):
 
 # Writes an unsigned integer of the given bit width to the given stream.
 def write_int(bitout, numbits, value):
-	for i in range(numbits):
-		bitout.write((value >> i) & 1)  # Little endian
+	for i in reversed(range(numbits)):
+		bitout.write((value >> i) & 1)  # Big endian
 
 
 # Main launcher

@@ -68,7 +68,7 @@ public class ArithmeticDecompress {
 		
 		int result = 0;
 		for (int i = 0; i < numBits; i++)
-			result |= in.readNoEof() << i;  // Little endian
+			result = (result << 1) | in.readNoEof();  // Big endian
 		return result;
 	}
 	
