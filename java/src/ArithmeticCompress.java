@@ -15,6 +15,14 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
+/**
+ * Compression application using static arithmetic coding.
+ * <p>Usage: java ArithmeticCompress InputFile OutputFile</p>
+ * <p>Then use the corresponding "ArithmeticDecompress" application to recreate the original input file.</p>
+ * <p>Note that the application uses an alphabet of 257 symbols - 256 symbols for the byte
+ * values and 1 symbol for the EOF marker. The compressed file format starts with a list
+ * of 256 symbol frequencies, and then followed by the arithmetic-coded data.</p>
+ */
 public class ArithmeticCompress {
 	
 	public static void main(String[] args) throws IOException {

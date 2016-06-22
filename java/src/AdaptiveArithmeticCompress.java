@@ -15,6 +15,15 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
+/**
+ * Compression application using adaptive arithmetic coding.
+ * <p>Usage: java AdaptiveArithmeticCompress InputFile OutputFile</p>
+ * <p>Then use the corresponding "AdaptiveArithmeticDecompress" application to recreate the original input file.</p>
+ * <p>Note that the application starts with a flat frequency table of 257 symbols (all set to a frequency of 1),
+ * and updates it after each byte encoded. The corresponding decompressor program also starts with a flat
+ * frequency table and updates it after each byte decoded. It is by design that the compressor and
+ * decompressor have synchronized states, so that the data can be decompressed properly.</p>
+ */
 public class AdaptiveArithmeticCompress {
 	
 	public static void main(String[] args) throws IOException {

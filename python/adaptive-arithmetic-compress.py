@@ -1,5 +1,13 @@
 # 
-# Reference arithmetic coding
+# Compression application using adaptive arithmetic coding
+# 
+# Usage: python adaptive-arithmetic-compress.py InputFile OutputFile
+# Then use the corresponding adaptive-arithmetic-decompress.py application to recreate the original input file.
+# Note that the application starts with a flat frequency table of 257 symbols (all set to a frequency of 1),
+# and updates it after each byte encoded. The corresponding decompressor program also starts with a flat
+# frequency table and updates it after each byte decoded. It is by design that the compressor and
+# decompressor have synchronized states, so that the data can be decompressed properly.
+# 
 # Copyright (c) Project Nayuki
 # 
 # https://www.nayuki.io/page/reference-arithmetic-coding

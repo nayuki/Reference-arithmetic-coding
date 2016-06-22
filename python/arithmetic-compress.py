@@ -1,5 +1,12 @@
 # 
-# Reference arithmetic coding
+# Compression application using static arithmetic coding
+# 
+# Usage: python arithmetic-compress.py InputFile OutputFile
+# Then use the corresponding arithmetic-decompress.py application to recreate the original input file.
+# Note that the application uses an alphabet of 257 symbols - 256 symbols for the byte
+# values and 1 symbol for the EOF marker. The compressed file format starts with a list
+# of 256 symbol frequencies, and then followed by the arithmetic-coded data.
+# 
 # Copyright (c) Project Nayuki
 # 
 # https://www.nayuki.io/page/reference-arithmetic-coding
