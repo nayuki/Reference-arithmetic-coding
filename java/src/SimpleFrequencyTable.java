@@ -8,8 +8,9 @@
 
 
 /**
- * A mutable table of symbol frequencies. The number of symbols cannot be changed after construction.
- * The current algorithm for calculating cumulative frequencies takes linear time, but there exist faster algorithms.
+ * A mutable table of symbol frequencies. The number of symbols cannot be changed
+ * after construction. The current algorithm for calculating cumulative frequencies
+ * takes linear time, but there exist faster algorithms such as Fenwick trees.
  */
 public final class SimpleFrequencyTable implements FrequencyTable {
 	
@@ -26,9 +27,10 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	
 	
 	/**
-	 * Creates a frequency table from the specified array of symbol frequencies. There must be at least 1 symbol, and no symbol has a negative frequency.
+	 * Constructs a frequency table from the specified array of symbol frequencies. There must be at least
+	 * 1 symbol, no symbol has a negative frequency, and the total must not exceed {@code Integer.MAX_VALUE}.
 	 * @param freqs the array of symbol frequencies
-	 * @throws NullPointerException if {@code freqs} is {@code null}
+	 * @throws NullPointerException if the array is {@code null}
 	 * @throws IllegalArgumentException if {@code freqs.length} &lt; 1 or any element {@code freqs[i]} &lt; 0
 	 * @throws ArithmeticException if the total of {@code freqs} exceeds {@code Integer.MAX_VALUE}
 	 */
@@ -38,7 +40,7 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 		if (freqs.length == 0)
 			throw new IllegalArgumentException("At least 1 symbol needed");
 		
-		frequencies = freqs.clone();  // Defensive copy
+		frequencies = freqs.clone();  // Make copy
 		total = 0;
 		for (int x : frequencies) {
 			if (x < 0)
@@ -50,11 +52,12 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	
 	
 	/**
-	 * Creates a frequency table by copying the specified frequency table.
+	 * Constructs a frequency table by copying the specified frequency table.
 	 * @param freqs the frequency table to copy
-	 * @throws NullPointerException if {@code freqTab} is {@code null}
-	 * @throws IllegalArgumentException if {@code freqTab.getSymbolLimit()} &lt; 1 or any element {@code freqTab.get(i)} &lt; 0
-	 * @throws ArithmeticException if the total of all {@code freqTab} elements exceeds {@code Integer.MAX_VALUE}
+	 * @throws NullPointerException if {@code freqs} is {@code null}
+	 * @throws IllegalArgumentException if {@code freqs.getSymbolLimit()} &lt; 1
+	 * or any element {@code freqs.get(i)} &lt; 0
+	 * @throws ArithmeticException if the total of all {@code freqs} elements exceeds {@code Integer.MAX_VALUE}
 	 */
 	public SimpleFrequencyTable(FrequencyTable freqs) {
 		if (freqs == null)
@@ -77,7 +80,7 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	
 	
 	/**
-	 * Returns the number of symbols in this frequency table.
+	 * Returns the number of symbols in this frequency table, which is at least 1.
 	 * @return the number of symbols in this frequency table
 	 */
 	public int getSymbolLimit() {
@@ -99,10 +102,12 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	
 	
 	/**
-	 * Sets the frequency of the specified symbol to the specified value. The frequency value must be at least 0.
+	 * Sets the frequency of the specified symbol to the specified value. The frequency value
+	 * must be at least 0. If an exception is thrown, then the state is left unchanged.
 	 * @param symbol the symbol to set
 	 * @param freq the frequency value to set
 	 * @throws IllegalArgumentException if {@code symbol} &lt; 0 or {@code symbol} &ge; {@code getSymbolLimit()}
+	 * @throws ArithmeticException if this set request would cause the total to exceed {@code Integer.MAX_VALUE}
 	 */
 	public void set(int symbol, int freq) {
 		if (symbol < 0 || symbol >= frequencies.length)
@@ -117,7 +122,7 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	
 	
 	/**
-	 * Increments the frequency of the specified symbol. An exception should be thrown if the symbol is out of range.
+	 * Increments the frequency of the specified symbol.
 	 * @param symbol the symbol whose frequency to increment
 	 * @throws IllegalArgumentException if {@code symbol} &lt; 0 or {@code symbol} &ge; {@code getSymbolLimit()}
 	 */
@@ -134,7 +139,8 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	
 	
 	/**
-	 * Returns the total of all symbol frequencies. The returned value is at least 0 and is always equal to {@code getHigh(getSymbolLimit() - 1)}.
+	 * Returns the total of all symbol frequencies. The returned value is at
+	 * least 0 and is always equal to {@code getHigh(getSymbolLimit() - 1)}.
 	 * @return the total of all symbol frequencies
 	 */
 	public int getTotal() {
@@ -143,7 +149,8 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	
 	
 	/**
-	 * Returns the total of the frequencies of all the symbols below the specified one. The returned value is at least 0. An exception should be thrown if the symbol is out of range.
+	 * Returns the total of the frequencies of all the symbols strictly
+	 * below the specified symbol value. The returned value is at least 0.
 	 * @param symbol the symbol to query
 	 * @return the total of the frequencies of all the symbols below {@code symbol}
 	 * @throws IllegalArgumentException if {@code symbol} &lt; 0 or {@code symbol} &ge; {@code getSymbolLimit()}
@@ -159,9 +166,10 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	
 	
 	/**
-	 * Returns the total of the frequencies of the specified symbol and all the ones below. The returned value is at least 0. An exception should be thrown if the symbol is out of range.
+	 * Returns the total of the frequencies of the specified symbol
+	 * and all the symbols below. The returned value is at least 0.
 	 * @param symbol the symbol to query
-	 * @return the total of the frequencies of {@code symbol} and all the ones below
+	 * @return the total of the frequencies of {@code symbol} and all symbols below
 	 * @throws IllegalArgumentException if {@code symbol} &lt; 0 or {@code symbol} &ge; {@code getSymbolLimit()}
 	 */
 	public int getHigh(int symbol) {
@@ -174,10 +182,13 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	}
 	
 	
+	// Recomputes the array of cumulative symbol frequencies.
 	private void initCumulative() {
 		cumulative = new int[frequencies.length + 1];
 		int sum = 0;
 		for (int i = 0; i < frequencies.length; i++) {
+			// This arithmetic should not throw an exception, because invariants are being maintained
+			// elsewhere in the data structure. This implementation is just a defensive measure.
 			sum = checkedAdd(frequencies[i], sum);
 			cumulative[i + 1] = sum;
 		}
@@ -187,7 +198,8 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	
 	
 	/**
-	 * Returns a string representation of this frequency table. The current format shows all the symbols and frequencies. The format is subject to change.
+	 * Returns a string representation of this frequency table,
+	 * useful for debugging only, and the format is subject to change.
 	 * @return a string representation of this frequency table
 	 */
 	public String toString() {

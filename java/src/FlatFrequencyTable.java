@@ -8,7 +8,8 @@
 
 
 /**
- * An immutable frequency table where every symbol has the same frequency of 1. Useful as a fallback model when no statistics are available.
+ * An immutable frequency table where every symbol has the same frequency of 1.
+ * Useful as a fallback model when no statistics are available.
  */
 public final class FlatFrequencyTable implements FrequencyTable {
 	
@@ -18,9 +19,9 @@ public final class FlatFrequencyTable implements FrequencyTable {
 	
 	
 	/**
-	 * Creates a flat frequency table with the specified number of symbols.
+	 * Constructs a flat frequency table with the specified number of symbols.
 	 * @param numSyms the number of symbols, which must be at least 1
-	 * @throws IllegalArgumentException if {@code numSyms} &le; 0
+	 * @throws IllegalArgumentException if the number of symbols is less than 1
 	 */
 	public FlatFrequencyTable(int numSyms) {
 		if (numSyms <= 0)
@@ -31,7 +32,7 @@ public final class FlatFrequencyTable implements FrequencyTable {
 	
 	
 	/**
-	 * Returns the number of symbols in this table.
+	 * Returns the number of symbols in this table, which is at least 1.
 	 * @return the number of symbols in this table
 	 */
 	public int getSymbolLimit() {
@@ -40,7 +41,7 @@ public final class FlatFrequencyTable implements FrequencyTable {
 	
 	
 	/**
-	 * Returns the frequency of the specified symbol, which is always 1. If the symbol index is out of bounds, then an exception is thrown instead.
+	 * Returns the frequency of the specified symbol, which is always 1.
 	 * @param symbol the symbol to query
 	 * @return the frequency of the symbol, which is 1
 	 * @throws IllegalArgumentException if {@code symbol} &lt; 0 or {@code symbol} &ge; {@code getSymbolLimit()}
@@ -62,9 +63,10 @@ public final class FlatFrequencyTable implements FrequencyTable {
 	
 	
 	/**
-	 * Returns the total of the frequencies of all the symbols below the specified one, which is equal to {@code symbol}.
+	 * Returns the total of the frequencies of all the symbols strictly below
+	 * the specified symbol value. The returned value is equal to {@code symbol}.
 	 * @param symbol the symbol to query
-	 * @return the total of the frequencies of all the symbols below the specified one, which is {@code symbol}
+	 * @return the total of the frequencies of all the symbols below {@code symbol}, which is {@code symbol}
 	 * @throws IllegalArgumentException if {@code symbol} &lt; 0 or {@code symbol} &ge; {@code getSymbolLimit()}
 	 */
 	public int getLow(int symbol) {
@@ -75,9 +77,10 @@ public final class FlatFrequencyTable implements FrequencyTable {
 	
 	
 	/**
-	 * Returns the total of the frequencies of the specified symbol and all the ones below, which is equal to {@code symbol} + 1.
+	 * Returns the total of the frequencies of the specified symbol and all
+	 * the symbols below. The returned value is equal to {@code symbol + 1}.
 	 * @param symbol the symbol to query
-	 * @return the total of the frequencies of the specified symbol and all the ones below, which is {@code symbol} + 1
+	 * @return the total of the frequencies of {@code symbol} and all symbols below, which is {@code symbol + 1}
 	 * @throws IllegalArgumentException if {@code symbol} &lt; 0 or {@code symbol} &ge; {@code getSymbolLimit()}
 	 */
 	public int getHigh(int symbol) {
