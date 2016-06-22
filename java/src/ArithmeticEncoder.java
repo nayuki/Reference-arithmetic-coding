@@ -90,9 +90,9 @@ public final class ArithmeticEncoder extends ArithmeticCoderBase {
 	}
 	
 	
-	protected void underflow() throws IOException {
+	protected void underflow() {
 		if (numUnderflow == Integer.MAX_VALUE)
-			throw new RuntimeException("Maximum underflow reached");
+			throw new ArithmeticException("Maximum underflow reached");
 		numUnderflow++;
 	}
 	
