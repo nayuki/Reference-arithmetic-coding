@@ -49,10 +49,10 @@ public class ArithmeticCompress {
 		InputStream input = new BufferedInputStream(new FileInputStream(file));
 		try {
 			while (true) {
-				int symbol = input.read();
-				if (symbol == -1)
+				int b = input.read();
+				if (b == -1)
 					break;
-				freqs.increment(symbol);
+				freqs.increment(b);
 			}
 		} finally {
 			input.close();
@@ -72,10 +72,10 @@ public class ArithmeticCompress {
 	static void compress(FrequencyTable freqs, InputStream in, BitOutputStream out) throws IOException {
 		ArithmeticEncoder enc = new ArithmeticEncoder(out);
 		while (true) {
-			int b = in.read();
-			if (b == -1)
+			int symbol = in.read();
+			if (symbol == -1)
 				break;
-			enc.write(freqs, b);
+			enc.write(freqs, symbol);
 		}
 		enc.write(freqs, 256);  // EOF
 		enc.finish();

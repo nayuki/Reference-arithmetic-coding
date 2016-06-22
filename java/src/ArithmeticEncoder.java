@@ -14,7 +14,7 @@ public final class ArithmeticEncoder extends ArithmeticCoderBase {
 	private BitOutputStream output;
 	
 	// Number of saved underflow bits. This value can grow without bound, so a truly correct implementation would use a BigInteger.
-	private int underflow;
+	private int numUnderflow;
 	
 	
 	
@@ -24,7 +24,7 @@ public final class ArithmeticEncoder extends ArithmeticCoderBase {
 		if (out == null)
 			throw new NullPointerException();
 		output = out;
-		underflow = 0;
+		numUnderflow = 0;
 	}
 	
 	
@@ -36,8 +36,8 @@ public final class ArithmeticEncoder extends ArithmeticCoderBase {
 	
 	
 	// Encodes a symbol.
-	public void write(CheckedFrequencyTable freq, int symbol) throws IOException {
-		update(freq, symbol);
+	public void write(CheckedFrequencyTable freqs, int symbol) throws IOException {
+		update(freqs, symbol);
 	}
 	
 	
@@ -53,15 +53,15 @@ public final class ArithmeticEncoder extends ArithmeticCoderBase {
 		output.write(bit);
 		
 		// Write out saved underflow bits
-		for (; underflow > 0; underflow--)
+		for (; numUnderflow > 0; numUnderflow--)
 			output.write(bit ^ 1);
 	}
 	
 	
 	protected void underflow() throws IOException {
-		if (underflow == Integer.MAX_VALUE)
+		if (numUnderflow == Integer.MAX_VALUE)
 			throw new RuntimeException("Maximum underflow reached");
-		underflow++;
+		numUnderflow++;
 	}
 	
 }

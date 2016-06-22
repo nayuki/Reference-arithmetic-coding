@@ -38,9 +38,9 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	
 	
 	// Decodes and returns a symbol.
-	public int read(CheckedFrequencyTable freq) throws IOException {
+	public int read(CheckedFrequencyTable freqs) throws IOException {
 		// Translate from coding range scale to frequency table scale
-		long total = freq.getTotal();
+		long total = freqs.getTotal();
 		if (total > MAX_TOTAL)
 			throw new IllegalArgumentException("Cannot decode symbol because total is too large");
 		long range = high - low + 1;
@@ -53,10 +53,10 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 		
 		// A kind of binary search
 		int start = 0;
-		int end = freq.getSymbolLimit();
+		int end = freqs.getSymbolLimit();
 		while (end - start > 1) {
 			int middle = (start + end) >>> 1;
-			if (freq.getLow(middle) > value)
+			if (freqs.getLow(middle) > value)
 				end = middle;
 			else
 				start = middle;
@@ -65,9 +65,9 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 			throw new AssertionError();
 		
 		int symbol = start;
-		if (freq.getLow(symbol) * range / total > offset || freq.getHigh(symbol) * range / total <= offset)
+		if (freqs.getLow(symbol) * range / total > offset || freqs.getHigh(symbol) * range / total <= offset)
 			throw new AssertionError();
-		update(freq, symbol);
+		update(freqs, symbol);
 		if (code < low || code > high)
 			throw new AssertionError("Code out of range");
 		return symbol;

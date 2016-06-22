@@ -44,7 +44,7 @@ public abstract class ArithmeticCoderBase {
 	 * - Let range = high - low + 1, then MIN_RANGE <= range <= MAX_RANGE = 2^STATE_SIZE. In particular, range > MAX_RANGE/4.
 	 * The invariants for 'range' essentially dictate the maximum total that the incoming frequency table can have, such that intermediate calculations don't overflow.
 	 */
-	protected void update(CheckedFrequencyTable freq, int symbol) throws IOException {
+	protected void update(CheckedFrequencyTable freqs, int symbol) throws IOException {
 		// State check
 		if (low >= high || (low & MASK) != low || (high & MASK) != high)
 			throw new AssertionError("Low or high out of range");
@@ -53,9 +53,9 @@ public abstract class ArithmeticCoderBase {
 			throw new AssertionError("Range out of range");
 		
 		// Frequency table values check
-		long total = freq.getTotal();
-		long symLow = freq.getLow(symbol);
-		long symHigh = freq.getHigh(symbol);
+		long total = freqs.getTotal();
+		long symLow = freqs.getLow(symbol);
+		long symHigh = freqs.getHigh(symbol);
 		if (symLow == symHigh)
 			throw new IllegalArgumentException("Symbol has zero frequency");
 		if (total > MAX_TOTAL)
