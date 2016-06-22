@@ -44,6 +44,8 @@ public class ArithmeticCompress {
 	}
 	
 	
+	// Returns a frequency table based on the bytes in the given file.
+	// Also contains an extra entry for symbol 256, whose frequency is set to 0.
 	private static FrequencyTable getFrequencies(File file) throws IOException {
 		FrequencyTable freqs = new SimpleFrequencyTable(new int[257]);
 		InputStream input = new BufferedInputStream(new FileInputStream(file));
@@ -78,10 +80,11 @@ public class ArithmeticCompress {
 			enc.write(freqs, symbol);
 		}
 		enc.write(freqs, 256);  // EOF
-		enc.finish();
+		enc.finish();  // Flush remaining code bits
 	}
 	
 	
+	// Writes an unsigned integer of the given bit width to the given stream.
 	private static void writeInt(BitOutputStream out, int numBits, int value) throws IOException {
 		if (numBits < 0 || numBits > 32)
 			throw new IllegalArgumentException();

@@ -61,6 +61,7 @@ public class ArithmeticDecompress {
 	}
 	
 	
+	// Reads an unsigned integer of the given bit width from the given stream.
 	private static int readInt(BitInputStream in, int numBits) throws IOException {
 		if (numBits < 0 || numBits > 32)
 			throw new IllegalArgumentException();

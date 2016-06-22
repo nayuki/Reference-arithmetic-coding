@@ -44,6 +44,7 @@ public class AdaptiveArithmeticDecompress {
 		FrequencyTable freqs = new SimpleFrequencyTable(initFreqs);
 		ArithmeticDecoder dec = new ArithmeticDecoder(in);
 		while (true) {
+			// Decode and write one byte
 			int symbol = dec.read(freqs);
 			if (symbol == 256)  // EOF symbol
 				break;

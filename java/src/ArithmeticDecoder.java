@@ -9,16 +9,30 @@
 import java.io.IOException;
 
 
+/**
+ * Reads from an arithmetic-coded bit stream and decodes symbols. Not thread-safe.
+ * @see ArithmeticEncoder
+ */
 public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	
+	/* Fields */
+	
+	// The underlying bit input stream (not null).
 	private BitInputStream input;
 	
-	// The current code being read, which is always in the range [low, high].
+	// The current raw code bits being buffered, which is always in the range [low, high].
 	private long code;
 	
 	
+	/* Constructor */
 	
-	// Creates an arithmetic coding decoder.
+	/**
+	 * Constructs an arithmetic coding decoder based on the
+	 * specified bit input stream, and fills the code bits.
+	 * @param in the bit input stream to read from
+	 * @throws IOException if an I/O exception occurred
+	 * @throws NullPointerException if the input steam is {@code null}
+	 */
 	public ArithmeticDecoder(BitInputStream in) throws IOException {
 		super();
 		if (in == null)
@@ -30,14 +44,29 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	}
 	
 	
+	/* Methods */
 	
-	// Decodes and returns a symbol.
+	/**
+	 * Decodes the next symbol based on the specified frequency table and returns it.
+	 * Also updates this arithmetic coder's state and may read in some bits.
+	 * @param freqs the frequency table to use
+	 * @return the next symbol
+	 * @throws NullPointerException if the frequency table is {@code null}
+	 * @throws IOException if an I/O exception occurred
+	 */
 	public int read(FrequencyTable freqs) throws IOException {
 		return read(new CheckedFrequencyTable(freqs));
 	}
 	
 	
-	// Decodes and returns a symbol.
+	/**
+	 * Decodes the next symbol based on the specified frequency table and returns it.
+	 * Also updates this arithmetic coder's state and may read in some bits.
+	 * @param freqs the frequency table to use
+	 * @return the next symbol
+	 * @throws NullPointerException if the frequency table is {@code null}
+	 * @throws IOException if an I/O exception occurred
+	 */
 	public int read(CheckedFrequencyTable freqs) throws IOException {
 		// Translate from coding range scale to frequency table scale
 		long total = freqs.getTotal();
@@ -84,6 +113,8 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	}
 	
 	
+	// Returns either the next bit (0 or 1) from the input stream.
+	// The end of stream is treated as an infinite number of trailing zeros.
 	private int readCodeBit() throws IOException {
 		int temp = input.read();
 		if (temp == -1)

@@ -44,6 +44,7 @@ public class AdaptiveArithmeticCompress {
 		FrequencyTable freqs = new SimpleFrequencyTable(initFreqs);
 		ArithmeticEncoder enc = new ArithmeticEncoder(out);
 		while (true) {
+			// Read and encode one byte
 			int symbol = in.read();
 			if (symbol == -1)
 				break;

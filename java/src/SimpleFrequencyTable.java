@@ -14,14 +14,14 @@
  */
 public final class SimpleFrequencyTable implements FrequencyTable {
 	
-	// The frequency for each symbol.
+	// The frequency for each symbol. Its length is at least 1, and each element is non-negative.
 	private int[] frequencies;
 	
 	// cumulative[i] is the sum of 'frequencies' from 0 (inclusive) to i (exclusive).
 	// Initialized lazily. When this is not null, the data is valid.
 	private int[] cumulative;
 	
-	// Equal to the sum of 'frequencies'.
+	// Always equal to the sum of 'frequencies'.
 	private int total;
 	
 	

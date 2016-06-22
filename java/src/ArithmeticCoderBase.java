@@ -9,7 +9,11 @@
 import java.io.IOException;
 
 
-// A model of the state and behaviors that arithmetic coding encoders and decoders share.
+/**
+ * Provides the state and behaviors that arithmetic coding encoders and decoders share.
+ * @see ArithmeticEncoder
+ * @see ArithmeticDecoder
+ */
 public abstract class ArithmeticCoderBase {
 	
 	/* Configuration */
@@ -66,22 +70,37 @@ public abstract class ArithmeticCoderBase {
 	protected long high;
 	
 	
+	/* Constructor */
+	
+	/**
+	 * Constructs an arithmetic coder, which initializes the code range.
+	 */
 	public ArithmeticCoderBase() {
 		low = 0;
 		high = MASK;
 	}
 	
 	
+	/* Methods */
 	
-	/* 
-	 * Updates the range as a result of seeing the given symbol - i.e. update low and high.
-	 * 
-	 * Invariants that are true before and after encoding/decoding each symbol:
-	 * - 0 <= low <= code <= high < 2^STATE_SIZE. ('code' exists only in the decoder.) Therefore these variables are unsigned integers of STATE_SIZE bits.
-	 * - low < 1/2 * 2^STATE_SIZE && high >= 1/2 * 2^STATE_SIZE. In other words, they are in different halves of the full range.
-	 * - low < 1/4 * 2^STATE_SIZE || high >= 3/4 * 2^STATE_SIZE. In other words, they are not both in the middle two quarters.
-	 * - Let range = high - low + 1, then MIN_RANGE <= range <= MAX_RANGE = 2^STATE_SIZE. In particular, range > MAX_RANGE/4.
-	 * The invariants for 'range' essentially dictate the maximum total that the incoming frequency table can have, such that intermediate calculations don't overflow.
+	/**
+	 * Updates the code range (low and high) of this arithmetic coder as a result
+	 * of processing the specified symbol with the specified frequency table.
+	 * <p>Invariants that are true before and after encoding/decoding each symbol:</p>
+	 * <ul>
+	 *   <li>0 &le; low &le; code &le; high &lt; 2<sup>STATE_SIZE</sup>. ('code' exists only in the decoder.)
+	 *   Therefore these variables are unsigned integers of STATE_SIZE bits.</li>
+	 *   <li>(low &lt; 1/2 * 2<sup>STATE_SIZE</sup>) && (high >= 1/2 * 2<sup>STATE_SIZE</sup>).
+	 *   In other words, they are in different halves of the full range.</li>
+	 *   <li>(low &lt; 1/4 * 2<sup>STATE_SIZE</sup>) || (high >= 3/4 * 2<sup>STATE_SIZE</sup>).
+	 *   In other words, they are not both in the middle two quarters.</li>
+	 *   <li>Let range = high &minus; low + 1, then MIN_RANGE &le; range &le;
+	 *   MAX_RANGE = 2<sup>STATE_SIZE</sup>. In particular, range > MAX_RANGE/4.</li>
+	 * </ul>
+	 * <p>The invariants for 'range' essentially dictate the maximum total that the incoming
+	 * frequency table can have, such that intermediate calculations don't overflow.</p>
+	 * @param freqs the frequency table to use
+	 * @param symbol the symbol that was processed
 	 */
 	protected void update(CheckedFrequencyTable freqs, int symbol) throws IOException {
 		// State check
@@ -122,10 +141,17 @@ public abstract class ArithmeticCoderBase {
 	}
 	
 	
-	// Called when the top bit of low and high are equal.
+	/**
+	 * Called to handle the situation when the top bit of {@code low} and {@code high} are equal.
+	 * @throws IOException if an I/O exception occurred
+	 */
 	protected abstract void shift() throws IOException;
 	
-	// Called when low=01xxxx and high=10yyyy.
+	
+	/**
+	 * Called to handle the situation when low=01(...) and high=10(...).
+	 * @throws IOException if an I/O exception occurred
+	 */
 	protected abstract void underflow() throws IOException;
 	
 }
