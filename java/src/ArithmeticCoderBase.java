@@ -94,11 +94,10 @@ public abstract class ArithmeticCoderBase {
 	 *   In other words, they are in different halves of the full range.</li>
 	 *   <li>(low &lt; 1/4 * 2<sup>STATE_SIZE</sup>) || (high >= 3/4 * 2<sup>STATE_SIZE</sup>).
 	 *   In other words, they are not both in the middle two quarters.</li>
-	 *   <li>Let range = high &minus; low + 1, then MIN_RANGE &le; range &le;
-	 *   MAX_RANGE = 2<sup>STATE_SIZE</sup>. In particular, range > MAX_RANGE/4.</li>
+	 *   <li>Let range = high &minus; low + 1, then MAX_RANGE/4 &lt; MIN_RANGE &le; range
+	 *   &le; MAX_RANGE = 2<sup>STATE_SIZE</sup>. These invariants for 'range' essentially dictate the maximum
+	 *   total that the incoming frequency table can have, such that intermediate calculations don't overflow.</li>
 	 * </ul>
-	 * <p>The invariants for 'range' essentially dictate the maximum total that the incoming
-	 * frequency table can have, such that intermediate calculations don't overflow.</p>
 	 * @param freqs the frequency table to use
 	 * @param symbol the symbol that was processed
 	 */

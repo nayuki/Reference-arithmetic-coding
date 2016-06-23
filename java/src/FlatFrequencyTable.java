@@ -53,7 +53,8 @@ public final class FlatFrequencyTable implements FrequencyTable {
 	
 	
 	/**
-	 * Returns the total of all symbol frequencies, which is always equal to the number of symbols in this table.
+	 * Returns the total of all symbol frequencies, which is
+	 * always equal to the number of symbols in this table.
 	 * @return the total of all symbol frequencies, which is {@code getSymbolLimit()}
 	 */
 	public int getTotal() {

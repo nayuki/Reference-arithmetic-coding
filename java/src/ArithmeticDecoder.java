@@ -80,7 +80,7 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 		if (value < 0 || value >= total)
 			throw new AssertionError();
 		
-		// A kind of binary search
+		// A kind of binary search. Find highest symbol such that freqs.get_low(symbol) <= value.
 		int start = 0;
 		int end = freqs.getSymbolLimit();
 		while (end - start > 1) {
@@ -113,8 +113,8 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	}
 	
 	
-	// Returns either the next bit (0 or 1) from the input stream.
-	// The end of stream is treated as an infinite number of trailing zeros.
+	// Returns the next bit (0 or 1) from the input stream. The end
+	// of stream is treated as an infinite number of trailing zeros.
 	private int readCodeBit() throws IOException {
 		int temp = input.read();
 		if (temp == -1)

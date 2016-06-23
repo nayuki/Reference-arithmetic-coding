@@ -45,7 +45,7 @@ public final class ArithmeticEncoder extends ArithmeticCoderBase {
 	
 	/**
 	 * Encodes the specified symbol based on the specified frequency table.
-	 * Also updates this arithmetic coder's state and may write out some bits.
+	 * This updates this arithmetic coder's state and may write out some bits.
 	 * @param freqs the frequency table to use
 	 * @param symbol the symbol to encode
 	 * @throws NullPointerException if the frequency table is {@code null}

@@ -9,7 +9,7 @@
 
 /**
  * A table of symbol frequencies. The table holds data for symbols numbered from 0
- * to numSymbols&minus;1. Each symbol has a frequency, which is a non-negative integer.
+ * to getSymbolLimit()&minus;1. Each symbol has a frequency, which is a non-negative integer.
  * <p>Frequency table objects are primarily used for getting cumulative symbol
  * frequencies. These objects can be mutable depending on the implementation.
  * The total of all symbol frequencies must not exceed Integer.MAX_VALUE.</p>

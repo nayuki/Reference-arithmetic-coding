@@ -54,9 +54,9 @@ class ArithmeticCoderBase(object):
 	#   In other words, they are in different halves of the full range.
 	# - (low < 1/4 * 2^STATE_SIZE) || (high >= 3/4 * 2^STATE_SIZE).
 	#   In other words, they are not both in the middle two quarters.
-	# - Let range = high - low + 1, then MIN_RANGE <= range <=
-	#   MAX_RANGE = 2^STATE_SIZE. In particular, range > MAX_RANGE/4.
-	# The invariants for 'range' essentially dictate the maximum total that the incoming frequency table can have.
+	# - Let range = high - low + 1, then MAX_RANGE/4 < MIN_RANGE <= range
+	#   <= MAX_RANGE = 2^STATE_SIZE. These invariants for 'range' essentially
+	#   dictate the maximum total that the incoming frequency table can have.
 	def update(self, freqs, symbol):
 		# State check
 		low = self.low
@@ -119,7 +119,7 @@ class ArithmeticEncoder(ArithmeticCoderBase):
 	
 	
 	# Encodes the given symbol based on the given frequency table.
-	# Also updates this arithmetic coder's state and may write out some bits.
+	# This updates this arithmetic coder's state and may write out some bits.
 	def write(self, freqs, symbol):
 		if not isinstance(freqs, CheckedFrequencyTable):
 			freqs = CheckedFrequencyTable(freqs)
@@ -179,7 +179,7 @@ class ArithmeticDecoder(ArithmeticCoderBase):
 		assert value * range // total <= offset
 		assert 0 <= value < total
 		
-		# A kind of binary search
+		# A kind of binary search. Find highest symbol such that freqs.get_low(symbol) <= value.
 		start = 0
 		end = freqs.get_symbol_limit()
 		while end - start > 1:
@@ -206,8 +206,8 @@ class ArithmeticDecoder(ArithmeticCoderBase):
 		self.code = (self.code & ArithmeticCoderBase.TOP_MASK) | ((self.code << 1) & (ArithmeticCoderBase.MASK >> 1)) | self.read_code_bit()
 	
 	
-	# Returns either the next bit (0 or 1) from the input stream.
-	# The end of stream is treated as an infinite number of trailing zeros. 
+	# Returns the next bit (0 or 1) from the input stream. The end
+	# of stream is treated as an infinite number of trailing zeros.
 	def read_code_bit(self):
 		temp = self.input.read()
 		if temp == -1:
@@ -219,7 +219,7 @@ class ArithmeticDecoder(ArithmeticCoderBase):
 # ---- Frequency table classes ----
 
 # A table of symbol frequencies. The table holds data for symbols numbered from 0
-# to numSymbols-1. Each symbol has a frequency, which is a non-negative integer.
+# to get_symbol_limit()-1. Each symbol has a frequency, which is a non-negative integer.
 # Frequency table objects are primarily used for getting cumulative symbol
 # frequencies. These objects can be mutable depending on the implementation.
 class FrequencyTable(object):
@@ -277,7 +277,8 @@ class FlatFrequencyTable(FrequencyTable):
 		self._check_symbol(symbol)
 		return 1
 	
-	# Returns the total of all symbol frequencies, which is always equal to the number of symbols in this table.
+	# Returns the total of all symbol frequencies, which is
+	# always equal to the number of symbols in this table.
 	def get_total(self):
 		return self.numsymbols
 	
