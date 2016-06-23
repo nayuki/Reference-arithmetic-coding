@@ -95,7 +95,7 @@ class ArithmeticCoderBase(object):
 			self.high = ((self.high << 1) & (ArithmeticCoderBase.MASK >> 1)) | ArithmeticCoderBase.TOP_MASK | 1
 	
 	
-	# Called to handle the situation when the top bit of {@code low} and {@code high} are equal.
+	# Called to handle the situation when the top bit of 'low' and 'high' are equal.
 	def shift(self):
 		raise NotImplementedError()
 	
@@ -106,7 +106,7 @@ class ArithmeticCoderBase(object):
 
 
 
-# Encodes symbols and writes to an arithmetic-coded bit stream. Not thread-safe.
+# Encodes symbols and writes to an arithmetic-coded bit stream.
 class ArithmeticEncoder(ArithmeticCoderBase):
 	
 	# Constructs an arithmetic coding encoder based on the given bit output stream.
@@ -148,7 +148,7 @@ class ArithmeticEncoder(ArithmeticCoderBase):
 
 
 
-# Reads from an arithmetic-coded bit stream and decodes symbols. Not thread-safe.
+# Reads from an arithmetic-coded bit stream and decodes symbols.
 class ArithmeticDecoder(ArithmeticCoderBase):
 	
 	# Constructs an arithmetic coding decoder based on the
@@ -362,7 +362,7 @@ class SimpleFrequencyTable(FrequencyTable):
 	
 	
 	# Sets the frequency of the given symbol to the given value. The frequency value
-	# must be at least 0. If an exception is thrown, then the state is left unchanged.
+	# must be at least 0. If an exception is raised, then the state is left unchanged.
 	def set(self, symbol, freq):
 		self._check_symbol(symbol)
 		if freq < 0:
@@ -435,9 +435,8 @@ class SimpleFrequencyTable(FrequencyTable):
 
 
 
-# A wrapper that checks the preconditions (arguments) and postconditions (return value)
-# of all the frequency table methods. Useful for finding faults in a frequency table
-# implementation. Current this does not check arithmetic overflow conditions.
+# A wrapper that checks the preconditions (arguments) and postconditions (return value) of all
+# the frequency table methods. Useful for finding faults in a frequency table implementation.
 class CheckedFrequencyTable(FrequencyTable):
 	
 	def __init__(self, freqtab):
