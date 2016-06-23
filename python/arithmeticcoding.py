@@ -64,7 +64,7 @@ class ArithmeticCoderBase(object):
 		if low >= high or (low & ArithmeticCoderBase.MASK) != low or (high & ArithmeticCoderBase.MASK) != high:
 			raise AssertionError("Low or high out of range")
 		range = high - low + 1
-		if range < ArithmeticCoderBase.MIN_RANGE or range > ArithmeticCoderBase.MAX_RANGE:
+		if not (ArithmeticCoderBase.MIN_RANGE <= range <= ArithmeticCoderBase.MAX_RANGE):
 			raise AssertionError("Range out of range")
 		
 		# Frequency table values check
@@ -191,9 +191,9 @@ class ArithmeticDecoder(ArithmeticCoderBase):
 		assert start != end
 		
 		symbol = start
-		assert freqs.get_low(symbol) * range // total <= offset and freqs.get_high(symbol) * range // total > offset
+		assert freqs.get_low(symbol) * range // total <= offset < freqs.get_high(symbol) * range // total
 		self.update(freqs, symbol)
-		if self.code < self.low or self.code > self.high:
+		if not (self.low <= self.code <= self.high):
 			raise AssertionError("Code out of range")
 		return symbol
 	
