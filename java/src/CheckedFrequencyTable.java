@@ -10,7 +10,7 @@
 /**
  * A wrapper that checks the preconditions (arguments) and postconditions (return value)
  * of all the frequency table methods. Useful for finding faults in a frequency table
- * implementation. Current this does not check arithmetic overflow conditions.
+ * implementation. However, arithmetic overflow conditions are not checked.
  */
 public final class CheckedFrequencyTable implements FrequencyTable {
 	

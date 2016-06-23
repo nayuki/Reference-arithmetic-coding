@@ -94,7 +94,7 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 			throw new AssertionError();
 		
 		int symbol = start;
-		if (freqs.getLow(symbol) * range / total > offset || freqs.getHigh(symbol) * range / total <= offset)
+		if (offset < freqs.getLow(symbol) * range / total || freqs.getHigh(symbol) * range / total <= offset)
 			throw new AssertionError();
 		update(freqs, symbol);
 		if (code < low || code > high)

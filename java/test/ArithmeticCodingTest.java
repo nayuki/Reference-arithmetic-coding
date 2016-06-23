@@ -107,9 +107,6 @@ public abstract class ArithmeticCodingTest {
 	
 	/* Utilities */
 	
-	private static Random random = new Random();
-	
-	
 	// Tests that the given byte array can be compressed and decompressed to the same data, and not throw any exceptions.
 	private void test(byte[] b) {
 		try {
@@ -122,6 +119,9 @@ public abstract class ArithmeticCodingTest {
 			throw new AssertionError(e);
 		}
 	}
+	
+	
+	private static Random random = new Random();
 	
 	
 	/* Abstract methods */
