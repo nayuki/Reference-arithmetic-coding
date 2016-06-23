@@ -61,20 +61,20 @@ public interface FrequencyTable {
 	
 	
 	/**
-	 * Returns the total of the frequencies of all the symbols strictly
+	 * Returns the sum of the frequencies of all the symbols strictly
 	 * below the specified symbol value. The returned value is at least 0.
 	 * @param symbol the symbol to query
-	 * @return the total of the frequencies of all the symbols below {@code symbol}
+	 * @return the sum of the frequencies of all the symbols below {@code symbol}
 	 * @throws IllegalArgumentException if the symbol is out of range
 	 */
 	public int getLow(int symbol);
 	
 	
 	/**
-	 * Returns the total of the frequencies of the specified symbol
+	 * Returns the sum of the frequencies of the specified symbol
 	 * and all the symbols below. The returned value is at least 0.
 	 * @param symbol the symbol to query
-	 * @return the total of the frequencies of {@code symbol} and all symbols below
+	 * @return the sum of the frequencies of {@code symbol} and all symbols below
 	 * @throws IllegalArgumentException if the symbol is out of range
 	 */
 	public int getHigh(int symbol);

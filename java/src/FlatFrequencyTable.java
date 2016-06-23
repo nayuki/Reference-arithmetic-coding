@@ -62,10 +62,10 @@ public final class FlatFrequencyTable implements FrequencyTable {
 	
 	
 	/**
-	 * Returns the total of the frequencies of all the symbols strictly below
+	 * Returns the sum of the frequencies of all the symbols strictly below
 	 * the specified symbol value. The returned value is equal to {@code symbol}.
 	 * @param symbol the symbol to query
-	 * @return the total of the frequencies of all the symbols below {@code symbol}, which is {@code symbol}
+	 * @return the sum of the frequencies of all the symbols below {@code symbol}, which is {@code symbol}
 	 * @throws IllegalArgumentException if {@code symbol} &lt; 0 or {@code symbol} &ge; {@code getSymbolLimit()}
 	 */
 	public int getLow(int symbol) {
@@ -75,10 +75,10 @@ public final class FlatFrequencyTable implements FrequencyTable {
 	
 	
 	/**
-	 * Returns the total of the frequencies of the specified symbol and all
+	 * Returns the sum of the frequencies of the specified symbol and all
 	 * the symbols below. The returned value is equal to {@code symbol + 1}.
 	 * @param symbol the symbol to query
-	 * @return the total of the frequencies of {@code symbol} and all symbols below, which is {@code symbol + 1}
+	 * @return the sum of the frequencies of {@code symbol} and all symbols below, which is {@code symbol + 1}
 	 * @throws IllegalArgumentException if {@code symbol} &lt; 0 or {@code symbol} &ge; {@code getSymbolLimit()}
 	 */
 	public int getHigh(int symbol) {

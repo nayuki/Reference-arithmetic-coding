@@ -246,12 +246,12 @@ class FrequencyTable(object):
 	def get_total(self):
 		raise NotImplementedError()
 	
-	# Returns the total of the frequencies of all the symbols strictly
+	# Returns the sum of the frequencies of all the symbols strictly
 	# below the given symbol value. The returned value is at least 0.
 	def get_low(self, symbol):
 		raise NotImplementedError()
 	
-	# Returns the total of the frequencies of the given symbol
+	# Returns the sum of the frequencies of the given symbol
 	# and all the symbols below. The returned value is at least 0.
 	def get_high(self, symbol):
 		raise NotImplementedError()
@@ -281,14 +281,14 @@ class FlatFrequencyTable(FrequencyTable):
 	def get_total(self):
 		return self.numsymbols
 	
-	# Returns the total of the frequencies of all the symbols strictly below
+	# Returns the sum of the frequencies of all the symbols strictly below
 	# the given symbol value. The returned value is equal to 'symbol'.
 	def get_low(self, symbol):
 		self._check_symbol(symbol)
 		return symbol
 	
 	
-	# Returns the total of the frequencies of the given symbol and all
+	# Returns the sum of the frequencies of the given symbol and all
 	# the symbols below. The returned value is equal to 'symbol' + 1.
 	def get_high(self, symbol):
 		self._check_symbol(symbol)
@@ -388,7 +388,7 @@ class SimpleFrequencyTable(FrequencyTable):
 		return self.total
 	
 	
-	# Returns the total of the frequencies of all the symbols strictly
+	# Returns the sum of the frequencies of all the symbols strictly
 	# below the given symbol value. The returned value is at least 0.
 	def get_low(self, symbol):
 		self._check_symbol(symbol)
@@ -397,7 +397,7 @@ class SimpleFrequencyTable(FrequencyTable):
 		return self.cumulative[symbol]
 	
 	
-	# Returns the total of the frequencies of the given symbol
+	# Returns the sum of the frequencies of the given symbol
 	# and all the symbols below. The returned value is at least 0.
 	def get_high(self, symbol):
 		self._check_symbol(symbol)

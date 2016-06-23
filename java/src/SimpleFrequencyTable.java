@@ -149,10 +149,10 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	
 	
 	/**
-	 * Returns the total of the frequencies of all the symbols strictly
+	 * Returns the sum of the frequencies of all the symbols strictly
 	 * below the specified symbol value. The returned value is at least 0.
 	 * @param symbol the symbol to query
-	 * @return the total of the frequencies of all the symbols below {@code symbol}
+	 * @return the sum of the frequencies of all the symbols below {@code symbol}
 	 * @throws IllegalArgumentException if {@code symbol} &lt; 0 or {@code symbol} &ge; {@code getSymbolLimit()}
 	 */
 	public int getLow(int symbol) {
@@ -164,10 +164,10 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	
 	
 	/**
-	 * Returns the total of the frequencies of the specified symbol
+	 * Returns the sum of the frequencies of the specified symbol
 	 * and all the symbols below. The returned value is at least 0.
 	 * @param symbol the symbol to query
-	 * @return the total of the frequencies of {@code symbol} and all symbols below
+	 * @return the sum of the frequencies of {@code symbol} and all symbols below
 	 * @throws IllegalArgumentException if {@code symbol} &lt; 0 or {@code symbol} &ge; {@code getSymbolLimit()}
 	 */
 	public int getHigh(int symbol) {
