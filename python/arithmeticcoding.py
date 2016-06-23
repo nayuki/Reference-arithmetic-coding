@@ -22,7 +22,7 @@ class ArithmeticCoderBase(object):
 	MAX_RANGE = 1 << STATE_SIZE
 	
 	# Minimum range during coding (non-trivial), i.e. 010...010.
-	MIN_RANGE = (1 << (STATE_SIZE - 2)) + 2
+	MIN_RANGE = (MAX_RANGE >> 2) + 2
 	
 	# Maximum allowed total frequency at all times during coding.
 	MAX_TOTAL = MIN_RANGE
@@ -188,7 +188,7 @@ class ArithmeticDecoder(ArithmeticCoderBase):
 				end = middle
 			else:
 				start = middle
-		assert start != end
+		assert start + 1 == end
 		
 		symbol = start
 		assert freqs.get_low(symbol) * range // total <= offset < freqs.get_high(symbol) * range // total
@@ -453,14 +453,12 @@ class CheckedFrequencyTable(FrequencyTable):
 	
 	
 	def get(self, symbol):
-		if self._is_symbol_in_range(symbol):
-			result = self.freqtable.get(symbol)
-			if result < 0:
-				raise AssertionError("Negative symbol frequency")
-			return result
-		else:
-			self.freqtable.get(symbol)
+		result = self.freqtable.get(symbol)
+		if not self._is_symbol_in_range(symbol):
 			raise AssertionError("ValueError expected")
+		if result < 0:
+			raise AssertionError("Negative symbol frequency")
+		return result
 	
 	
 	def get_total(self):
@@ -474,8 +472,7 @@ class CheckedFrequencyTable(FrequencyTable):
 		if self._is_symbol_in_range(symbol):
 			low   = self.freqtable.get_low (symbol)
 			high  = self.freqtable.get_high(symbol)
-			total = self.freqtable.get_total()
-			if not (0 <= low <= high <= total):
+			if not (0 <= low <= high <= self.freqtable.get_total()):
 				raise AssertionError("Symbol low cumulative frequency out of range")
 			return low
 		else:
@@ -487,8 +484,7 @@ class CheckedFrequencyTable(FrequencyTable):
 		if self._is_symbol_in_range(symbol):
 			low   = self.freqtable.get_low (symbol)
 			high  = self.freqtable.get_high(symbol)
-			total = self.freqtable.get_total()
-			if not (0 <= low <= high <= total):
+			if not (0 <= low <= high <= self.freqtable.get_total()):
 				raise AssertionError("Symbol high cumulative frequency out of range")
 			return high
 		else:

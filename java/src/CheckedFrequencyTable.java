@@ -36,15 +36,12 @@ public final class CheckedFrequencyTable implements FrequencyTable {
 	
 	
 	public int get(int symbol) {
-		if (isSymbolInRange(symbol)) {
-			int result = freqTable.get(symbol);
-			if (result < 0)
-				throw new AssertionError("Negative symbol frequency");
-			return result;
-		} else {
-			freqTable.get(symbol);
+		int result = freqTable.get(symbol);
+		if (!isSymbolInRange(symbol))
 			throw new AssertionError("IllegalArgumentException expected");
-		}
+		if (result < 0)
+			throw new AssertionError("Negative symbol frequency");
+		return result;
 	}
 	
 	
@@ -60,8 +57,7 @@ public final class CheckedFrequencyTable implements FrequencyTable {
 		if (isSymbolInRange(symbol)) {
 			int low   = freqTable.getLow (symbol);
 			int high  = freqTable.getHigh(symbol);
-			int total = freqTable.getTotal();
-			if (!(0 <= low && low <= high && high <= total))
+			if (!(0 <= low && low <= high && high <= freqTable.getTotal()))
 				throw new AssertionError("Symbol low cumulative frequency out of range");
 			return low;
 		} else {
@@ -75,8 +71,7 @@ public final class CheckedFrequencyTable implements FrequencyTable {
 		if (isSymbolInRange(symbol)) {
 			int low   = freqTable.getLow (symbol);
 			int high  = freqTable.getHigh(symbol);
-			int total = freqTable.getTotal();
-			if (!(0 <= low && low <= high && high <= total))
+			if (!(0 <= low && low <= high && high <= freqTable.getTotal()))
 				throw new AssertionError("Symbol high cumulative frequency out of range");
 			return high;
 		} else {

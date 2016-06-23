@@ -90,7 +90,7 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 			else
 				start = middle;
 		}
-		if (start == end)
+		if (start + 1 != end)
 			throw new AssertionError();
 		
 		int symbol = start;

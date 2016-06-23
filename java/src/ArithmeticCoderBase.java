@@ -34,7 +34,7 @@ public abstract class ArithmeticCoderBase {
 	/**
 	 * Minimum range during coding (non-trivial), i.e. 010...010.
 	 */
-	protected final long MIN_RANGE = (1L << (STATE_SIZE - 2)) + 2;
+	protected final long MIN_RANGE = (MAX_RANGE >>> 2) + 2;
 	
 	/**
 	 * Maximum allowed total frequency at all times during coding.
