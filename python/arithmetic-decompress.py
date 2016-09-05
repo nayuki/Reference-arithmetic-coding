@@ -19,8 +19,7 @@ python3 = sys.version_info.major >= 3
 def main(args):
 	# Handle command line arguments
 	if len(args) != 2:
-		print("Usage: python arithmetic-decompress.py InputFile OutputFile")
-		sys.exit(1)
+		sys.exit("Usage: python arithmetic-decompress.py InputFile OutputFile")
 	inputfile  = args[0]
 	outputfile = args[1]
 	
