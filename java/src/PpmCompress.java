@@ -25,8 +25,8 @@ import java.util.Arrays;
  */
 public final class PpmCompress {
 	
-	// Must be at least -1. Warning: Exponential memory usage at O(257^n).
-	static final int CONTEXT_ORDER = 3;
+	// Must be at least -1 and match PpmDecompress. Warning: Exponential memory usage at O(257^n).
+	private static final int MODEL_ORDER = 3;
 	
 	
 	public static void main(String[] args) throws IOException {
@@ -51,8 +51,7 @@ public final class PpmCompress {
 	static void compress(InputStream in, BitOutputStream out) throws IOException {
 		// Set up encoder and model
 		ArithmeticEncoder enc = new ArithmeticEncoder(out);
-		PpmContext rootCtx = new PpmContext(257, CONTEXT_ORDER >= 1);
-		rootCtx.frequencies.increment(256);
+		PpmModel model = new PpmModel(MODEL_ORDER, 257, 256);
 		int[] history = new int[0];
 		
 		while (true) {
@@ -61,12 +60,12 @@ public final class PpmCompress {
 			if (symbol == -1)
 				break;
 			
-			encodeSymbol(rootCtx, history, symbol, enc);
-			incrementContexts(history, symbol, rootCtx);
+			encodeSymbol(model, history, symbol, enc);
+			model.incrementContexts(history, symbol);
 			
 			// Append current symbol or shift back by one
-			if (CONTEXT_ORDER >= 1) {
-				if (history.length < CONTEXT_ORDER)
+			if (model.modelOrder >= 1) {
+				if (history.length < model.modelOrder)
 					history = Arrays.copyOf(history, history.length + 1);
 				else
 					System.arraycopy(history, 1, history, 0, history.length - 1);
@@ -74,16 +73,16 @@ public final class PpmCompress {
 			}
 		}
 		
-		encodeSymbol(rootCtx, history, 256, enc);  // EOF
+		encodeSymbol(model, history, 256, enc);  // EOF
 		enc.finish();  // Flush remaining code bits
 	}
 	
 	
-	private static void encodeSymbol(PpmContext rootCtx, int[] history, int symbol, ArithmeticEncoder enc) throws IOException {
+	private static void encodeSymbol(PpmModel model, int[] history, int symbol, ArithmeticEncoder enc) throws IOException {
 		outer:
-		for (int order = Math.min(history.length, CONTEXT_ORDER); order >= -1; order--) {
+		for (int order = Math.min(history.length, MODEL_ORDER); order >= -1; order--) {
 			if (order >= 0) {
-				PpmContext ctx = rootCtx;
+				PpmModel.Context ctx = model.rootContext;
 				for (int i = history.length - order; i < history.length; i++) {
 					if (ctx.subcontexts == null)
 						throw new AssertionError();
@@ -99,52 +98,10 @@ public final class PpmCompress {
 					// Continue decrementing the order
 				}
 			} else if (order == -1)
-				enc.write(ORDER_MINUS1_FREQS, symbol);
+				enc.write(model.orderMinus1Freqs, symbol);
 			else
 				throw new AssertionError();
 		}
-	}
-	
-	
-	/* Members shared by compressor and decompressor */
-	
-	static void incrementContexts(int[] history, int symbol, PpmContext rootCtx) {
-		for (int order = Math.min(history.length, CONTEXT_ORDER); order >= 0; order--) {
-			PpmContext ctx = rootCtx;
-			for (int i = history.length - order, depth = 0; i < history.length; i++, depth++) {
-				if (ctx.subcontexts == null)
-					throw new AssertionError();
-				int sym = history[i];
-				if (ctx.subcontexts[sym] == null) {
-					ctx.subcontexts[sym] = new PpmContext(257, depth + 1 < CONTEXT_ORDER);
-					ctx.subcontexts[sym].frequencies.increment(256);
-				}
-				ctx = ctx.subcontexts[sym];
-			}
-			ctx.frequencies.increment(symbol);
-		}
-	}
-	
-	
-	static final FrequencyTable ORDER_MINUS1_FREQS = new FlatFrequencyTable(257);
-	
-	
-	
-	static final class PpmContext {
-		
-		public final FrequencyTable frequencies;
-		
-		public final PpmContext[] subcontexts;
-		
-		
-		public PpmContext(int symbols, boolean hasSubctx) {
-			frequencies = new SimpleFrequencyTable(new int[symbols]);
-			if (hasSubctx)
-				subcontexts = new PpmContext[symbols];
-			else
-				subcontexts = null;
-		}
-		
 	}
 	
 }

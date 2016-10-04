@@ -23,6 +23,10 @@ import java.util.Arrays;
  */
 public final class PpmDecompress {
 	
+	// Must be at least -1 and match PpmDecompress. Warning: Exponential memory usage at O(257^n).
+	private static final int MODEL_ORDER = 3;
+	
+	
 	public static void main(String[] args) throws IOException {
 		// Handle command line arguments
 		if (args.length != 2) {
@@ -45,20 +49,19 @@ public final class PpmDecompress {
 	static void decompress(BitInputStream in, OutputStream out) throws IOException {
 		// Set up encoder and model
 		ArithmeticDecoder dec = new ArithmeticDecoder(in);
-		PpmCompress.PpmContext rootCtx = new PpmCompress.PpmContext(257, PpmCompress.CONTEXT_ORDER >= 1);
-		rootCtx.frequencies.increment(256);
+		PpmModel model = new PpmModel(MODEL_ORDER, 257, 256);
 		int[] history = new int[0];
 		
 		while (true) {
-			int symbol = decodeSymbol(dec, rootCtx, history);
+			int symbol = decodeSymbol(dec, model, history);
 			if (symbol == 256)  // EOF symbol
 				break;
 			out.write(symbol);
-			PpmCompress.incrementContexts(history, symbol, rootCtx);
+			model.incrementContexts(history, symbol);
 			
 			// Append current symbol or shift back by one
-			if (PpmCompress.CONTEXT_ORDER >= 1) {
-				if (history.length < PpmCompress.CONTEXT_ORDER)
+			if (model.modelOrder >= 1) {
+				if (history.length < model.modelOrder)
 					history = Arrays.copyOf(history, history.length + 1);
 				else
 					System.arraycopy(history, 1, history, 0, history.length - 1);
@@ -68,10 +71,10 @@ public final class PpmDecompress {
 	}
 	
 	
-	private static int decodeSymbol(ArithmeticDecoder dec, PpmCompress.PpmContext rootCtx, int[] history) throws IOException {
+	private static int decodeSymbol(ArithmeticDecoder dec, PpmModel model, int[] history) throws IOException {
 		outer:
-		for (int order = Math.min(history.length, PpmCompress.CONTEXT_ORDER); order >= 0; order--) {
-			PpmCompress.PpmContext ctx = rootCtx;
+		for (int order = Math.min(history.length, model.modelOrder); order >= 0; order--) {
+			PpmModel.Context ctx = model.rootContext;
 			for (int i = history.length - order; i < history.length; i++) {
 				if (ctx.subcontexts == null)
 					throw new AssertionError();
@@ -85,7 +88,7 @@ public final class PpmDecompress {
 			// Else the context escape symbol was encountered, so continue decrementing the order
 		}
 		// Logic for order = -1
-		return dec.read(PpmCompress.ORDER_MINUS1_FREQS);
+		return dec.read(model.orderMinus1Freqs);
 	}
 	
 }
