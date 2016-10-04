@@ -16,7 +16,7 @@ import java.io.IOException;
  */
 public abstract class ArithmeticCoderBase {
 	
-	/* Configuration */
+	/*---- Configuration ----*/
 	
 	/**
 	 * Number of bits for 'low' and 'high'. Configurable in the range [1, 62] (but possibly more restricted).
@@ -24,7 +24,7 @@ public abstract class ArithmeticCoderBase {
 	protected final long STATE_SIZE = 32;
 	
 	
-	/* Constants */
+	/*---- Constants ----*/
 	
 	/**
 	 * Maximum range during coding (trivial), i.e. 1000...000.
@@ -57,7 +57,8 @@ public abstract class ArithmeticCoderBase {
 	protected final long SECOND_MASK = TOP_MASK >>> 1;
 	
 	
-	/* Fields */
+	
+	/*---- Fields ----*/
 	
 	/**
 	 * Low end of this arithmetic coder's current range. Conceptually has an infinite number of trailing 0s.
@@ -70,7 +71,8 @@ public abstract class ArithmeticCoderBase {
 	protected long high;
 	
 	
-	/* Constructor */
+	
+	/*---- Constructor ----*/
 	
 	/**
 	 * Constructs an arithmetic coder, which initializes the code range.
@@ -81,7 +83,8 @@ public abstract class ArithmeticCoderBase {
 	}
 	
 	
-	/* Methods */
+	
+	/*---- Methods ----*/
 	
 	/**
 	 * Updates the code range (low and high) of this arithmetic coder as a result

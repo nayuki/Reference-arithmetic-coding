@@ -14,10 +14,14 @@
  */
 public final class CheckedFrequencyTable implements FrequencyTable {
 	
+	/*---- Fields ----*/
+	
 	// The underlying frequency table that holds the data (not null).
 	private FrequencyTable freqTable;
 	
 	
+	
+	/*---- Constructor ----*/
 	
 	public CheckedFrequencyTable(FrequencyTable freq) {
 		if (freq == null)
@@ -26,6 +30,8 @@ public final class CheckedFrequencyTable implements FrequencyTable {
 	}
 	
 	
+	
+	/*---- Methods ----*/
 	
 	public int getSymbolLimit() {
 		int result = freqTable.getSymbolLimit();

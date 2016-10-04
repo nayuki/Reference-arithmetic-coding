@@ -15,7 +15,7 @@ import java.io.IOException;
  */
 public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	
-	/* Fields */
+	/*---- Fields ----*/
 	
 	// The underlying bit input stream (not null).
 	private BitInputStream input;
@@ -24,7 +24,8 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	private long code;
 	
 	
-	/* Constructor */
+	
+	/*---- Constructor ----*/
 	
 	/**
 	 * Constructs an arithmetic coding decoder based on the
@@ -44,7 +45,8 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	}
 	
 	
-	/* Methods */
+	
+	/*---- Methods ----*/
 	
 	/**
 	 * Decodes the next symbol based on the specified frequency table and returns it.

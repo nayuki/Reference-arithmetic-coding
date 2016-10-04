@@ -15,7 +15,7 @@ import java.io.IOException;
  */
 public final class ArithmeticEncoder extends ArithmeticCoderBase {
 	
-	/* Fields */
+	/*---- Fields ----*/
 	
 	// The underlying bit output stream (not null).
 	private BitOutputStream output;
@@ -25,7 +25,8 @@ public final class ArithmeticEncoder extends ArithmeticCoderBase {
 	private int numUnderflow;
 	
 	
-	/* Constructor */
+	
+	/*---- Constructor ----*/
 	
 	/**
 	 * Constructs an arithmetic coding encoder based on the specified bit output stream.
@@ -41,7 +42,8 @@ public final class ArithmeticEncoder extends ArithmeticCoderBase {
 	}
 	
 	
-	/* Methods */
+	
+	/*---- Methods ----*/
 	
 	/**
 	 * Encodes the specified symbol based on the specified frequency table.

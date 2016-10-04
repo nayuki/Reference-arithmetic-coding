@@ -13,10 +13,14 @@
  */
 public final class FlatFrequencyTable implements FrequencyTable {
 	
+	/*---- Fields ----*/
+	
 	// Total number of symbols, which is at least 1.
 	private final int numSymbols;
 	
 	
+	
+	/*---- Constructor ----*/
 	
 	/**
 	 * Constructs a flat frequency table with the specified number of symbols.
@@ -30,6 +34,8 @@ public final class FlatFrequencyTable implements FrequencyTable {
 	}
 	
 	
+	
+	/*---- Methods ----*/
 	
 	/**
 	 * Returns the number of symbols in this table, which is at least 1.

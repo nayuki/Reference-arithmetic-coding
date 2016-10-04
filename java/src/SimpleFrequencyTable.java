@@ -14,6 +14,8 @@
  */
 public final class SimpleFrequencyTable implements FrequencyTable {
 	
+	/*---- Fields ----*/
+	
 	// The frequency for each symbol. Its length is at least 1, and each element is non-negative.
 	private int[] frequencies;
 	
@@ -25,6 +27,8 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	private int total;
 	
 	
+	
+	/*---- Constructors ----*/
 	
 	/**
 	 * Constructs a frequency table from the specified array of symbol frequencies. There must be at least
@@ -79,6 +83,8 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	}
 	
 	
+	
+	/*---- Methods ----*/
 	
 	/**
 	 * Returns the number of symbols in this frequency table, which is at least 1.

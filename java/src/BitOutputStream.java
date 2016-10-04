@@ -18,7 +18,7 @@ import java.io.OutputStream;
  */
 public final class BitOutputStream {
 	
-	/* Fields */
+	/*---- Fields ----*/
 	
 	// The underlying byte stream to write to (not null).
 	private OutputStream output;
@@ -31,7 +31,7 @@ public final class BitOutputStream {
 	
 	
 	
-	/* Constructor */
+	/*---- Constructor ----*/
 	
 	/**
 	 * Constructs a bit output stream based on the specified byte output stream.
@@ -48,7 +48,7 @@ public final class BitOutputStream {
 	
 	
 	
-	/* Methods */
+	/*---- Methods ----*/
 	
 	/**
 	 * Writes a bit to the stream. The specified bit must be 0 or 1.

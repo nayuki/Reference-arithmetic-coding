@@ -19,7 +19,7 @@ import java.io.InputStream;
  */
 public final class BitInputStream {
 	
-	/* Fields */
+	/*---- Fields ----*/
 	
 	// The underlying byte stream to read from (not null).
 	private InputStream input;
@@ -32,7 +32,7 @@ public final class BitInputStream {
 	
 	
 	
-	/* Constructor */
+	/*---- Constructor ----*/
 	
 	/**
 	 * Constructs a bit input stream based on the specified byte input stream.
@@ -49,7 +49,7 @@ public final class BitInputStream {
 	
 	
 	
-	/* Methods */
+	/*---- Methods ----*/
 	
 	/**
 	 * Reads a bit from this stream. Returns 0 or 1 if a bit is available, or -1 if
