@@ -28,13 +28,12 @@ def main(args):
 	outputfile = args[1]
 	
 	# Perform file compression
-	inp = open(inputfile, "rb")
-	bitout = arithmeticcoding.BitOutputStream(open(outputfile, "wb"))
-	try:
-		compress(inp, bitout)
-	finally:
-		bitout.close()
-		inp.close()
+	with open(inputfile, "rb") as inp:
+		bitout = arithmeticcoding.BitOutputStream(open(outputfile, "wb"))
+		try:
+			compress(inp, bitout)
+		finally:
+			bitout.close()
 
 
 def compress(inp, bitout):

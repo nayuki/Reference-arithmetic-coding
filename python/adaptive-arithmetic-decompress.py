@@ -25,12 +25,11 @@ def main(args):
 	
 	# Perform file decompression
 	bitin = arithmeticcoding.BitInputStream(open(inputfile, "rb"))
-	out = open(outputfile, "wb")
-	try:
-		decompress(bitin, out)
-	finally:
-		out.close()
-		bitin.close()
+	with open(outputfile, "wb") as out:
+		try:
+			decompress(bitin, out)
+		finally:
+			bitin.close()
 
 
 def decompress(bitin, out):

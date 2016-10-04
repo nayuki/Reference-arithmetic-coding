@@ -31,14 +31,13 @@ def main(args):
 	freqs.increment(256)  # EOF symbol gets a frequency of 1
 	
 	# Read input file again, compress with arithmetic coding, and write output file
-	inp = open(inputfile, "rb")
-	bitout = arithmeticcoding.BitOutputStream(open(outputfile, "wb"))
-	try:
-		write_frequencies(bitout, freqs)
-		compress(freqs, inp, bitout)
-	finally:
-		bitout.close()
-		inp.close()
+	with open(inputfile, "rb") as inp:
+		bitout = arithmeticcoding.BitOutputStream(open(outputfile, "wb"))
+		try:
+			write_frequencies(bitout, freqs)
+			compress(freqs, inp, bitout)
+		finally:
+			bitout.close()
 	
 
 # Returns a frequency table based on the bytes in the given file.

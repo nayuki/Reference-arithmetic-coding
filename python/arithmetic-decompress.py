@@ -24,13 +24,12 @@ def main(args):
 	outputfile = args[1]
 	
 	bitin = arithmeticcoding.BitInputStream(open(inputfile, "rb"))
-	out = open(outputfile, "wb")
-	try:
-		freqs = read_frequencies(bitin)
-		decompress(freqs, bitin, out)
-	finally:
-		out.close()
-		bitin.close()
+	with open(outputfile, "wb") as out:
+		try:
+			freqs = read_frequencies(bitin)
+			decompress(freqs, bitin, out)
+		finally:
+			bitin.close()
 
 
 def read_frequencies(bitin):
