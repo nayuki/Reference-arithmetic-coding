@@ -80,28 +80,24 @@ public final class PpmCompress {
 	
 	private static void encodeSymbol(PpmModel model, int[] history, int symbol, ArithmeticEncoder enc) throws IOException {
 		outer:
-		for (int order = Math.min(history.length, MODEL_ORDER); order >= -1; order--) {
-			if (order >= 0) {
-				PpmModel.Context ctx = model.rootContext;
-				for (int i = history.length - order; i < history.length; i++) {
-					if (ctx.subcontexts == null)
-						throw new AssertionError();
-					ctx = ctx.subcontexts[history[i]];
-					if (ctx == null)
-						continue outer;
-				}
-				if (symbol != 256 && ctx.frequencies.get(symbol) > 0) {
-					enc.write(ctx.frequencies, symbol);
-					break;
-				} else {
-					enc.write(ctx.frequencies, 256);  // Context escape symbol
-					// Continue decrementing the order
-				}
-			} else if (order == -1)
-				enc.write(model.orderMinus1Freqs, symbol);
-			else
-				throw new AssertionError();
+		for (int order = Math.min(history.length, model.modelOrder); order >= 0; order--) {
+			PpmModel.Context ctx = model.rootContext;
+			for (int i = history.length - order; i < history.length; i++) {
+				if (ctx.subcontexts == null)
+					throw new AssertionError();
+				ctx = ctx.subcontexts[history[i]];
+				if (ctx == null)
+					continue outer;
+			}
+			if (symbol != 256 && ctx.frequencies.get(symbol) > 0) {
+				enc.write(ctx.frequencies, symbol);
+				return;
+			}
+			// Else write context escape symbol and continue decrementing the order
+			enc.write(ctx.frequencies, 256);
 		}
+		// Logic for order = -1
+		enc.write(model.orderMinus1Freqs, symbol);
 	}
 	
 }
