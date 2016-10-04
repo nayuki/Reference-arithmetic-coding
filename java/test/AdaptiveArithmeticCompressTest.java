@@ -20,10 +20,9 @@ public class AdaptiveArithmeticCompressTest extends ArithmeticCodingTest {
 	protected byte[] compress(byte[] b) throws IOException {
 		InputStream in = new ByteArrayInputStream(b);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		BitOutputStream bitOut = new BitOutputStream(out);
-		
-		AdaptiveArithmeticCompress.compress(in, bitOut);
-		bitOut.close();
+		try (BitOutputStream bitOut = new BitOutputStream(out)) {
+			AdaptiveArithmeticCompress.compress(in, bitOut);
+		}
 		return out.toByteArray();
 	}
 	

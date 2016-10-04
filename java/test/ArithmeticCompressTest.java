@@ -25,11 +25,10 @@ public class ArithmeticCompressTest extends ArithmeticCodingTest {
 		
 		InputStream in = new ByteArrayInputStream(b);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		BitOutputStream bitOut = new BitOutputStream(out);
-		
-		ArithmeticCompress.writeFrequencies(bitOut, freqs);
-		ArithmeticCompress.compress(freqs, in, bitOut);
-		bitOut.close();
+		try (BitOutputStream bitOut = new BitOutputStream(out)) {
+			ArithmeticCompress.writeFrequencies(bitOut, freqs);
+			ArithmeticCompress.compress(freqs, in, bitOut);
+		}
 		return out.toByteArray();
 	}
 	

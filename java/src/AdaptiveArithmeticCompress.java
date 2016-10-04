@@ -36,13 +36,10 @@ public class AdaptiveArithmeticCompress {
 		File inputFile  = new File(args[0]);
 		File outputFile = new File(args[1]);
 		
-		InputStream in = new BufferedInputStream(new FileInputStream(inputFile));
-		BitOutputStream out = new BitOutputStream(new BufferedOutputStream(new FileOutputStream(outputFile)));
-		try {
-			compress(in, out);
-		} finally {
-			out.close();
-			in.close();
+		try (InputStream in = new BufferedInputStream(new FileInputStream(inputFile))) {
+			try (BitOutputStream out = new BitOutputStream(new BufferedOutputStream(new FileOutputStream(outputFile)))) {
+				compress(in, out);
+			}
 		}
 	}
 	

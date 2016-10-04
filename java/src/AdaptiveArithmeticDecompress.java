@@ -32,13 +32,10 @@ public class AdaptiveArithmeticDecompress {
 		File inputFile  = new File(args[0]);
 		File outputFile = new File(args[1]);
 		
-		BitInputStream in = new BitInputStream(new BufferedInputStream(new FileInputStream(inputFile)));
-		OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile));
-		try {
-			decompress(in, out);
-		} finally {
-			out.close();
-			in.close();
+		try (BitInputStream in = new BitInputStream(new BufferedInputStream(new FileInputStream(inputFile)))) {
+			try (OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile))) {
+				decompress(in, out);
+			}
 		}
 	}
 	
