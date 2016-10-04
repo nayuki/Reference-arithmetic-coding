@@ -60,12 +60,11 @@ public final class PpmCompress {
 			int symbol = in.read();
 			if (symbol == -1)
 				break;
-			
 			encodeSymbol(model, history, symbol, enc);
 			model.incrementContexts(history, symbol);
 			
-			// Append current symbol or shift back by one
 			if (model.modelOrder >= 1) {
+				// Append current symbol or shift back by one
 				if (history.length < model.modelOrder)
 					history = Arrays.copyOf(history, history.length + 1);
 				else

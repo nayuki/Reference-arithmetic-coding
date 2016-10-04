@@ -23,7 +23,7 @@ import java.util.Arrays;
  */
 public final class PpmDecompress {
 	
-	// Must be at least -1 and match PpmDecompress. Warning: Exponential memory usage at O(257^n).
+	// Must be at least -1 and match PpmCompress. Warning: Exponential memory usage at O(257^n).
 	private static final int MODEL_ORDER = 3;
 	
 	
@@ -48,20 +48,21 @@ public final class PpmDecompress {
 	
 	// To allow unit testing, this method is package-private instead of private.
 	static void decompress(BitInputStream in, OutputStream out) throws IOException {
-		// Set up encoder and model
+		// Set up decoder and model
 		ArithmeticDecoder dec = new ArithmeticDecoder(in);
 		PpmModel model = new PpmModel(MODEL_ORDER, 257, 256);
 		int[] history = new int[0];
 		
 		while (true) {
+			// Decode and write one byte
 			int symbol = decodeSymbol(dec, model, history);
 			if (symbol == 256)  // EOF symbol
 				break;
 			out.write(symbol);
 			model.incrementContexts(history, symbol);
 			
-			// Append current symbol or shift back by one
 			if (model.modelOrder >= 1) {
+				// Append current symbol or shift back by one
 				if (history.length < model.modelOrder)
 					history = Arrays.copyOf(history, history.length + 1);
 				else
@@ -86,7 +87,7 @@ public final class PpmDecompress {
 			int symbol = dec.read(ctx.frequencies);
 			if (symbol < 256)
 				return symbol;
-			// Else the context escape symbol was encountered, so continue decrementing the order
+			// Else we read the context escape symbol, so continue decrementing the order
 		}
 		// Logic for order = -1
 		return dec.read(model.orderMinus1Freqs);
