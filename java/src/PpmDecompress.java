@@ -37,6 +37,7 @@ public final class PpmDecompress {
 		File inputFile  = new File(args[0]);
 		File outputFile = new File(args[1]);
 		
+		// Perform file decompression
 		try (BitInputStream in = new BitInputStream(new BufferedInputStream(new FileInputStream(inputFile)))) {
 			try (OutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile))) {
 				decompress(in, out);

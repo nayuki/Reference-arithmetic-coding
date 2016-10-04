@@ -23,6 +23,7 @@ def main(args):
 	inputfile  = args[0]
 	outputfile = args[1]
 	
+	# Perform file decompression
 	bitin = arithmeticcoding.BitInputStream(open(inputfile, "rb"))
 	with open(outputfile, "wb") as out:
 		try:
