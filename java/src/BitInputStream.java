@@ -9,6 +9,7 @@
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 
 /**
@@ -40,8 +41,7 @@ public final class BitInputStream implements AutoCloseable {
 	 * @throws NullPointerException if the input stream is {@code null}
 	 */
 	public BitInputStream(InputStream in) {
-		if (in == null)
-			throw new NullPointerException();
+		Objects.requireNonNull(in);
 		input = in;
 		currentByte = 0;
 		numBitsRemaining = 0;

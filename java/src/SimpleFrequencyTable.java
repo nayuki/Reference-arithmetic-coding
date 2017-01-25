@@ -6,6 +6,8 @@
  * https://github.com/nayuki/Reference-arithmetic-coding
  */
 
+import java.util.Objects;
+
 
 /**
  * A mutable table of symbol frequencies. The number of symbols cannot be changed
@@ -39,8 +41,7 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	 * @throws ArithmeticException if the total of {@code freqs} exceeds {@code Integer.MAX_VALUE}
 	 */
 	public SimpleFrequencyTable(int[] freqs) {
-		if (freqs == null)
-			throw new NullPointerException();
+		Objects.requireNonNull(freqs);
 		if (freqs.length < 1)
 			throw new IllegalArgumentException("At least 1 symbol needed");
 		

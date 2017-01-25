@@ -8,6 +8,7 @@
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Objects;
 
 
 /**
@@ -39,8 +40,7 @@ public final class BitOutputStream implements AutoCloseable {
 	 * @throws NullPointerException if the output stream is {@code null}
 	 */
 	public BitOutputStream(OutputStream out) {
-		if (out == null)
-			throw new NullPointerException();
+		Objects.requireNonNull(out);
 		output = out;
 		currentByte = 0;
 		numBitsFilled = 0;

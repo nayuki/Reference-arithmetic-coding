@@ -7,6 +7,7 @@
  */
 
 import java.io.IOException;
+import java.util.Objects;
 
 
 /**
@@ -36,8 +37,7 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	 */
 	public ArithmeticDecoder(BitInputStream in) throws IOException {
 		super();
-		if (in == null)
-			throw new NullPointerException();
+		Objects.requireNonNull(in);
 		input = in;
 		code = 0;
 		for (int i = 0; i < STATE_SIZE; i++)

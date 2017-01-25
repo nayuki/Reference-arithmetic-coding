@@ -6,6 +6,8 @@
  * https://github.com/nayuki/Reference-arithmetic-coding
  */
 
+import java.util.Objects;
+
 
 /**
  * A wrapper that checks the preconditions (arguments) and postconditions (return value)
@@ -24,8 +26,7 @@ public final class CheckedFrequencyTable implements FrequencyTable {
 	/*---- Constructor ----*/
 	
 	public CheckedFrequencyTable(FrequencyTable freq) {
-		if (freq == null)
-			throw new NullPointerException();
+		Objects.requireNonNull(freq);
 		freqTable = freq;
 	}
 	

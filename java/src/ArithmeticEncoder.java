@@ -7,6 +7,7 @@
  */
 
 import java.io.IOException;
+import java.util.Objects;
 
 
 /**
@@ -35,8 +36,7 @@ public final class ArithmeticEncoder extends ArithmeticCoderBase {
 	 */
 	public ArithmeticEncoder(BitOutputStream out) {
 		super();
-		if (out == null)
-			throw new NullPointerException();
+		Objects.requireNonNull(out);
 		output = out;
 		numUnderflow = 0;
 	}
