@@ -36,7 +36,7 @@ public final class BitOutputStream implements AutoCloseable {
 	
 	/**
 	 * Constructs a bit output stream based on the specified byte output stream.
-	 * @param in the byte output stream
+	 * @param out the byte output stream
 	 * @throws NullPointerException if the output stream is {@code null}
 	 */
 	public BitOutputStream(OutputStream out) {
