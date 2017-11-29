@@ -40,11 +40,10 @@ public class ArithmeticCompress {
 		freqs.increment(256);  // EOF symbol gets a frequency of 1
 		
 		// Read input file again, compress with arithmetic coding, and write output file
-		try (InputStream in = new BufferedInputStream(new FileInputStream(inputFile))) {
-			try (BitOutputStream out = new BitOutputStream(new BufferedOutputStream(new FileOutputStream(outputFile)))) {
-				writeFrequencies(out, freqs);
-				compress(freqs, in, out);
-			}
+		try (InputStream in = new BufferedInputStream(new FileInputStream(inputFile));
+				BitOutputStream out = new BitOutputStream(new BufferedOutputStream(new FileOutputStream(outputFile)))) {
+			writeFrequencies(out, freqs);
+			compress(freqs, in, out);
 		}
 	}
 	
