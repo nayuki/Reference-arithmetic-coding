@@ -20,7 +20,7 @@ import org.junit.Test;
  */
 public abstract class ArithmeticCodingTest {
 	
-	/* Test cases */
+	/*---- Test cases ----*/
 	
 	@Test public void testEmpty() {
 		test(new byte[0]);
@@ -105,7 +105,8 @@ public abstract class ArithmeticCodingTest {
 	}
 	
 	
-	/* Utilities */
+	
+	/*---- Utilities ----*/
 	
 	// Tests that the given byte array can be compressed and decompressed to the same data, and not throw any exceptions.
 	private void test(byte[] b) {
@@ -124,7 +125,8 @@ public abstract class ArithmeticCodingTest {
 	private static Random random = new Random();
 	
 	
-	/* Abstract methods */
+	
+	/*---- Abstract methods ----*/
 	
 	// Compression method that needs to be supplied by a subclass.
 	protected abstract byte[] compress(byte[] b) throws IOException;
