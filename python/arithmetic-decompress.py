@@ -30,9 +30,13 @@ def main(args):
 
 
 def read_frequencies(bitin):
-	freqs = []
-	for i in range(256):
-		freqs.append(read_int(bitin, 32))
+	def read_int(n):
+		result = 0
+		for _ in range(n):
+			result = (result << 1) | bitin.read_no_eof()  # Big endian
+		return result
+	
+	freqs = [read_int(32) for _ in range(256)]
 	freqs.append(1)  # EOF symbol
 	return arithmeticcoding.SimpleFrequencyTable(freqs)
 
@@ -44,14 +48,6 @@ def decompress(freqs, bitin, out):
 		if symbol == 256:  # EOF symbol
 			break
 		out.write(bytes((symbol,)) if python3 else chr(symbol))
-
-
-# Reads an unsigned integer of the given bit width from the given stream.
-def read_int(bitin, numbits):
-	result = 0
-	for i in range(numbits):
-		result = (result << 1) | bitin.read_no_eof()  # Big endian
-	return result
 
 
 # Main launcher
