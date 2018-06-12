@@ -13,7 +13,7 @@
 # https://github.com/nayuki/Reference-arithmetic-coding
 # 
 
-import sys
+import contextlib, sys
 import arithmeticcoding
 python3 = sys.version_info.major >= 3
 
@@ -31,13 +31,10 @@ def main(args):
 	freqs.increment(256)  # EOF symbol gets a frequency of 1
 	
 	# Read input file again, compress with arithmetic coding, and write output file
-	with open(inputfile, "rb") as inp:
-		bitout = arithmeticcoding.BitOutputStream(open(outputfile, "wb"))
-		try:
-			write_frequencies(bitout, freqs)
-			compress(freqs, inp, bitout)
-		finally:
-			bitout.close()
+	with open(inputfile, "rb") as inp, \
+			contextlib.closing(arithmeticcoding.BitOutputStream(open(outputfile, "wb"))) as bitout:
+		write_frequencies(bitout, freqs)
+		compress(freqs, inp, bitout)
 
 
 # Returns a frequency table based on the bytes in the given file.

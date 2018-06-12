@@ -14,7 +14,7 @@
 # https://github.com/nayuki/Reference-arithmetic-coding
 # 
 
-import sys
+import contextlib, sys
 import arithmeticcoding
 python3 = sys.version_info.major >= 3
 
@@ -28,12 +28,9 @@ def main(args):
 	outputfile = args[1]
 	
 	# Perform file compression
-	with open(inputfile, "rb") as inp:
-		bitout = arithmeticcoding.BitOutputStream(open(outputfile, "wb"))
-		try:
-			compress(inp, bitout)
-		finally:
-			bitout.close()
+	with open(inputfile, "rb") as inp, \
+			contextlib.closing(arithmeticcoding.BitOutputStream(open(outputfile, "wb"))) as bitout:
+		compress(inp, bitout)
 
 
 def compress(inp, bitout):
