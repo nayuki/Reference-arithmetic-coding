@@ -38,7 +38,7 @@ def main(args):
 			compress(freqs, inp, bitout)
 		finally:
 			bitout.close()
-	
+
 
 # Returns a frequency table based on the bytes in the given file.
 # Also contains an extra entry for symbol 256, whose frequency is set to 0.
