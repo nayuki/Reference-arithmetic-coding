@@ -20,8 +20,7 @@ def main(args):
 	# Handle command line arguments
 	if len(args) != 2:
 		sys.exit("Usage: python adaptive-arithmetic-decompress.py InputFile OutputFile")
-	inputfile  = args[0]
-	outputfile = args[1]
+	inputfile, outputfile = args
 	
 	# Perform file decompression
 	with open(inputfile, "rb") as inp, open(outputfile, "wb") as out:
