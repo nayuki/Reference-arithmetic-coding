@@ -82,7 +82,7 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 		if (value < 0 || value >= total)
 			throw new AssertionError();
 		
-		// A kind of binary search. Find highest symbol such that freqs.get_low(symbol) <= value.
+		// A kind of binary search. Find highest symbol such that freqs.getLow(symbol) <= value.
 		int start = 0;
 		int end = freqs.getSymbolLimit();
 		while (end - start > 1) {

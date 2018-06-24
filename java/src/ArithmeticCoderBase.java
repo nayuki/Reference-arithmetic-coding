@@ -93,9 +93,9 @@ public abstract class ArithmeticCoderBase {
 	 * <ul>
 	 *   <li>0 &le; low &le; code &le; high &lt; 2<sup>STATE_SIZE</sup>. ('code' exists only in the decoder.)
 	 *   Therefore these variables are unsigned integers of STATE_SIZE bits.</li>
-	 *   <li>(low &lt; 1/2 * 2<sup>STATE_SIZE</sup>) && (high >= 1/2 * 2<sup>STATE_SIZE</sup>).
+	 *   <li>(low &lt; 1/2 * 2<sup>STATE_SIZE</sup>) && (high &ge; 1/2 * 2<sup>STATE_SIZE</sup>).
 	 *   In other words, they are in different halves of the full range.</li>
-	 *   <li>(low &lt; 1/4 * 2<sup>STATE_SIZE</sup>) || (high >= 3/4 * 2<sup>STATE_SIZE</sup>).
+	 *   <li>(low &lt; 1/4 * 2<sup>STATE_SIZE</sup>) || (high &ge; 3/4 * 2<sup>STATE_SIZE</sup>).
 	 *   In other words, they are not both in the middle two quarters.</li>
 	 *   <li>Let range = high &minus; low + 1, then MAX_RANGE/4 &lt; MIN_RANGE &le; range
 	 *   &le; MAX_RANGE = 2<sup>STATE_SIZE</sup>. These invariants for 'range' essentially dictate the maximum
