@@ -2,7 +2,7 @@ Reference arithmetic coding
 ===========================
 
 This project is a clear implementation of arithmetic coding, suitable as a reference for
-educational purposes. It is provided separately in Java and Python, and is open source.
+educational purposes. It is provided separately in Java, Python, C++, and is open source.
 
 The code can be used for study, and as a solid basis for modification and extension.
 Consequently, the codebase optimizes for readability and avoids fancy logic,
@@ -14,7 +14,7 @@ Home page with detailed description: [https://www.nayuki.io/page/reference-arith
 License
 -------
 
-Copyright © 2017 Project Nayuki. (MIT License)
+Copyright © 2018 Project Nayuki. (MIT License)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
