@@ -104,7 +104,7 @@ class SimpleFrequencyTable final : public FrequencyTable {
 	
 	
 	// Recomputes the array of cumulative symbol frequencies.
-	private: void initCumulative() const;
+	private: void initCumulative(bool checkTotal=true) const;
 	
 	
 	// Adds the given integers, or throws an exception if the result cannot be represented as a uint32_t (i.e. overflow).
