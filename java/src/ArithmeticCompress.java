@@ -91,7 +91,7 @@ public class ArithmeticCompress {
 			throw new IllegalArgumentException();
 		
 		for (int i = numBits - 1; i >= 0; i--)
-			out.write((value >>> i) & 1);  // Little endian
+			out.write((value >>> i) & 1);  // Big endian
 	}
 	
 }

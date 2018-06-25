@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
 		for (uint32_t i = 0; i < 256; i++) {
 			uint32_t freq = freqs.get(i);
 			for (int j = 31; j >= 0; j--)
-				bout.write(static_cast<int>((freq >> j) & 1));  // Little endian
+				bout.write(static_cast<int>((freq >> j) & 1));  // Big endian
 		}
 		
 		ArithmeticEncoder enc(bout);
