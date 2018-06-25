@@ -15,9 +15,9 @@
 #include <fstream>
 #include <iostream>
 #include <vector>
+#include "ArithmeticCoder.hpp"
 #include "BitIoStream.hpp"
 #include "FrequencyTable.hpp"
-#include "ArithmeticCoder.hpp"
 
 using std::uint32_t;
 
