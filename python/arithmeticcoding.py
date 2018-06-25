@@ -138,7 +138,7 @@ class ArithmeticEncoder(ArithmeticCoderBase):
 		self.output.write(bit)
 		
 		# Write out the saved underflow bits
-		for i in range(self.num_underflow):
+		for _ in range(self.num_underflow):
 			self.output.write(bit ^ 1)
 		self.num_underflow = 0
 	
@@ -159,7 +159,7 @@ class ArithmeticDecoder(ArithmeticCoderBase):
 		self.input = bitin
 		# The current raw code bits being buffered, which is always in the range [low, high].
 		self.code = 0
-		for i in range(ArithmeticCoderBase.STATE_SIZE):
+		for _ in range(ArithmeticCoderBase.STATE_SIZE):
 			self.code = self.code << 1 | self.read_code_bit()
 	
 	
