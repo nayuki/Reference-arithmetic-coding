@@ -45,6 +45,8 @@ int main(int argc, char *argv[]) {
 		int b = in.get();
 		if (b == EOF)
 			break;
+		if (b < 0 || b > 255)
+			throw "Assertion error";
 		freqs.increment(static_cast<uint32_t>(b));
 	}
 	
@@ -67,6 +69,8 @@ int main(int argc, char *argv[]) {
 			int symbol = in.get();
 			if (symbol == EOF)
 				break;
+			if (symbol < 0 || symbol > 255)
+				throw "Assertion error";
 			enc.write(freqs, static_cast<uint32_t>(symbol));
 		}
 		
