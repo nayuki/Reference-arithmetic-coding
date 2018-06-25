@@ -107,7 +107,7 @@ class SimpleFrequencyTable final : public FrequencyTable {
 	private: void initCumulative() const;
 	
 	
-	// Adds the given integers, or throws an exception if the result cannot be represented as an int (i.e. overflow).
+	// Adds the given integers, or throws an exception if the result cannot be represented as a uint32_t (i.e. overflow).
 	private: static std::uint32_t checkedAdd(std::uint32_t x, std::uint32_t y);
 	
 };

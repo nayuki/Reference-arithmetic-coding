@@ -22,7 +22,7 @@ class ArithmeticCoderBase {
 	
 	/*---- Configuration ----*/
 	
-	// Number of bits for 'low' and 'high'. Configurable in the range [1, 62] (but possibly more restricted).
+	// Number of bits for 'low' and 'high'. Configurable in the range [1, 63] (but possibly more restricted).
 	protected: int STATE_SIZE = 32;
 	
 	

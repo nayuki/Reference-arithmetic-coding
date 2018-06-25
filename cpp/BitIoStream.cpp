@@ -55,6 +55,7 @@ void BitOutputStream::write(int b) {
 	currentByte = (currentByte << 1) | b;
 	numBitsFilled++;
 	if (numBitsFilled == 8) {
+		// Note: ostream.put() takes char, which may be signed/unsigned
 		if (std::numeric_limits<char>::is_signed)
 			currentByte -= (currentByte >> 7) << 8;
 		output.put(static_cast<char>(currentByte));
