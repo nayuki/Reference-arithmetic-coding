@@ -17,10 +17,8 @@ SimpleFrequencyTable::SimpleFrequencyTable(const std::vector<uint32_t> &freqs) {
 	if (freqs.size() > UINT32_MAX - 1)
 		throw "Too many symbols";
 	frequencies = freqs;
-	total = 0;
-	for (uint32_t x : frequencies)
-		total = checkedAdd(x, total);
 	cumulative.reserve(frequencies.size() + 1);
+	total = getHigh(freqs.size() - 1);
 }
 
 
@@ -59,20 +57,20 @@ uint32_t SimpleFrequencyTable::getTotal() const {
 
 
 uint32_t SimpleFrequencyTable::getLow(uint32_t symbol) const {
-	if (cumulative.empty())
-		initCumulative();
+	initCumulative();
 	return cumulative.at(symbol);
 }
 
 
 uint32_t SimpleFrequencyTable::getHigh(uint32_t symbol) const {
-	if (cumulative.empty())
-		initCumulative();
+	initCumulative();
 	return cumulative.at(symbol + 1);
 }
 
 
 void SimpleFrequencyTable::initCumulative() const {
+	if (!cumulative.empty())
+		return;
 	uint32_t sum = 0;
 	cumulative.push_back(sum);
 	for (uint32_t freq : frequencies) {
