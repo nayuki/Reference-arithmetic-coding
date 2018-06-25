@@ -20,7 +20,7 @@ SimpleFrequencyTable::SimpleFrequencyTable(const std::vector<uint32_t> &freqs) {
 	total = 0;
 	for (uint32_t x : frequencies)
 		total = checkedAdd(x, total);
-	cumulative.clear();
+	cumulative.reserve(frequencies.size() + 1);
 }
 
 
@@ -73,7 +73,6 @@ uint32_t SimpleFrequencyTable::getHigh(uint32_t symbol) const {
 
 
 void SimpleFrequencyTable::initCumulative() const {
-	cumulative.reserve(frequencies.size() + 1);
 	uint32_t sum = 0;
 	cumulative.push_back(sum);
 	for (uint32_t freq : frequencies) {
