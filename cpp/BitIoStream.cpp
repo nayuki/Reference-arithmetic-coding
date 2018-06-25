@@ -6,6 +6,7 @@
  * https://github.com/nayuki/Reference-arithmetic-coding
  */
 
+#include <limits>
 #include "BitIoStream.hpp"
 
 
@@ -19,9 +20,11 @@ int BitInputStream::read() {
 	if (currentByte == -1)
 		return -1;
 	if (numBitsRemaining == 0) {
-		currentByte = input.get();
+		currentByte = input.get();  // Note: istream.get() returns int, not char
 		if (currentByte == EOF)
 			return -1;
+		if (currentByte < 0 || currentByte > 255)
+			throw "Assertion error";
 		numBitsRemaining = 8;
 	}
 	if (numBitsRemaining <= 0)
@@ -52,7 +55,9 @@ void BitOutputStream::write(int b) {
 	currentByte = (currentByte << 1) | b;
 	numBitsFilled++;
 	if (numBitsFilled == 8) {
-		output.put(currentByte);
+		if (std::numeric_limits<char>::is_signed)
+			currentByte -= (currentByte >> 7) << 8;
+		output.put(static_cast<char>(currentByte));
 		currentByte = 0;
 		numBitsFilled = 0;
 	}
