@@ -10,6 +10,7 @@
 
 #include <algorithm>
 #include <cstdint>
+#include <limits>
 #include "BitIoStream.hpp"
 #include "FrequencyTable.hpp"
 
@@ -34,7 +35,7 @@ class ArithmeticCoderBase {
 	protected: std::uint64_t MIN_RANGE = (MAX_RANGE >> 2) + 2;
 	
 	// Maximum allowed total frequency at all times during coding.
-	protected: std::uint64_t MAX_TOTAL = std::min(UINT64_MAX / MAX_RANGE, MIN_RANGE);
+	protected: std::uint64_t MAX_TOTAL = std::min(std::numeric_limits<decltype(MAX_RANGE)>::max() / MAX_RANGE, MIN_RANGE);
 	
 	// Mask of STATE_SIZE ones, i.e. 111...111.
 	protected: std::uint64_t MASK = MAX_RANGE - 1;
@@ -142,8 +143,8 @@ class ArithmeticEncoder final : private ArithmeticCoderBase {
 	private: BitOutputStream &output;
 	
 	// Number of saved underflow bits. This value can grow without bound,
-	// so a truly correct implementation would use a BigInteger.
-	private: std::uint32_t numUnderflow;
+	// so a truly correct implementation would use a bigint.
+	private: unsigned long numUnderflow;
 	
 	
 	/*---- Constructor ----*/

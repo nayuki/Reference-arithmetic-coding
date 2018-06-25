@@ -144,7 +144,7 @@ void ArithmeticEncoder::shift() {
 
 
 void ArithmeticEncoder::underflow() {
-	if (numUnderflow == UINT32_MAX)
+	if (numUnderflow == std::numeric_limits<decltype(numUnderflow)>::max())
 		throw "Maximum underflow reached";
 	numUnderflow++;
 }
