@@ -49,7 +49,9 @@ public final class PpmCompress {
 	
 	// To allow unit testing, this method is package-private instead of private.
 	static void compress(InputStream in, BitOutputStream out) throws IOException {
-		// Set up encoder and model
+		// Set up encoder and model. In this PPM model, symbol 256 represents EOF;
+		// its frequency is 1 in the order -1 context but its frequency
+		// is 0 in all other contexts (which have non-negative order).
 		ArithmeticEncoder enc = new ArithmeticEncoder(out);
 		PpmModel model = new PpmModel(MODEL_ORDER, 257, 256);
 		int[] history = new int[0];
@@ -78,6 +80,10 @@ public final class PpmCompress {
 	
 	
 	private static void encodeSymbol(PpmModel model, int[] history, int symbol, ArithmeticEncoder enc) throws IOException {
+		// Try to use highest order context that exists based on the history suffix, such
+		// that the next symbol has non-zero frequency. When symbol 256 is produced at a context
+		// at any non-negative order, it means "escape to the next lower order with non-empty
+		// context". When symbol 256 is produced at the order -1 context, it means "EOF".
 		outer:
 		for (int order = history.length; order >= 0; order--) {
 			PpmModel.Context ctx = model.rootContext;

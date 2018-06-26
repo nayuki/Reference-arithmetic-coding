@@ -59,7 +59,9 @@ int main(int argc, char *argv[]) {
 
 
 static void compress(std::ifstream &in, BitOutputStream &out) {
-	// Set up encoder and model
+	// Set up encoder and model. In this PPM model, symbol 256 represents EOF;
+	// its frequency is 1 in the order -1 context but its frequency
+	// is 0 in all other contexts (which have non-negative order).
 	ArithmeticEncoder enc(out);
 	PpmModel model(MODEL_ORDER, 257, 256);
 	vector<uint32_t> history;
@@ -89,6 +91,10 @@ static void compress(std::ifstream &in, BitOutputStream &out) {
 
 
 static void encodeSymbol(PpmModel &model, const vector<uint32_t> &history, uint32_t symbol, ArithmeticEncoder &enc) {
+	// Try to use highest order context that exists based on the history suffix, such
+	// that the next symbol has non-zero frequency. When symbol 256 is produced at a context
+	// at any non-negative order, it means "escape to the next lower order with non-empty
+	// context". When symbol 256 is produced at the order -1 context, it means "EOF".
 	for (int order = static_cast<int>(history.size()); order >= 0; order--) {
 		PpmModel::Context *ctx = model.rootContext.get();
 		for (std::size_t i = history.size() - static_cast<unsigned int>(order); i < history.size(); i++) {

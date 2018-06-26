@@ -36,7 +36,9 @@ def main(args):
 
 
 def compress(inp, bitout):
-	# Set up encoder and model
+	# Set up encoder and model. In this PPM model, symbol 256 represents EOF;
+	# its frequency is 1 in the order -1 context but its frequency
+	# is 0 in all other contexts (which have non-negative order).
 	enc = arithmeticcoding.ArithmeticEncoder(bitout)
 	model = ppmmodel.PpmModel(MODEL_ORDER, 257, 256)
 	history = []
@@ -61,6 +63,10 @@ def compress(inp, bitout):
 
 
 def encode_symbol(model, history, symbol, enc):
+	# Try to use highest order context that exists based on the history suffix, such
+	# that the next symbol has non-zero frequency. When symbol 256 is produced at a context
+	# at any non-negative order, it means "escape to the next lower order with non-empty
+	# context". When symbol 256 is produced at the order -1 context, it means "EOF".
 	for order in reversed(range(len(history) + 1)):
 		ctx = model.root_context
 		# Note: We can't simplify the slice start to just '-order' because order can be 0
