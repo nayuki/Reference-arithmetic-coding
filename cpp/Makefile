@@ -18,8 +18,8 @@ CXXFLAGS += -std=c++11 -O1 -Wall -Wextra -fsanitize=undefined
 .PHONY: all clean
 
 
-OBJ = ArithmeticCoder.o BitIoStream.o FrequencyTable.o
-MAINS = ArithmeticCompress ArithmeticDecompress AdaptiveArithmeticCompress AdaptiveArithmeticDecompress
+OBJ = ArithmeticCoder.o BitIoStream.o FrequencyTable.o PpmModel.o
+MAINS = ArithmeticCompress ArithmeticDecompress AdaptiveArithmeticCompress AdaptiveArithmeticDecompress PpmCompress PpmDecompress
 
 all: $(MAINS)
 
