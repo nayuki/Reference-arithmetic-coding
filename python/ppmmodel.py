@@ -35,11 +35,11 @@ class PpmModel(object):
 		for order in range(len(history) + 1):
 			ctx = self.root_context
 			depth = 0
-			for i in range(len(history) - order, len(history)):
+			# Note: We can't simplify the slice start to just '-order' because order can be 0
+			for sym in history[len(history) - order : ]:
 				subctxs = ctx.subcontexts
 				assert subctxs is not None
 				
-				sym = history[i]
 				if subctxs[sym] is None:
 					subctxs[sym] = PpmModel.Context(self.symbol_limit, depth + 1 < self.model_order)
 					subctxs[sym].frequencies.increment(self.escape_symbol)
