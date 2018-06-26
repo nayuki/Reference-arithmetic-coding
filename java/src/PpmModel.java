@@ -48,7 +48,7 @@ final class PpmModel {
 		if (history.length > modelOrder || symbol < 0 || symbol >= symbolLimit)
 			throw new IllegalArgumentException();
 		
-		for (int order = history.length; order >= 0; order--) {
+		for (int order = 0; order <= history.length; order++) {
 			Context ctx = rootContext;
 			for (int i = history.length - order, depth = 0; i < history.length; i++, depth++) {
 				Context[] subctxs = ctx.subcontexts;

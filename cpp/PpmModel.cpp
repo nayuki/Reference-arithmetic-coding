@@ -46,7 +46,7 @@ void PpmModel::incrementContexts(const vector<uint32_t> &history, uint32_t symbo
 		throw "Illegal argument";
 	int histSize = static_cast<int>(history.size());
 	
-	for (int order = histSize; order >= 0; order--) {
+	for (int order = 0; order <= histSize; order++) {
 		Context *ctx = rootContext.get();
 		for (int i = histSize - order, depth = 0; i < histSize; i++, depth++) {
 			vector<std::unique_ptr<Context>> &subctxs = ctx->subcontexts;
