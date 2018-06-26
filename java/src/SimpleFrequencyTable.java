@@ -37,13 +37,16 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	 * 1 symbol, no symbol has a negative frequency, and the total must not exceed {@code Integer.MAX_VALUE}.
 	 * @param freqs the array of symbol frequencies
 	 * @throws NullPointerException if the array is {@code null}
-	 * @throws IllegalArgumentException if {@code freqs.length} &lt; 1 or any element {@code freqs[i]} &lt; 0
+	 * @throws IllegalArgumentException if {@code freqs.length} &lt; 1,
+	 * {@code freqs.length} = {@code Integer.MAX_VALUE}, or any element {@code freqs[i]} &lt; 0
 	 * @throws ArithmeticException if the total of {@code freqs} exceeds {@code Integer.MAX_VALUE}
 	 */
 	public SimpleFrequencyTable(int[] freqs) {
 		Objects.requireNonNull(freqs);
 		if (freqs.length < 1)
 			throw new IllegalArgumentException("At least 1 symbol needed");
+		if (freqs.length > Integer.MAX_VALUE - 1)
+			throw new IllegalArgumentException("Too many symbols");
 		
 		frequencies = freqs.clone();  // Make copy
 		total = 0;
