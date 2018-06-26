@@ -14,6 +14,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include <vector>
 #include "ArithmeticCoder.hpp"
 #include "BitIoStream.hpp"
@@ -49,10 +50,13 @@ int main(int argc, char *argv[]) {
 		
 		ArithmeticDecoder dec(bin);
 		while (true) {
-			int symbol = static_cast<int>(dec.read(freqs));
+			uint32_t symbol = dec.read(freqs);
 			if (symbol == 256)  // EOF symbol
 				break;
-			out.put(symbol);
+			int b = static_cast<int>(symbol);
+			if (std::numeric_limits<char>::is_signed)
+				b -= (b >> 7) << 8;
+			out.put(static_cast<char>(b));
 		}
 		return EXIT_SUCCESS;
 		
