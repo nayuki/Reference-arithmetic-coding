@@ -74,7 +74,7 @@ public final class PpmDecompress {
 	
 	private static int decodeSymbol(ArithmeticDecoder dec, PpmModel model, int[] history) throws IOException {
 		outer:
-		for (int order = Math.min(history.length, model.modelOrder); order >= 0; order--) {
+		for (int order = history.length; order >= 0; order--) {
 			PpmModel.Context ctx = model.rootContext;
 			for (int i = history.length - order; i < history.length; i++) {
 				if (ctx.subcontexts == null)

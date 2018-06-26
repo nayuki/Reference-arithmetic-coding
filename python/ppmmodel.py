@@ -32,7 +32,7 @@ class PpmModel(object):
 		if len(history) > self.model_order or not (0 <= symbol < self.symbol_limit):
 			raise ValueError()
 		
-		for order in reversed(range(min(len(history), self.model_order) + 1)):
+		for order in reversed(range(len(history) + 1)):
 			ctx = self.root_context
 			depth = 0
 			for i in range(len(history) - order, len(history)):

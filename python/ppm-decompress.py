@@ -55,7 +55,7 @@ def decompress(bitin, out):
 
 
 def decode_symbol(dec, model, history):
-	for order in reversed(range(min(len(history), model.model_order) + 1)):
+	for order in reversed(range(len(history) + 1)):
 		ctx = model.root_context
 		# Note: We can't simplify the slice start to just '-order' because order can be 0
 		for sym in history[len(history) - order : ]:

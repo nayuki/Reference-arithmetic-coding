@@ -12,7 +12,6 @@
  * https://github.com/nayuki/Reference-arithmetic-coding
  */
 
-#include <algorithm>
 #include <cstddef>
 #include <cstdint>
 #include <cstdlib>
@@ -90,7 +89,7 @@ static void compress(std::ifstream &in, BitOutputStream &out) {
 
 
 static void encodeSymbol(PpmModel &model, const vector<uint32_t> &history, uint32_t symbol, ArithmeticEncoder &enc) {
-	for (int order = std::min(static_cast<int>(history.size()), model.modelOrder); order >= 0; order--) {
+	for (int order = static_cast<int>(history.size()); order >= 0; order--) {
 		PpmModel::Context *ctx = model.rootContext.get();
 		for (std::size_t i = history.size() - static_cast<unsigned int>(order); i < history.size(); i++) {
 			if (ctx->subcontexts.empty())
