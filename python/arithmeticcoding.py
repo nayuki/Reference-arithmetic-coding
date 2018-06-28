@@ -15,34 +15,27 @@ python3 = sys.version_info.major >= 3
 # Provides the state and behaviors that arithmetic coding encoders and decoders share.
 class ArithmeticCoderBase(object):
 	
-	# Number of bits for 'low' and 'high'. Configurable and must be at least 1.
-	STATE_SIZE = 32
-	
-	# Maximum range during coding (trivial), i.e. 1000...000.
-	MAX_RANGE = 1 << STATE_SIZE
-	
-	# Minimum range during coding (non-trivial), i.e. 010...010.
-	MIN_RANGE = (MAX_RANGE >> 2) + 2
-	
-	# Maximum allowed total frequency at all times during coding.
-	MAX_TOTAL = MIN_RANGE
-	
-	# Mask of STATE_SIZE ones, i.e. 111...111.
-	MASK = MAX_RANGE - 1
-	
-	# Mask of the top bit at width STATE_SIZE, i.e. 100...000.
-	TOP_MASK = MAX_RANGE >> 1
-	
-	# Mask of the second highest bit at width STATE_SIZE, i.e. 010...000.
-	SECOND_MASK = TOP_MASK >> 1
-	
-	
 	# Constructs an arithmetic coder, which initializes the code range.
 	def __init__(self):
+		# Number of bits for 'low' and 'high'. Configurable and must be at least 1.
+		self.STATE_SIZE = 32
+		# Maximum range during coding (trivial), i.e. 1000...000.
+		self.MAX_RANGE = 1 << self.STATE_SIZE
+		# Minimum range during coding (non-trivial), i.e. 010...010.
+		self.MIN_RANGE = (self.MAX_RANGE >> 2) + 2
+		# Maximum allowed total frequency at all times during coding.
+		self.MAX_TOTAL = self.MIN_RANGE
+		# Mask of STATE_SIZE ones, i.e. 111...111.
+		self.MASK = self.MAX_RANGE - 1
+		# Mask of the top bit at width STATE_SIZE, i.e. 100...000.
+		self.TOP_MASK = self.MAX_RANGE >> 1
+		# Mask of the second highest bit at width STATE_SIZE, i.e. 010...000.
+		self.SECOND_MASK = self.TOP_MASK >> 1
+		
 		# Low end of this arithmetic coder's current range. Conceptually has an infinite number of trailing 0s.
 		self.low = 0
 		# High end of this arithmetic coder's current range. Conceptually has an infinite number of trailing 1s.
-		self.high = ArithmeticCoderBase.MASK
+		self.high = self.MASK
 	
 	
 	# Updates the code range (low and high) of this arithmetic coder as a result
@@ -61,10 +54,10 @@ class ArithmeticCoderBase(object):
 		# State check
 		low = self.low
 		high = self.high
-		if low >= high or (low & ArithmeticCoderBase.MASK) != low or (high & ArithmeticCoderBase.MASK) != high:
+		if low >= high or (low & self.MASK) != low or (high & self.MASK) != high:
 			raise AssertionError("Low or high out of range")
 		range = high - low + 1
-		if not (ArithmeticCoderBase.MIN_RANGE <= range <= ArithmeticCoderBase.MAX_RANGE):
+		if not (self.MIN_RANGE <= range <= self.MAX_RANGE):
 			raise AssertionError("Range out of range")
 		
 		# Frequency table values check
@@ -73,7 +66,7 @@ class ArithmeticCoderBase(object):
 		symhigh = freqs.get_high(symbol)
 		if symlow == symhigh:
 			raise ValueError("Symbol has zero frequency")
-		if total > ArithmeticCoderBase.MAX_TOTAL:
+		if total > self.MAX_TOTAL:
 			raise ValueError("Cannot code symbol because total is too large")
 		
 		# Update range
@@ -83,16 +76,16 @@ class ArithmeticCoderBase(object):
 		self.high = newhigh
 		
 		# While the highest bits are equal
-		while ((self.low ^ self.high) & ArithmeticCoderBase.TOP_MASK) == 0:
+		while ((self.low ^ self.high) & self.TOP_MASK) == 0:
 			self.shift()
-			self.low = (self.low << 1) & ArithmeticCoderBase.MASK
-			self.high = ((self.high << 1) & ArithmeticCoderBase.MASK) | 1
+			self.low = (self.low << 1) & self.MASK
+			self.high = ((self.high << 1) & self.MASK) | 1
 		
 		# While the second highest bit of low is 1 and the second highest bit of high is 0
-		while (self.low & ~self.high & ArithmeticCoderBase.SECOND_MASK) != 0:
+		while (self.low & ~self.high & self.SECOND_MASK) != 0:
 			self.underflow()
-			self.low = (self.low << 1) & (ArithmeticCoderBase.MASK >> 1)
-			self.high = ((self.high << 1) & (ArithmeticCoderBase.MASK >> 1)) | ArithmeticCoderBase.TOP_MASK | 1
+			self.low = (self.low << 1) & (self.MASK >> 1)
+			self.high = ((self.high << 1) & (self.MASK >> 1)) | self.TOP_MASK | 1
 	
 	
 	# Called to handle the situation when the top bit of 'low' and 'high' are equal.
@@ -134,7 +127,7 @@ class ArithmeticEncoder(ArithmeticCoderBase):
 	
 	
 	def shift(self):
-		bit = self.low >> (ArithmeticCoderBase.STATE_SIZE - 1)
+		bit = self.low >> (self.STATE_SIZE - 1)
 		self.output.write(bit)
 		
 		# Write out the saved underflow bits
@@ -159,7 +152,7 @@ class ArithmeticDecoder(ArithmeticCoderBase):
 		self.input = bitin
 		# The current raw code bits being buffered, which is always in the range [low, high].
 		self.code = 0
-		for _ in range(ArithmeticCoderBase.STATE_SIZE):
+		for _ in range(self.STATE_SIZE):
 			self.code = self.code << 1 | self.read_code_bit()
 	
 	
@@ -171,7 +164,7 @@ class ArithmeticDecoder(ArithmeticCoderBase):
 		
 		# Translate from coding range scale to frequency table scale
 		total = freqs.get_total()
-		if total > ArithmeticCoderBase.MAX_TOTAL:
+		if total > self.MAX_TOTAL:
 			raise ValueError("Cannot decode symbol because total is too large")
 		range = self.high - self.low + 1
 		offset = self.code - self.low
@@ -199,11 +192,11 @@ class ArithmeticDecoder(ArithmeticCoderBase):
 	
 	
 	def shift(self):
-		self.code = ((self.code << 1) & ArithmeticCoderBase.MASK) | self.read_code_bit()
+		self.code = ((self.code << 1) & self.MASK) | self.read_code_bit()
 	
 	
 	def underflow(self):
-		self.code = (self.code & ArithmeticCoderBase.TOP_MASK) | ((self.code << 1) & (ArithmeticCoderBase.MASK >> 1)) | self.read_code_bit()
+		self.code = (self.code & self.TOP_MASK) | ((self.code << 1) & (self.MASK >> 1)) | self.read_code_bit()
 	
 	
 	# Returns the next bit (0 or 1) from the input stream. The end
