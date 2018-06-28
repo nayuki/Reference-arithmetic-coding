@@ -38,11 +38,7 @@ int main(int argc, char *argv[]) {
 	BitInputStream bin(in);
 	try {
 		
-		std::vector<uint32_t> temp;
-		for (int i = 0; i < 257; i++)
-			temp.push_back(1);
-		SimpleFrequencyTable freqs(temp);
-		
+		SimpleFrequencyTable freqs(FlatFrequencyTable(257));
 		ArithmeticDecoder dec(bin);
 		while (true) {
 			// Decode and write one byte

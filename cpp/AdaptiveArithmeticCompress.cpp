@@ -41,11 +41,7 @@ int main(int argc, char *argv[]) {
 	BitOutputStream bout(out);
 	try {
 		
-		std::vector<uint32_t> temp;
-		for (int i = 0; i < 257; i++)
-			temp.push_back(1);
-		SimpleFrequencyTable freqs(temp);
-		
+		SimpleFrequencyTable freqs(FlatFrequencyTable(257));
 		ArithmeticEncoder enc(bout);
 		while (true) {
 			// Read and encode one byte

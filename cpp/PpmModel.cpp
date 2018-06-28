@@ -27,15 +27,13 @@ PpmModel::PpmModel(int order, uint32_t symLimit, uint32_t escapeSym) :
 		symbolLimit(symLimit),
 		escapeSymbol(escapeSym),
 		rootContext(std::unique_ptr<Context>(nullptr)),
-		orderMinus1Freqs(makeEmpty(symbolLimit)) {
+		orderMinus1Freqs(FlatFrequencyTable(symbolLimit)) {
 	if (order < -1 || escapeSym >= symLimit)
 		throw "Illegal argument";
 	if (order >= 0) {
 		rootContext.reset(new Context(symbolLimit, order >= 1));
 		rootContext->frequencies.increment(escapeSymbol);
 	}
-	for (uint32_t i = 0; i < symLimit; i++)
-		orderMinus1Freqs.increment(i);
 }
 
 
