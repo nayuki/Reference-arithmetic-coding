@@ -17,21 +17,33 @@ class ArithmeticCoderBase(object):
 	
 	# Constructs an arithmetic coder, which initializes the code range.
 	def __init__(self):
-		# Number of bits for 'low' and 'high'. Configurable and must be at least 1.
+		# -- Configuration fields --
+		# Number of bits for the 'low' and 'high' state variables. Must be at least 1.
+		# - Larger values are generally better - they allow a larger maximum frequency total (MAX_TOTAL),
+		#   and they reduce the approximation error inherent in adapting fractions to integers;
+		#   both effects reduce the data encoding loss and asymptotically approach the efficiency
+		#   of arithmetic coding using exact fractions.
+		# - But larger state sizes increase the computation time for integer arithmetic,
+		#   and compression gains beyond ~30 bits essentially zero in real-world applications.
+		# - Python has native bigint arithmetic, so there is no upper limit to the state size.
+		#   For Java and C++ where using native machine-sized integers makes the most sense,
+		#   they have a recommended value of STATE_SIZE=32 as the most versatile setting.
 		self.STATE_SIZE = 32
-		# Maximum range during coding (trivial), i.e. 1000...000.
+		# Maximum range (high+1-low) during coding (trivial), which is 2^STATE_SIZE = 1000...000.
 		self.MAX_RANGE = 1 << self.STATE_SIZE
-		# Minimum range during coding (non-trivial), i.e. 010...010.
+		# Minimum range (high+1-low) during coding (non-trivial), which is 0010...010.
 		self.MIN_RANGE = (self.MAX_RANGE >> 2) + 2
-		# Maximum allowed total frequency at all times during coding.
+		# Maximum allowed total from a frequency table at all times during coding. This differs from Java
+		# and C++ because Python's native bigint avoids constraining the size of intermediate computations.
 		self.MAX_TOTAL = self.MIN_RANGE
-		# Mask of STATE_SIZE ones, i.e. 111...111.
+		# Bit mask of STATE_SIZE ones, which is 0111...111.
 		self.MASK = self.MAX_RANGE - 1
-		# Mask of the top bit at width STATE_SIZE, i.e. 100...000.
+		# The top bit at width STATE_SIZE, which is 0100...000.
 		self.TOP_MASK = self.MAX_RANGE >> 1
-		# Mask of the second highest bit at width STATE_SIZE, i.e. 010...000.
+		# The second highest bit at width STATE_SIZE, which is 0010...000. This is zero when STATE_SIZE=1.
 		self.SECOND_MASK = self.TOP_MASK >> 1
 		
+		# -- State fields --
 		# Low end of this arithmetic coder's current range. Conceptually has an infinite number of trailing 0s.
 		self.low = 0
 		# High end of this arithmetic coder's current range. Conceptually has an infinite number of trailing 1s.
