@@ -16,7 +16,10 @@ python3 = sys.version_info.major >= 3
 class ArithmeticCoderBase(object):
 	
 	# Constructs an arithmetic coder, which initializes the code range.
-	def __init__(self):
+	def __init__(self, statesize):
+		if statesize < 1:
+			raise ValueError("State size out of range")
+		
 		# -- Configuration fields --
 		# Number of bits for the 'low' and 'high' state variables. Must be at least 1.
 		# - Larger values are generally better - they allow a larger maximum frequency total (MAX_TOTAL),
@@ -28,7 +31,7 @@ class ArithmeticCoderBase(object):
 		# - Python has native bigint arithmetic, so there is no upper limit to the state size.
 		#   For Java and C++ where using native machine-sized integers makes the most sense,
 		#   they have a recommended value of STATE_SIZE=32 as the most versatile setting.
-		self.STATE_SIZE = 32
+		self.STATE_SIZE = statesize
 		# Maximum range (high+1-low) during coding (trivial), which is 2^STATE_SIZE = 1000...000.
 		self.MAX_RANGE = 1 << self.STATE_SIZE
 		# Minimum range (high+1-low) during coding (non-trivial), which is 0010...010.
@@ -115,8 +118,8 @@ class ArithmeticCoderBase(object):
 class ArithmeticEncoder(ArithmeticCoderBase):
 	
 	# Constructs an arithmetic coding encoder based on the given bit output stream.
-	def __init__(self, bitout):
-		super(ArithmeticEncoder, self).__init__()
+	def __init__(self, statesize, bitout):
+		super(ArithmeticEncoder, self).__init__(statesize)
 		# The underlying bit output stream.
 		self.output = bitout
 		# Number of saved underflow bits. This value can grow without bound.
@@ -158,8 +161,8 @@ class ArithmeticDecoder(ArithmeticCoderBase):
 	
 	# Constructs an arithmetic coding decoder based on the
 	# given bit input stream, and fills the code bits.
-	def __init__(self, bitin):
-		super(ArithmeticDecoder, self).__init__()
+	def __init__(self, statesize, bitin):
+		super(ArithmeticDecoder, self).__init__(statesize)
 		# The underlying bit input stream.
 		self.input = bitin
 		# The current raw code bits being buffered, which is always in the range [low, high].

@@ -31,7 +31,7 @@ def main(args):
 def decompress(bitin, out):
 	initfreqs = arithmeticcoding.FlatFrequencyTable(257)
 	freqs = arithmeticcoding.SimpleFrequencyTable(initfreqs)
-	dec = arithmeticcoding.ArithmeticDecoder(bitin)
+	dec = arithmeticcoding.ArithmeticDecoder(32, bitin)
 	while True:
 		# Decode and write one byte
 		symbol = dec.read(freqs)

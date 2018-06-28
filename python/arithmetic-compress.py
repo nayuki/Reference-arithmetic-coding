@@ -56,7 +56,7 @@ def write_frequencies(bitout, freqs):
 
 
 def compress(freqs, inp, bitout):
-	enc = arithmeticcoding.ArithmeticEncoder(bitout)
+	enc = arithmeticcoding.ArithmeticEncoder(32, bitout)
 	while True:
 		symbol = inp.read(1)
 		if len(symbol) == 0:

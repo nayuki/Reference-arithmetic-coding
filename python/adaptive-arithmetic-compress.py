@@ -35,7 +35,7 @@ def main(args):
 def compress(inp, bitout):
 	initfreqs = arithmeticcoding.FlatFrequencyTable(257)
 	freqs = arithmeticcoding.SimpleFrequencyTable(initfreqs)
-	enc = arithmeticcoding.ArithmeticEncoder(bitout)
+	enc = arithmeticcoding.ArithmeticEncoder(32, bitout)
 	while True:
 		# Read and encode one byte
 		symbol = inp.read(1)

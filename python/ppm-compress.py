@@ -39,7 +39,7 @@ def compress(inp, bitout):
 	# Set up encoder and model. In this PPM model, symbol 256 represents EOF;
 	# its frequency is 1 in the order -1 context but its frequency
 	# is 0 in all other contexts (which have non-negative order).
-	enc = arithmeticcoding.ArithmeticEncoder(bitout)
+	enc = arithmeticcoding.ArithmeticEncoder(32, bitout)
 	model = ppmmodel.PpmModel(MODEL_ORDER, 257, 256)
 	history = []
 	

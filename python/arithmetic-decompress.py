@@ -42,7 +42,7 @@ def read_frequencies(bitin):
 
 
 def decompress(freqs, bitin, out):
-	dec = arithmeticcoding.ArithmeticDecoder(bitin)
+	dec = arithmeticcoding.ArithmeticDecoder(32, bitin)
 	while True:
 		symbol = dec.read(freqs)
 		if symbol == 256:  # EOF symbol

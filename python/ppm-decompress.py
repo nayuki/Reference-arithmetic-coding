@@ -37,7 +37,7 @@ def decompress(bitin, out):
 	# Set up decoder and model. In this PPM model, symbol 256 represents EOF;
 	# its frequency is 1 in the order -1 context but its frequency
 	# is 0 in all other contexts (which have non-negative order).
-	dec = arithmeticcoding.ArithmeticDecoder(bitin)
+	dec = arithmeticcoding.ArithmeticDecoder(32, bitin)
 	model = ppmmodel.PpmModel(MODEL_ORDER, 257, 256)
 	history = []
 	
