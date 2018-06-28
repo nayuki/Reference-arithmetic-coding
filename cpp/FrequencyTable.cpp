@@ -11,6 +11,57 @@
 using std::uint32_t;
 
 
+FlatFrequencyTable::FlatFrequencyTable(uint32_t numSyms) :
+		numSymbols(numSyms) {
+	if (numSyms < 1)
+		throw "Number of symbols must be positive";
+}
+
+
+uint32_t FlatFrequencyTable::getSymbolLimit() const {
+	return numSymbols;
+}
+
+
+uint32_t FlatFrequencyTable::get(uint32_t symbol) const  {
+	checkSymbol(symbol);
+	return 1;
+}
+
+
+uint32_t FlatFrequencyTable::getTotal() const  {
+	return numSymbols;
+}
+
+
+uint32_t FlatFrequencyTable::getLow(uint32_t symbol) const  {
+	checkSymbol(symbol);
+	return symbol;
+}
+
+
+uint32_t FlatFrequencyTable::getHigh(uint32_t symbol) const  {
+	checkSymbol(symbol);
+	return symbol + 1;
+}
+
+
+void FlatFrequencyTable::set(uint32_t, uint32_t)  {
+	throw "Unsupported operation";
+}
+
+
+void FlatFrequencyTable::increment(uint32_t) {
+	throw "Unsupported operation";
+}
+
+
+void FlatFrequencyTable::checkSymbol(uint32_t symbol) const {
+	if (symbol >= numSymbols)
+		throw "Symbol out of range";
+}
+
+
 SimpleFrequencyTable::SimpleFrequencyTable(const std::vector<uint32_t> &freqs) {
 	if (freqs.size() < 1)
 		throw "At least 1 symbol needed";

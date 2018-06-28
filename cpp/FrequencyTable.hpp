@@ -53,6 +53,49 @@ class FrequencyTable {
 
 
 
+class FlatFrequencyTable final : public FrequencyTable {
+	
+	/*---- Fields ----*/
+	
+	// Total number of symbols, which is at least 1.
+	private: std::uint32_t numSymbols;
+	
+	
+	/*---- Constructor ----*/
+	
+	// Constructs a flat frequency table with the given number of symbols.
+	public: explicit FlatFrequencyTable(std::uint32_t numSyms);
+	
+	
+	/*---- Methods ----*/
+	
+	public: std::uint32_t getSymbolLimit() const override;
+	
+	
+	public: std::uint32_t get(std::uint32_t symbol) const override;
+	
+	
+	public: std::uint32_t getTotal() const override;
+	
+	
+	public: std::uint32_t getLow(std::uint32_t symbol) const override;
+	
+	
+	public: std::uint32_t getHigh(std::uint32_t symbol) const override;
+	
+	
+	public: void set(std::uint32_t symbol, std::uint32_t freq) override;
+	
+	
+	public: void increment(std::uint32_t symbol) override;
+	
+	
+	private: void checkSymbol(std::uint32_t symbol) const;
+	
+};
+
+
+
 /* 
  * A mutable table of symbol frequencies. The number of symbols cannot be changed
  * after construction. The current algorithm for calculating cumulative frequencies
