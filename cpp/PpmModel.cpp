@@ -14,7 +14,7 @@ using std::vector;
 
 
 PpmModel::Context::Context(uint32_t symbols, bool hasSubctx) :
-		frequencies(makeEmpty(symbols)) {
+		frequencies(vector<uint32_t>(symbols, 0)) {
 	if (hasSubctx) {
 		for (uint32_t i = 0; i < symbols; i++)
 			subcontexts.push_back(std::unique_ptr<Context>(nullptr));
@@ -61,12 +61,4 @@ void PpmModel::incrementContexts(const vector<uint32_t> &history, uint32_t symbo
 		}
 		ctx->frequencies.increment(symbol);
 	}
-}
-
-
-vector<uint32_t> PpmModel::makeEmpty(uint32_t len) {
-	vector<uint32_t> result;
-	for (uint32_t i = 0; i < len; i++)
-		result.push_back(0);
-	return result;
 }

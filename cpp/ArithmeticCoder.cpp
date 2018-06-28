@@ -17,7 +17,7 @@ ArithmeticCoderBase::ArithmeticCoderBase(int stateSize) {
 	if (stateSize < 1 || stateSize > 63)
 		throw "State size out of range";
 	STATE_SIZE = stateSize;
-	MAX_RANGE = UINT64_C(1) << STATE_SIZE;
+	MAX_RANGE = static_cast<decltype(MAX_RANGE)>(1) << STATE_SIZE;
 	MIN_RANGE = (MAX_RANGE >> 2) + 2;
 	MAX_TOTAL = std::min(std::numeric_limits<decltype(MAX_RANGE)>::max() / MAX_RANGE, MIN_RANGE);
 	MASK = MAX_RANGE - 1;
