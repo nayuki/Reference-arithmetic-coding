@@ -20,34 +20,42 @@
  */
 class ArithmeticCoderBase {
 	
-	/*---- Configuration ----*/
+	/*---- Configuration fields ----*/
 	
-	// Number of bits for 'low' and 'high'. Configurable in the range [1, 63] (but possibly more restricted).
+	// Number of bits for the 'low' and 'high' state variables. Must be in the range [1, 63].
+	// - For state sizes less than the midpoint of around 32, larger values are generally better -
+	//   they allow a larger maximum frequency total (MAX_TOTAL), and they reduce the approximation
+	//   error inherent in adapting fractions to integers; both effects reduce the data encoding loss
+	//   and asymptotically approach the efficiency of arithmetic coding using exact fractions.
+	// - But for state sizes greater than the midpoint, because intermediate computations are limited
+	//   to the long integer type's 63-bit unsigned precision, larger state sizes will decrease the
+	//   maximum frequency total, which might constrain the user-supplied probability model.
+	// - Therefore STATE_SIZE=32 is recommended as the most versatile setting
+	//   because it maximizes MAX_TOTAL (which ends up being slightly over 2^30).
+	// - Note that STATE_SIZE=63 is legal but useless because it implies MAX_TOTAL=1,
+	//   which means a frequency table can only support one symbol with non-zero frequency.
 	protected: int STATE_SIZE = 32;
 	
-	
-	/*---- Constants ----*/
-	
-	// Maximum range during coding (trivial), i.e. 1000...000.
+	// Maximum range (high+1-low) during coding (trivial), which is 2^STATE_SIZE = 1000...000.
 	protected: std::uint64_t MAX_RANGE = UINT64_C(1) << STATE_SIZE;
 	
-	// Minimum range during coding (non-trivial), i.e. 010...010.
+	// Minimum range (high+1-low) during coding (non-trivial), which is 0010...010.
 	protected: std::uint64_t MIN_RANGE = (MAX_RANGE >> 2) + 2;
 	
-	// Maximum allowed total frequency at all times during coding.
+	// Maximum allowed total from a frequency table at all times during coding.
 	protected: std::uint64_t MAX_TOTAL = std::min(std::numeric_limits<decltype(MAX_RANGE)>::max() / MAX_RANGE, MIN_RANGE);
 	
-	// Mask of STATE_SIZE ones, i.e. 111...111.
+	// Bit mask of STATE_SIZE ones, which is 0111...111.
 	protected: std::uint64_t MASK = MAX_RANGE - 1;
 	
-	// Mask of the top bit at width STATE_SIZE, i.e. 100...000.
+	// The top bit at width STATE_SIZE, which is 0100...000.
 	protected: std::uint64_t TOP_MASK = MAX_RANGE >> 1;
 	
-	// Mask of the second highest bit at width STATE_SIZE, i.e. 010...000.
+	// The second highest bit at width STATE_SIZE, which is 0010...000. This is zero when STATE_SIZE=1.
 	protected: std::uint64_t SECOND_MASK = TOP_MASK >> 1;
 	
 	
-	/*---- Fields ----*/
+	/*---- State fields ----*/
 	
 	// Low end of this arithmetic coder's current range. Conceptually has an infinite number of trailing 0s.
 	protected: std::uint64_t low;
