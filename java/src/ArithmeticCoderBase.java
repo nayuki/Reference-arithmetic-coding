@@ -19,7 +19,7 @@ public abstract class ArithmeticCoderBase {
 	/*---- Configuration fields ----*/
 	
 	/**
-	 * Number of bits for the 'low' and 'high' state variables. Configurable in the range [1, 62].
+	 * Number of bits for the 'low' and 'high' state variables. Must be in the range [1, 62].
 	 * <ul>
 	 *   <li>For state sizes less than the midpoint of around 32, larger values are generally better -
 	 *   they allow a larger maximum frequency total (MAX_TOTAL), and they reduce the approximation
@@ -34,7 +34,7 @@ public abstract class ArithmeticCoderBase {
 	 *   which means a frequency table can only support one symbol with non-zero frequency.</li>
 	 * </ul>
 	 */
-	protected final long STATE_SIZE;
+	protected final int STATE_SIZE;
 	
 	/** Maximum range (high+1-low) during coding (trivial), which is 2^STATE_SIZE = 1000...000. */
 	protected final long MAX_RANGE;
