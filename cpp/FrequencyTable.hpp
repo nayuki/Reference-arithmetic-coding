@@ -116,11 +116,15 @@ class SimpleFrequencyTable final : public FrequencyTable {
 	private: std::uint32_t total;
 	
 	
-	/*---- Constructor ----*/
+	/*---- Constructors ----*/
 	
 	// Constructs a frequency table from the given array of symbol frequencies.
 	// There must be at least 1 symbol, and the total must not exceed UINT32_MAX.
 	public: explicit SimpleFrequencyTable(const std::vector<std::uint32_t> &freqs);
+	
+	
+	// Constructs a frequency table by copying the given frequency table.
+	public: explicit SimpleFrequencyTable(const FrequencyTable &freqs);
 	
 	
 	/*---- Methods ----*/

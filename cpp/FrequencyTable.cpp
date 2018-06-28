@@ -74,6 +74,23 @@ SimpleFrequencyTable::SimpleFrequencyTable(const std::vector<uint32_t> &freqs) {
 }
 
 
+SimpleFrequencyTable::SimpleFrequencyTable(const FrequencyTable &freqs) {
+	uint32_t size = freqs.getSymbolLimit();
+	if (size < 1)
+		throw "At least 1 symbol needed";
+	if (size > UINT32_MAX - 1)
+		throw "Too many symbols";
+	
+	frequencies.reserve(size + 1);
+	for (uint32_t i = 0; i < size; i++)
+		frequencies.push_back(freqs.get(i));
+	
+	cumulative.reserve(size + 1);
+	initCumulative(false);
+	total = getHigh(size - 1);
+}
+
+
 uint32_t SimpleFrequencyTable::getSymbolLimit() const {
 	return static_cast<uint32_t>(frequencies.size());
 }
