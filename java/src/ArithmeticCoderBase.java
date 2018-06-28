@@ -34,25 +34,25 @@ public abstract class ArithmeticCoderBase {
 	 *   which means a frequency table can only support one symbol with non-zero frequency.</li>
 	 * </ul>
 	 */
-	protected final long STATE_SIZE = 32;
+	protected final long STATE_SIZE;
 	
 	/** Maximum range (high+1-low) during coding (trivial), which is 2^STATE_SIZE = 1000...000. */
-	protected final long MAX_RANGE = 1L << STATE_SIZE;
+	protected final long MAX_RANGE;
 	
 	/** Minimum range (high+1-low) during coding (non-trivial), which is 0010...010. */
-	protected final long MIN_RANGE = (MAX_RANGE >>> 2) + 2;
+	protected final long MIN_RANGE;
 	
 	/** Maximum allowed total from a frequency table at all times during coding. */
-	protected final long MAX_TOTAL = Math.min(Long.MAX_VALUE / MAX_RANGE, MIN_RANGE);
+	protected final long MAX_TOTAL;
 	
 	/** Bit mask of STATE_SIZE ones, which is 0111...111. */
-	protected final long MASK = MAX_RANGE - 1;
+	protected final long MASK;
 	
 	/** The top bit at width STATE_SIZE, which is 0100...000. */
-	protected final long TOP_MASK = MAX_RANGE >>> 1;
+	protected final long TOP_MASK;
 	
 	/** The second highest bit at width STATE_SIZE, which is 0010...000. This is zero when STATE_SIZE=1. */
-	protected final long SECOND_MASK = TOP_MASK >>> 1;
+	protected final long SECOND_MASK;
 	
 	
 	
@@ -74,8 +74,20 @@ public abstract class ArithmeticCoderBase {
 	
 	/**
 	 * Constructs an arithmetic coder, which initializes the code range.
+	 * @param stateSize the number of bits for the arithmetic coding range
+	 * @throws IllegalArgumentException if stateSize is outside the range [1, 62]
 	 */
-	public ArithmeticCoderBase() {
+	public ArithmeticCoderBase(int stateSize) {
+		if (stateSize < 1 || stateSize > 62)
+			throw new IllegalArgumentException("State size out of range");
+		STATE_SIZE = stateSize;
+		MAX_RANGE = 1L << STATE_SIZE;
+		MIN_RANGE = (MAX_RANGE >>> 2) + 2;
+		MAX_TOTAL = Math.min(Long.MAX_VALUE / MAX_RANGE, MIN_RANGE);
+		MASK = MAX_RANGE - 1;
+		TOP_MASK = MAX_RANGE >>> 1;
+		SECOND_MASK = TOP_MASK >>> 1;
+		
 		low = 0;
 		high = MASK;
 	}

@@ -53,7 +53,7 @@ public class ArithmeticDecompress {
 	
 	// To allow unit testing, this method is package-private instead of private.
 	static void decompress(FrequencyTable freqs, BitInputStream in, OutputStream out) throws IOException {
-		ArithmeticDecoder dec = new ArithmeticDecoder(in);
+		ArithmeticDecoder dec = new ArithmeticDecoder(32, in);
 		while (true) {
 			int symbol = dec.read(freqs);
 			if (symbol == 256)  // EOF symbol

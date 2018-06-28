@@ -73,7 +73,7 @@ public class ArithmeticCompress {
 	
 	// To allow unit testing, this method is package-private instead of private.
 	static void compress(FrequencyTable freqs, InputStream in, BitOutputStream out) throws IOException {
-		ArithmeticEncoder enc = new ArithmeticEncoder(out);
+		ArithmeticEncoder enc = new ArithmeticEncoder(32, out);
 		while (true) {
 			int symbol = in.read();
 			if (symbol == -1)

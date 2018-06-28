@@ -48,7 +48,7 @@ public class AdaptiveArithmeticCompress {
 	static void compress(InputStream in, BitOutputStream out) throws IOException {
 		FlatFrequencyTable initFreqs = new FlatFrequencyTable(257);
 		FrequencyTable freqs = new SimpleFrequencyTable(initFreqs);
-		ArithmeticEncoder enc = new ArithmeticEncoder(out);
+		ArithmeticEncoder enc = new ArithmeticEncoder(32, out);
 		while (true) {
 			// Read and encode one byte
 			int symbol = in.read();

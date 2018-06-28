@@ -44,7 +44,7 @@ public class AdaptiveArithmeticDecompress {
 	static void decompress(BitInputStream in, OutputStream out) throws IOException {
 		FlatFrequencyTable initFreqs = new FlatFrequencyTable(257);
 		FrequencyTable freqs = new SimpleFrequencyTable(initFreqs);
-		ArithmeticDecoder dec = new ArithmeticDecoder(in);
+		ArithmeticDecoder dec = new ArithmeticDecoder(32, in);
 		while (true) {
 			// Decode and write one byte
 			int symbol = dec.read(freqs);

@@ -31,12 +31,14 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	/**
 	 * Constructs an arithmetic coding decoder based on the
 	 * specified bit input stream, and fills the code bits.
+	 * @param stateSize the number of bits for the arithmetic coding range
 	 * @param in the bit input stream to read from
 	 * @throws IOException if an I/O exception occurred
 	 * @throws NullPointerException if the input steam is {@code null}
+	 * @throws IllegalArgumentException if stateSize is outside the range [1, 62]
 	 */
-	public ArithmeticDecoder(BitInputStream in) throws IOException {
-		super();
+	public ArithmeticDecoder(int stateSize, BitInputStream in) throws IOException {
+		super(stateSize);
 		Objects.requireNonNull(in);
 		input = in;
 		code = 0;
