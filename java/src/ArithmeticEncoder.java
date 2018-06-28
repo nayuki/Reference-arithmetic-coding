@@ -53,6 +53,8 @@ public final class ArithmeticEncoder extends ArithmeticCoderBase {
 	 * @param freqs the frequency table to use
 	 * @param symbol the symbol to encode
 	 * @throws NullPointerException if the frequency table is {@code null}
+	 * @throws IllegalArgumentException if the symbol has zero frequency
+	 * or the frequency table's total is too large
 	 * @throws IOException if an I/O exception occurred
 	 */
 	public void write(FrequencyTable freqs, int symbol) throws IOException {
@@ -66,6 +68,8 @@ public final class ArithmeticEncoder extends ArithmeticCoderBase {
 	 * @param freqs the frequency table to use
 	 * @param symbol the symbol to encode
 	 * @throws NullPointerException if the frequency table is {@code null}
+	 * @throws IllegalArgumentException if the symbol has zero frequency
+	 * or the frequency table's total is too large
 	 * @throws IOException if an I/O exception occurred
 	 */
 	public void write(CheckedFrequencyTable freqs, int symbol) throws IOException {

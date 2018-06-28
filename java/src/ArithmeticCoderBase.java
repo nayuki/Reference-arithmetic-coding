@@ -113,6 +113,7 @@ public abstract class ArithmeticCoderBase {
 	 * </ul>
 	 * @param freqs the frequency table to use
 	 * @param symbol the symbol that was processed
+	 * @throws IllegalArgumentException if the symbol has zero frequency or the frequency table's total is too large
 	 */
 	protected void update(CheckedFrequencyTable freqs, int symbol) throws IOException {
 		// State check

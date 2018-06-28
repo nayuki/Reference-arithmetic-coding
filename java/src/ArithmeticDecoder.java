@@ -33,9 +33,9 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	 * specified bit input stream, and fills the code bits.
 	 * @param stateSize the number of bits for the arithmetic coding range
 	 * @param in the bit input stream to read from
-	 * @throws IOException if an I/O exception occurred
 	 * @throws NullPointerException if the input steam is {@code null}
 	 * @throws IllegalArgumentException if stateSize is outside the range [1, 62]
+	 * @throws IOException if an I/O exception occurred
 	 */
 	public ArithmeticDecoder(int stateSize, BitInputStream in) throws IOException {
 		super(stateSize);
@@ -69,6 +69,7 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	 * @param freqs the frequency table to use
 	 * @return the next symbol
 	 * @throws NullPointerException if the frequency table is {@code null}
+	 * @throws IllegalArgumentException if the frequency table's total is too large
 	 * @throws IOException if an I/O exception occurred
 	 */
 	public int read(CheckedFrequencyTable freqs) throws IOException {
