@@ -68,8 +68,7 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	 * @throws ArithmeticException if the total of all {@code freqs} elements exceeds {@code Integer.MAX_VALUE}
 	 */
 	public SimpleFrequencyTable(FrequencyTable freqs) {
-		if (freqs == null)
-			throw new NullPointerException("Argument is null");
+		Objects.requireNonNull(freqs);
 		int numSym = freqs.getSymbolLimit();
 		if (numSym < 1)
 			throw new IllegalArgumentException("At least 1 symbol needed");

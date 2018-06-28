@@ -63,14 +63,16 @@ void FlatFrequencyTable::checkSymbol(uint32_t symbol) const {
 
 
 SimpleFrequencyTable::SimpleFrequencyTable(const std::vector<uint32_t> &freqs) {
-	if (freqs.size() < 1)
-		throw "At least 1 symbol needed";
 	if (freqs.size() > UINT32_MAX - 1)
 		throw "Too many symbols";
+	uint32_t size = static_cast<uint32_t>(freqs.size());
+	if (size < 1)
+		throw "At least 1 symbol needed";
+	
 	frequencies = freqs;
-	cumulative.reserve(frequencies.size() + 1);
+	cumulative.reserve(size + 1);
 	initCumulative(false);
-	total = getHigh(freqs.size() - 1);
+	total = getHigh(size - 1);
 }
 
 
