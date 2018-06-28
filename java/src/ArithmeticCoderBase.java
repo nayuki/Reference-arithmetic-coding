@@ -26,34 +26,22 @@ public abstract class ArithmeticCoderBase {
 	
 	/*---- Constants ----*/
 	
-	/**
-	 * Maximum range during coding (trivial), i.e. 1000...000.
-	 */
+	/** Maximum range during coding (trivial), i.e. 1000...000. */
 	protected final long MAX_RANGE = 1L << STATE_SIZE;
 	
-	/**
-	 * Minimum range during coding (non-trivial), i.e. 010...010.
-	 */
+	/** Minimum range during coding (non-trivial), i.e. 010...010. */
 	protected final long MIN_RANGE = (MAX_RANGE >>> 2) + 2;
 	
-	/**
-	 * Maximum allowed total frequency at all times during coding.
-	 */
+	/** Maximum allowed total frequency at all times during coding. */
 	protected final long MAX_TOTAL = Math.min(Long.MAX_VALUE / MAX_RANGE, MIN_RANGE);
 	
-	/**
-	 * Mask of STATE_SIZE ones, i.e. 111...111.
-	 */
+	/** Mask of STATE_SIZE ones, i.e. 111...111. */
 	protected final long MASK = MAX_RANGE - 1;
 	
-	/**
-	 * Mask of the top bit at width STATE_SIZE, i.e. 100...000.
-	 */
+	/** Mask of the top bit at width STATE_SIZE, i.e. 100...000. */
 	protected final long TOP_MASK = MAX_RANGE >>> 1;
 	
-	/**
-	 * Mask of the second highest bit at width STATE_SIZE, i.e. 010...000.
-	 */
+	/** Mask of the second highest bit at width STATE_SIZE, i.e. 010...000. */
 	protected final long SECOND_MASK = TOP_MASK >>> 1;
 	
 	
