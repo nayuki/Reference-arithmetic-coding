@@ -60,7 +60,7 @@ static void decompress(BitInputStream &in, std::ostream &out) {
 	// Set up decoder and model. In this PPM model, symbol 256 represents EOF;
 	// its frequency is 1 in the order -1 context but its frequency
 	// is 0 in all other contexts (which have non-negative order).
-	ArithmeticDecoder dec(in);
+	ArithmeticDecoder dec(32, in);
 	PpmModel model(MODEL_ORDER, 257, 256);
 	vector<uint32_t> history;
 	

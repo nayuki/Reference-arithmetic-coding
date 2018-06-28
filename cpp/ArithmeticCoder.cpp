@@ -13,8 +13,10 @@ using std::uint32_t;
 using std::uint64_t;
 
 
-ArithmeticCoderBase::ArithmeticCoderBase() {
-	STATE_SIZE = 32;
+ArithmeticCoderBase::ArithmeticCoderBase(int stateSize) {
+	if (stateSize < 1 || stateSize > 63)
+		throw "State size out of range";
+	STATE_SIZE = stateSize;
 	MAX_RANGE = UINT64_C(1) << STATE_SIZE;
 	MIN_RANGE = (MAX_RANGE >> 2) + 2;
 	MAX_TOTAL = std::min(std::numeric_limits<decltype(MAX_RANGE)>::max() / MAX_RANGE, MIN_RANGE);
@@ -65,7 +67,8 @@ void ArithmeticCoderBase::update(const FrequencyTable &freqs, uint32_t symbol) {
 }
 
 
-ArithmeticDecoder::ArithmeticDecoder(BitInputStream &in) :
+ArithmeticDecoder::ArithmeticDecoder(int stateSize, BitInputStream &in) :
+		ArithmeticCoderBase(stateSize),
 		input(in),
 		code(0) {
 	for (int i = 0; i < STATE_SIZE; i++)
@@ -127,7 +130,8 @@ int ArithmeticDecoder::readCodeBit() {
 }
 
 
-ArithmeticEncoder::ArithmeticEncoder(BitOutputStream &out) :
+ArithmeticEncoder::ArithmeticEncoder(int stateSize, BitOutputStream &out) :
+	ArithmeticCoderBase(stateSize),
 	output(out),
 	numUnderflow(0) {}
 

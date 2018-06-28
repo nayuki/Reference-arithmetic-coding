@@ -66,7 +66,7 @@ class ArithmeticCoderBase {
 	/*---- Constructor ----*/
 	
 	// Constructs an arithmetic coder, which initializes the code range.
-	public: explicit ArithmeticCoderBase();
+	public: explicit ArithmeticCoderBase(int stateSize);
 	
 	
 	/*---- Methods ----*/
@@ -115,7 +115,7 @@ class ArithmeticDecoder final : private ArithmeticCoderBase {
 	
 	// Constructs an arithmetic coding decoder based on the
 	// given bit input stream, and fills the code bits.
-	public: explicit ArithmeticDecoder(BitInputStream &in);
+	public: explicit ArithmeticDecoder(int stateSize, BitInputStream &in);
 	
 	
 	/*---- Methods ----*/
@@ -157,7 +157,7 @@ class ArithmeticEncoder final : private ArithmeticCoderBase {
 	/*---- Constructor ----*/
 	
 	// Constructs an arithmetic coding encoder based on the given bit output stream.
-	public: explicit ArithmeticEncoder(BitOutputStream &out);
+	public: explicit ArithmeticEncoder(int stateSize, BitOutputStream &out);
 	
 	
 	/*---- Methods ----*/

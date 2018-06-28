@@ -39,7 +39,7 @@ int main(int argc, char *argv[]) {
 	try {
 		
 		SimpleFrequencyTable freqs(FlatFrequencyTable(257));
-		ArithmeticDecoder dec(bin);
+		ArithmeticDecoder dec(32, bin);
 		while (true) {
 			// Decode and write one byte
 			uint32_t symbol = dec.read(freqs);

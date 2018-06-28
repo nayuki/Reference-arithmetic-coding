@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
 				bout.write(static_cast<int>((freq >> j) & 1));  // Big endian
 		}
 		
-		ArithmeticEncoder enc(bout);
+		ArithmeticEncoder enc(32, bout);
 		while (true) {
 			// Read and encode one byte
 			int symbol = in.get();

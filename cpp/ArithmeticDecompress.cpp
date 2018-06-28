@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
 		temp.push_back(1);  // EOF symbol
 		SimpleFrequencyTable freqs(temp);
 		
-		ArithmeticDecoder dec(bin);
+		ArithmeticDecoder dec(32, bin);
 		while (true) {
 			uint32_t symbol = dec.read(freqs);
 			if (symbol == 256)  // EOF symbol

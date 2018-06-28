@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
 	try {
 		
 		SimpleFrequencyTable freqs(FlatFrequencyTable(257));
-		ArithmeticEncoder enc(bout);
+		ArithmeticEncoder enc(32, bout);
 		while (true) {
 			// Read and encode one byte
 			int symbol = in.get();
