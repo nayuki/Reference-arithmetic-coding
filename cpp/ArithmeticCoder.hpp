@@ -10,7 +10,6 @@
 
 #include <algorithm>
 #include <cstdint>
-#include <limits>
 #include "BitIoStream.hpp"
 #include "FrequencyTable.hpp"
 
@@ -34,25 +33,25 @@ class ArithmeticCoderBase {
 	//   because it maximizes MAX_TOTAL (which ends up being slightly over 2^30).
 	// - Note that STATE_SIZE=63 is legal but useless because it implies MAX_TOTAL=1,
 	//   which means a frequency table can only support one symbol with non-zero frequency.
-	protected: int STATE_SIZE = 32;
+	protected: int STATE_SIZE;
 	
 	// Maximum range (high+1-low) during coding (trivial), which is 2^STATE_SIZE = 1000...000.
-	protected: std::uint64_t MAX_RANGE = UINT64_C(1) << STATE_SIZE;
+	protected: std::uint64_t MAX_RANGE;
 	
 	// Minimum range (high+1-low) during coding (non-trivial), which is 0010...010.
-	protected: std::uint64_t MIN_RANGE = (MAX_RANGE >> 2) + 2;
+	protected: std::uint64_t MIN_RANGE;
 	
 	// Maximum allowed total from a frequency table at all times during coding.
-	protected: std::uint64_t MAX_TOTAL = std::min(std::numeric_limits<decltype(MAX_RANGE)>::max() / MAX_RANGE, MIN_RANGE);
+	protected: std::uint64_t MAX_TOTAL;
 	
 	// Bit mask of STATE_SIZE ones, which is 0111...111.
-	protected: std::uint64_t MASK = MAX_RANGE - 1;
+	protected: std::uint64_t MASK;
 	
 	// The top bit at width STATE_SIZE, which is 0100...000.
-	protected: std::uint64_t TOP_MASK = MAX_RANGE >> 1;
+	protected: std::uint64_t TOP_MASK;
 	
 	// The second highest bit at width STATE_SIZE, which is 0010...000. This is zero when STATE_SIZE=1.
-	protected: std::uint64_t SECOND_MASK = TOP_MASK >> 1;
+	protected: std::uint64_t SECOND_MASK;
 	
 	
 	/*---- State fields ----*/

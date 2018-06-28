@@ -6,15 +6,24 @@
  * https://github.com/nayuki/Reference-arithmetic-coding
  */
 
+#include <limits>
 #include "ArithmeticCoder.hpp"
 
 using std::uint32_t;
 using std::uint64_t;
 
 
-ArithmeticCoderBase::ArithmeticCoderBase() :
-	low(0),
-	high(MASK) {}
+ArithmeticCoderBase::ArithmeticCoderBase() {
+	STATE_SIZE = 32;
+	MAX_RANGE = UINT64_C(1) << STATE_SIZE;
+	MIN_RANGE = (MAX_RANGE >> 2) + 2;
+	MAX_TOTAL = std::min(std::numeric_limits<decltype(MAX_RANGE)>::max() / MAX_RANGE, MIN_RANGE);
+	MASK = MAX_RANGE - 1;
+	TOP_MASK = MAX_RANGE >> 1;
+	SECOND_MASK = TOP_MASK >> 1;
+	low = 0;
+	high = MASK;
+}
 
 
 void ArithmeticCoderBase::update(const FrequencyTable &freqs, uint32_t symbol) {
