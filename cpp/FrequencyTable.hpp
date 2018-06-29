@@ -21,6 +21,9 @@
  */
 class FrequencyTable {
 	
+	public: virtual ~FrequencyTable() = 0;
+	
+	
 	// Returns the number of symbols in this frequency table, which is a positive number.
 	public: virtual std::uint32_t getSymbolLimit() const = 0;
 	

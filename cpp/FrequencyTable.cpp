@@ -11,6 +11,9 @@
 using std::uint32_t;
 
 
+FrequencyTable::~FrequencyTable() {}
+
+
 FlatFrequencyTable::FlatFrequencyTable(uint32_t numSyms) :
 		numSymbols(numSyms) {
 	if (numSyms < 1)
