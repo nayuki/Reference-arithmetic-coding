@@ -22,7 +22,7 @@ class PpmModel final {
 		
 		public: SimpleFrequencyTable frequencies;
 		
-		public: std::vector<std::unique_ptr<Context>> subcontexts;
+		public: std::vector<std::unique_ptr<Context> > subcontexts;
 		
 		
 		public: Context(std::uint32_t symbols, bool hasSubctx);

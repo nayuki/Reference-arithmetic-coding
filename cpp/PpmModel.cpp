@@ -47,7 +47,7 @@ void PpmModel::incrementContexts(const vector<uint32_t> &history, uint32_t symbo
 	for (int order = 0; order <= histSize; order++) {
 		Context *ctx = rootContext.get();
 		for (int i = histSize - order, depth = 0; i < histSize; i++, depth++) {
-			vector<std::unique_ptr<Context>> &subctxs = ctx->subcontexts;
+			vector<std::unique_ptr<Context> > &subctxs = ctx->subcontexts;
 			if (subctxs.empty())
 				throw "Assertion error";
 			
