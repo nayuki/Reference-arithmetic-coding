@@ -6,6 +6,8 @@
  * https://github.com/nayuki/Reference-arithmetic-coding
  */
 
+#pragma once
+
 #include <cstdint>
 #include <memory>
 #include <vector>
