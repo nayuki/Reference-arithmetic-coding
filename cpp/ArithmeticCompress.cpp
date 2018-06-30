@@ -54,6 +54,7 @@ int main(int argc, char *argv[]) {
 	BitOutputStream bout(out);
 	try {
 		
+		// Write frequency table
 		for (uint32_t i = 0; i < 256; i++) {
 			uint32_t freq = freqs.get(i);
 			for (int j = 31; j >= 0; j--)

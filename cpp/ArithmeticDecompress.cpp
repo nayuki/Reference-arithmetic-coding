@@ -38,6 +38,7 @@ int main(int argc, char *argv[]) {
 	BitInputStream bin(in);
 	try {
 		
+		// Read frequency table
 		SimpleFrequencyTable freqs(std::vector<uint32_t>(257, 0));
 		for (uint32_t i = 0; i < 256; i++) {
 			uint32_t freq = 0;
