@@ -1,5 +1,5 @@
 /* 
- * Compression application using prediction by partial matching (PPM) with arithmetic coding.
+ * Compression application using prediction by partial matching (PPM) with arithmetic coding
  * 
  * Usage: PpmCompress InputFile OutputFile
  * Then use the corresponding "PpmDecompress" application to recreate the original input file.

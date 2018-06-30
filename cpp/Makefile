@@ -19,7 +19,7 @@ CXXFLAGS += -std=c++11 -O1 -Wall -Wextra -fsanitize=undefined
 
 
 OBJ = ArithmeticCoder.o BitIoStream.o FrequencyTable.o PpmModel.o
-MAINS = ArithmeticCompress ArithmeticDecompress AdaptiveArithmeticCompress AdaptiveArithmeticDecompress PpmCompress PpmDecompress
+MAINS = AdaptiveArithmeticCompress AdaptiveArithmeticDecompress ArithmeticCompress ArithmeticDecompress PpmCompress PpmDecompress
 
 all: $(MAINS)
 
