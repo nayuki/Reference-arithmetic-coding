@@ -28,6 +28,9 @@ ArithmeticCoderBase::ArithmeticCoderBase(int stateSize) {
 }
 
 
+ArithmeticCoderBase::~ArithmeticCoderBase() {}
+
+
 void ArithmeticCoderBase::update(const FrequencyTable &freqs, uint32_t symbol) {
 	// State check
 	if (low >= high || (low & MASK) != low || (high & MASK) != high)

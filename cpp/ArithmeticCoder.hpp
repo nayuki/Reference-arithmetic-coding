@@ -69,6 +69,9 @@ class ArithmeticCoderBase {
 	public: explicit ArithmeticCoderBase(int stateSize);
 	
 	
+	public: virtual ~ArithmeticCoderBase() = 0;
+	
+	
 	/*---- Methods ----*/
 	
 	// Updates the code range (low and high) of this arithmetic coder as a result
