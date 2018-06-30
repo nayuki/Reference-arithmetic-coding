@@ -36,9 +36,8 @@ int main(int argc, char *argv[]) {
 	
 	// Read input file once to compute symbol frequencies
 	std::ifstream in(inputFile, std::ios::binary);
-	std::vector<uint32_t> temp(256, 0);
-	temp.push_back(1);  // EOF symbol gets a frequency of 1
-	SimpleFrequencyTable freqs(temp);
+	SimpleFrequencyTable freqs(std::vector<uint32_t>(257, 0));
+	freqs.increment(256);  // EOF symbol gets a frequency of 1
 	while (true) {
 		int b = in.get();
 		if (b == EOF)

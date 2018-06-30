@@ -38,15 +38,14 @@ int main(int argc, char *argv[]) {
 	BitInputStream bin(in);
 	try {
 		
-		std::vector<uint32_t> temp;
-		for (int i = 0; i < 256; i++) {
+		SimpleFrequencyTable freqs(std::vector<uint32_t>(257, 0));
+		for (uint32_t i = 0; i < 256; i++) {
 			uint32_t freq = 0;
 			for (int j = 0; j < 32; j++)
 				freq = (freq << 1) | bin.readNoEof();  // Big endian
-			temp.push_back(freq);
+			freqs.set(i, freq);
 		}
-		temp.push_back(1);  // EOF symbol
-		SimpleFrequencyTable freqs(temp);
+		freqs.increment(256);  // EOF symbol
 		
 		ArithmeticDecoder dec(32, bin);
 		while (true) {
