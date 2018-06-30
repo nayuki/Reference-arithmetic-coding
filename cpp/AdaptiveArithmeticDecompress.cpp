@@ -15,7 +15,6 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
-#include <vector>
 #include "ArithmeticCoder.hpp"
 #include "BitIoStream.hpp"
 #include "FrequencyTable.hpp"

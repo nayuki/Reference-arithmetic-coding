@@ -18,7 +18,6 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
-#include <vector>
 #include "ArithmeticCoder.hpp"
 #include "BitIoStream.hpp"
 #include "FrequencyTable.hpp"
