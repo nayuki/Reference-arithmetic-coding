@@ -25,7 +25,7 @@ class PpmModel final {
 		public: std::vector<std::unique_ptr<Context> > subcontexts;
 		
 		
-		public: Context(std::uint32_t symbols, bool hasSubctx);
+		public: explicit Context(std::uint32_t symbols, bool hasSubctx);
 		
 	};
 	
@@ -44,7 +44,7 @@ class PpmModel final {
 	
 	/*---- Constructor ----*/
 	
-	public: PpmModel(int order, std::uint32_t symLimit, std::uint32_t escapeSym);
+	public: explicit PpmModel(int order, std::uint32_t symLimit, std::uint32_t escapeSym);
 	
 	
 	/*---- Methods ----*/
