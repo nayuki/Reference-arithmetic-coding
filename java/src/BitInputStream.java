@@ -41,8 +41,7 @@ public final class BitInputStream implements AutoCloseable {
 	 * @throws NullPointerException if the input stream is {@code null}
 	 */
 	public BitInputStream(InputStream in) {
-		Objects.requireNonNull(in);
-		input = in;
+		input = Objects.requireNonNull(in);
 		currentByte = 0;
 		numBitsRemaining = 0;
 	}

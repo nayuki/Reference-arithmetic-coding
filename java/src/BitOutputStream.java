@@ -40,8 +40,7 @@ public final class BitOutputStream implements AutoCloseable {
 	 * @throws NullPointerException if the output stream is {@code null}
 	 */
 	public BitOutputStream(OutputStream out) {
-		Objects.requireNonNull(out);
-		output = out;
+		output = Objects.requireNonNull(out);
 		currentByte = 0;
 		numBitsFilled = 0;
 	}

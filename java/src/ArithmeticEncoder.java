@@ -38,8 +38,7 @@ public final class ArithmeticEncoder extends ArithmeticCoderBase {
 	 */
 	public ArithmeticEncoder(int stateSize, BitOutputStream out) {
 		super(stateSize);
-		Objects.requireNonNull(out);
-		output = out;
+		output = Objects.requireNonNull(out);
 		numUnderflow = 0;
 	}
 	

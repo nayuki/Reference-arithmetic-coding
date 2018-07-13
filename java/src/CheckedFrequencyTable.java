@@ -26,8 +26,7 @@ public final class CheckedFrequencyTable implements FrequencyTable {
 	/*---- Constructor ----*/
 	
 	public CheckedFrequencyTable(FrequencyTable freq) {
-		Objects.requireNonNull(freq);
-		freqTable = freq;
+		freqTable = Objects.requireNonNull(freq);
 	}
 	
 	

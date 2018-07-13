@@ -39,8 +39,7 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	 */
 	public ArithmeticDecoder(int stateSize, BitInputStream in) throws IOException {
 		super(stateSize);
-		Objects.requireNonNull(in);
-		input = in;
+		input = Objects.requireNonNull(in);
 		code = 0;
 		for (int i = 0; i < STATE_SIZE; i++)
 			code = code << 1 | readCodeBit();
