@@ -7,6 +7,7 @@
  */
 
 #include <algorithm>
+#include <stdexcept>
 #include "PpmModel.hpp"
 
 using std::uint32_t;
@@ -29,7 +30,7 @@ PpmModel::PpmModel(int order, uint32_t symLimit, uint32_t escapeSym) :
 		rootContext(std::unique_ptr<Context>(nullptr)),
 		orderMinus1Freqs(FlatFrequencyTable(symbolLimit)) {
 	if (order < -1 || escapeSym >= symLimit)
-		throw "Illegal argument";
+		throw std::domain_error("Illegal argument");
 	if (order >= 0) {
 		rootContext.reset(new Context(symbolLimit, order >= 1));
 		rootContext->frequencies.increment(escapeSymbol);
@@ -41,7 +42,7 @@ void PpmModel::incrementContexts(const vector<uint32_t> &history, uint32_t symbo
 	if (modelOrder == -1)
 		return;
 	if (history.size() > static_cast<unsigned int>(modelOrder) || symbol >= symbolLimit)
-		throw "Illegal argument";
+		throw std::invalid_argument("Illegal argument");
 	int histSize = static_cast<int>(history.size());
 	
 	for (int order = 0; order <= histSize; order++) {
@@ -49,7 +50,7 @@ void PpmModel::incrementContexts(const vector<uint32_t> &history, uint32_t symbo
 		for (int i = histSize - order, depth = 0; i < histSize; i++, depth++) {
 			vector<std::unique_ptr<Context> > &subctxs = ctx->subcontexts;
 			if (subctxs.empty())
-				throw "Assertion error";
+				throw std::logic_error("Assertion error");
 			
 			uint32_t sym = history.at(i);
 			std::unique_ptr<Context> &subctx = subctxs.at(sym);

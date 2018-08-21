@@ -7,6 +7,7 @@
  */
 
 #include <limits>
+#include <stdexcept>
 #include "BitIoStream.hpp"
 
 
@@ -24,11 +25,11 @@ int BitInputStream::read() {
 		if (currentByte == EOF)
 			return -1;
 		if (currentByte < 0 || currentByte > 255)
-			throw "Assertion error";
+			throw std::logic_error("Assertion error");
 		numBitsRemaining = 8;
 	}
 	if (numBitsRemaining <= 0)
-		throw "Assertion error";
+		throw std::logic_error("Assertion error");
 	numBitsRemaining--;
 	return (currentByte >> numBitsRemaining) & 1;
 }
@@ -39,7 +40,7 @@ int BitInputStream::readNoEof() {
 	if (result != -1)
 		return result;
 	else
-		throw "End of stream";
+		throw std::runtime_error("End of stream");
 }
 
 
@@ -51,7 +52,7 @@ BitOutputStream::BitOutputStream(std::ostream &out) :
 
 void BitOutputStream::write(int b) {
 	if (b != 0 && b != 1)
-		throw "Argument must be 0 or 1";
+		throw std::domain_error("Argument must be 0 or 1");
 	currentByte = (currentByte << 1) | b;
 	numBitsFilled++;
 	if (numBitsFilled == 8) {

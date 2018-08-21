@@ -16,6 +16,7 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
+#include <stdexcept>
 #include <vector>
 #include "ArithmeticCoder.hpp"
 #include "BitIoStream.hpp"
@@ -93,7 +94,7 @@ static uint32_t decodeSymbol(ArithmeticDecoder &dec, PpmModel &model, const vect
 		PpmModel::Context *ctx = model.rootContext.get();
 		for (std::size_t i = history.size() - static_cast<unsigned int>(order); i < history.size(); i++) {
 			if (ctx->subcontexts.empty())
-				throw "Assertion error";
+				throw std::logic_error("Assertion error");
 			ctx = ctx->subcontexts.at(history.at(i)).get();
 			if (ctx == nullptr)
 				goto outerEnd;

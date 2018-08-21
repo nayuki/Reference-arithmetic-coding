@@ -17,6 +17,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <stdexcept>
 #include <vector>
 #include "ArithmeticCoder.hpp"
 #include "BitIoStream.hpp"
@@ -43,7 +44,7 @@ int main(int argc, char *argv[]) {
 		if (b == EOF)
 			break;
 		if (b < 0 || b > 255)
-			throw "Assertion error";
+			throw std::logic_error("Assertion error");
 		freqs.increment(static_cast<uint32_t>(b));
 	}
 	
@@ -68,7 +69,7 @@ int main(int argc, char *argv[]) {
 			if (symbol == EOF)
 				break;
 			if (symbol < 0 || symbol > 255)
-				throw "Assertion error";
+				throw std::logic_error("Assertion error");
 			enc.write(freqs, static_cast<uint32_t>(symbol));
 		}
 		

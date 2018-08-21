@@ -7,6 +7,7 @@
  */
 
 #include <limits>
+#include <stdexcept>
 #include "ArithmeticCoder.hpp"
 
 using std::uint32_t;
@@ -15,7 +16,7 @@ using std::uint64_t;
 
 ArithmeticCoderBase::ArithmeticCoderBase(int stateSize) {
 	if (stateSize < 1 || stateSize > 63)
-		throw "State size out of range";
+		throw std::domain_error("State size out of range");
 	STATE_SIZE = stateSize;
 	MAX_RANGE = static_cast<decltype(MAX_RANGE)>(1) << STATE_SIZE;
 	MIN_RANGE = (MAX_RANGE >> 2) + 2;
@@ -34,19 +35,19 @@ ArithmeticCoderBase::~ArithmeticCoderBase() {}
 void ArithmeticCoderBase::update(const FrequencyTable &freqs, uint32_t symbol) {
 	// State check
 	if (low >= high || (low & MASK) != low || (high & MASK) != high)
-		throw "Assertion error: Low or high out of range";
+		throw std::logic_error("Assertion error: Low or high out of range");
 	uint64_t range = high - low + 1;
 	if (range < MIN_RANGE || range > MAX_RANGE)
-		throw "Assertion error: Range out of range";
+		throw std::logic_error("Assertion error: Range out of range");
 	
 	// Frequency table values check
 	uint32_t total = freqs.getTotal();
 	uint32_t symLow = freqs.getLow(symbol);
 	uint32_t symHigh = freqs.getHigh(symbol);
 	if (symLow == symHigh)
-		throw "Symbol has zero frequency";
+		throw std::invalid_argument("Symbol has zero frequency");
 	if (total > MAX_TOTAL)
-		throw "Cannot code symbol because total is too large";
+		throw std::invalid_argument("Cannot code symbol because total is too large");
 	
 	// Update range
 	uint64_t newLow  = low + symLow  * range / total;
@@ -83,14 +84,14 @@ uint32_t ArithmeticDecoder::read(const FrequencyTable &freqs) {
 	// Translate from coding range scale to frequency table scale
 	uint32_t total = freqs.getTotal();
 	if (total > MAX_TOTAL)
-		throw "Cannot decode symbol because total is too large";
+		throw std::invalid_argument("Cannot decode symbol because total is too large");
 	uint64_t range = high - low + 1;
 	uint64_t offset = code - low;
 	uint64_t value = ((offset + 1) * total - 1) / range;
 	if (value * range / total > offset)
-		throw "Assertion error";
+		throw std::logic_error("Assertion error");
 	if (value >= total)
-		throw "Assertion error";
+		throw std::logic_error("Assertion error");
 	
 	// A kind of binary search. Find highest symbol such that freqs.getLow(symbol) <= value.
 	uint32_t start = 0;
@@ -103,14 +104,14 @@ uint32_t ArithmeticDecoder::read(const FrequencyTable &freqs) {
 			start = middle;
 	}
 	if (start + 1 != end)
-		throw "Assertion error";
+		throw std::logic_error("Assertion error");
 	
 	uint32_t symbol = start;
 	if (offset < freqs.getLow(symbol) * range / total || freqs.getHigh(symbol) * range / total <= offset)
-		throw "Assertion error";
+		throw std::logic_error("Assertion error");
 	update(freqs, symbol);
 	if (code < low || code > high)
-		throw "Assertion error: Code out of range";
+		throw std::logic_error("Assertion error: Code out of range");
 	return symbol;
 }
 
@@ -161,6 +162,6 @@ void ArithmeticEncoder::shift() {
 
 void ArithmeticEncoder::underflow() {
 	if (numUnderflow == std::numeric_limits<decltype(numUnderflow)>::max())
-		throw "Maximum underflow reached";
+		throw std::overflow_error("Maximum underflow reached");
 	numUnderflow++;
 }

@@ -17,6 +17,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <stdexcept>
 #include <vector>
 #include "ArithmeticCoder.hpp"
 #include "BitIoStream.hpp"
@@ -72,7 +73,7 @@ static void compress(std::ifstream &in, BitOutputStream &out) {
 		if (symbol == EOF)
 			break;
 		if (symbol < 0 || symbol > 255)
-			throw "Assertion error";
+			throw std::logic_error("Assertion error");
 		uint32_t sym = static_cast<uint32_t>(symbol);
 		encodeSymbol(model, history, sym, enc);
 		model.incrementContexts(history, sym);
@@ -99,7 +100,7 @@ static void encodeSymbol(PpmModel &model, const vector<uint32_t> &history, uint3
 		PpmModel::Context *ctx = model.rootContext.get();
 		for (std::size_t i = history.size() - static_cast<unsigned int>(order); i < history.size(); i++) {
 			if (ctx->subcontexts.empty())
-				throw "Assertion error";
+				throw std::logic_error("Assertion error");
 			ctx = ctx->subcontexts.at(history.at(i)).get();
 			if (ctx == nullptr)
 				goto outerEnd;

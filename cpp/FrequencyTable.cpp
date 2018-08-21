@@ -6,6 +6,7 @@
  * https://github.com/nayuki/Reference-arithmetic-coding
  */
 
+#include <stdexcept>
 #include "FrequencyTable.hpp"
 
 using std::uint32_t;
@@ -17,7 +18,7 @@ FrequencyTable::~FrequencyTable() {}
 FlatFrequencyTable::FlatFrequencyTable(uint32_t numSyms) :
 		numSymbols(numSyms) {
 	if (numSyms < 1)
-		throw "Number of symbols must be positive";
+		throw std::domain_error("Number of symbols must be positive");
 }
 
 
@@ -50,27 +51,27 @@ uint32_t FlatFrequencyTable::getHigh(uint32_t symbol) const  {
 
 
 void FlatFrequencyTable::set(uint32_t, uint32_t)  {
-	throw "Unsupported operation";
+	throw std::logic_error("Unsupported operation");
 }
 
 
 void FlatFrequencyTable::increment(uint32_t) {
-	throw "Unsupported operation";
+	throw std::logic_error("Unsupported operation");
 }
 
 
 void FlatFrequencyTable::checkSymbol(uint32_t symbol) const {
 	if (symbol >= numSymbols)
-		throw "Symbol out of range";
+		throw std::domain_error("Symbol out of range");
 }
 
 
 SimpleFrequencyTable::SimpleFrequencyTable(const std::vector<uint32_t> &freqs) {
 	if (freqs.size() > UINT32_MAX - 1)
-		throw "Too many symbols";
+		throw std::length_error("Too many symbols");
 	uint32_t size = static_cast<uint32_t>(freqs.size());
 	if (size < 1)
-		throw "At least 1 symbol needed";
+		throw std::invalid_argument("At least 1 symbol needed");
 	
 	frequencies = freqs;
 	cumulative.reserve(size + 1);
@@ -82,9 +83,9 @@ SimpleFrequencyTable::SimpleFrequencyTable(const std::vector<uint32_t> &freqs) {
 SimpleFrequencyTable::SimpleFrequencyTable(const FrequencyTable &freqs) {
 	uint32_t size = freqs.getSymbolLimit();
 	if (size < 1)
-		throw "At least 1 symbol needed";
+		throw std::invalid_argument("At least 1 symbol needed");
 	if (size > UINT32_MAX - 1)
-		throw "Too many symbols";
+		throw std::length_error("Too many symbols");
 	
 	frequencies.reserve(size + 1);
 	for (uint32_t i = 0; i < size; i++)
@@ -108,7 +109,7 @@ uint32_t SimpleFrequencyTable::get(uint32_t symbol) const {
 
 void SimpleFrequencyTable::set(uint32_t symbol, uint32_t freq) {
 	if (total < frequencies.at(symbol))
-		throw "Assertion error";
+		throw std::logic_error("Assertion error");
 	uint32_t temp = total - frequencies.at(symbol);
 	total = checkedAdd(temp, freq);
 	frequencies.at(symbol) = freq;
@@ -118,7 +119,7 @@ void SimpleFrequencyTable::set(uint32_t symbol, uint32_t freq) {
 
 void SimpleFrequencyTable::increment(uint32_t symbol) {
 	if (frequencies.at(symbol) == UINT32_MAX)
-		throw "Arithmetic overflow";
+		throw std::overflow_error("Arithmetic overflow");
 	total = checkedAdd(total, 1);
 	frequencies.at(symbol)++;
 	cumulative.clear();
@@ -154,12 +155,12 @@ void SimpleFrequencyTable::initCumulative(bool checkTotal) const {
 		cumulative.push_back(sum);
 	}
 	if (checkTotal && sum != total)
-		throw "Assertion error";
+		throw std::logic_error("Assertion error");
 }
 
 
 uint32_t SimpleFrequencyTable::checkedAdd(uint32_t x, uint32_t y) {
 	if (x > UINT32_MAX - y)
-		throw "Arithmetic overflow";
+		throw std::overflow_error("Arithmetic overflow");
 	return x + y;
 }
