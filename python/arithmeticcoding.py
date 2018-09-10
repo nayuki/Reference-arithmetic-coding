@@ -34,6 +34,10 @@ class ArithmeticCoderBase(object):
 		self.STATE_SIZE = statesize
 		# Maximum range (high+1-low) during coding (trivial), which is 2^STATE_SIZE = 1000...000.
 		self.MAX_RANGE = 1 << self.STATE_SIZE
+		# The top bit at width STATE_SIZE, which is 0100...000.
+		self.TOP_MASK = self.MAX_RANGE >> 1
+		# The second highest bit at width STATE_SIZE, which is 0010...000. This is zero when STATE_SIZE=1.
+		self.SECOND_MASK = self.TOP_MASK >> 1
 		# Minimum range (high+1-low) during coding (non-trivial), which is 0010...010.
 		self.MIN_RANGE = (self.MAX_RANGE >> 2) + 2
 		# Maximum allowed total from a frequency table at all times during coding. This differs from Java
@@ -41,10 +45,6 @@ class ArithmeticCoderBase(object):
 		self.MAX_TOTAL = self.MIN_RANGE
 		# Bit mask of STATE_SIZE ones, which is 0111...111.
 		self.MASK = self.MAX_RANGE - 1
-		# The top bit at width STATE_SIZE, which is 0100...000.
-		self.TOP_MASK = self.MAX_RANGE >> 1
-		# The second highest bit at width STATE_SIZE, which is 0010...000. This is zero when STATE_SIZE=1.
-		self.SECOND_MASK = self.TOP_MASK >> 1
 		
 		# -- State fields --
 		# Low end of this arithmetic coder's current range. Conceptually has an infinite number of trailing 0s.

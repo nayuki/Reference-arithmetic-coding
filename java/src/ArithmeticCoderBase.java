@@ -39,6 +39,12 @@ public abstract class ArithmeticCoderBase {
 	/** Maximum range (high+1-low) during coding (trivial), which is 2^STATE_SIZE = 1000...000. */
 	protected final long MAX_RANGE;
 	
+	/** The top bit at width STATE_SIZE, which is 0100...000. */
+	protected final long TOP_MASK;
+	
+	/** The second highest bit at width STATE_SIZE, which is 0010...000. This is zero when STATE_SIZE=1. */
+	protected final long SECOND_MASK;
+	
 	/** Minimum range (high+1-low) during coding (non-trivial), which is 0010...010. */
 	protected final long MIN_RANGE;
 	
@@ -47,12 +53,6 @@ public abstract class ArithmeticCoderBase {
 	
 	/** Bit mask of STATE_SIZE ones, which is 0111...111. */
 	protected final long MASK;
-	
-	/** The top bit at width STATE_SIZE, which is 0100...000. */
-	protected final long TOP_MASK;
-	
-	/** The second highest bit at width STATE_SIZE, which is 0010...000. This is zero when STATE_SIZE=1. */
-	protected final long SECOND_MASK;
 	
 	
 	
@@ -82,11 +82,11 @@ public abstract class ArithmeticCoderBase {
 			throw new IllegalArgumentException("State size out of range");
 		STATE_SIZE = stateSize;
 		MAX_RANGE = 1L << STATE_SIZE;
+		TOP_MASK = MAX_RANGE >>> 1;
+		SECOND_MASK = TOP_MASK >>> 1;
 		MIN_RANGE = (MAX_RANGE >>> 2) + 2;
 		MAX_TOTAL = Math.min(Long.MAX_VALUE / MAX_RANGE, MIN_RANGE);
 		MASK = MAX_RANGE - 1;
-		TOP_MASK = MAX_RANGE >>> 1;
-		SECOND_MASK = TOP_MASK >>> 1;
 		
 		low = 0;
 		high = MASK;

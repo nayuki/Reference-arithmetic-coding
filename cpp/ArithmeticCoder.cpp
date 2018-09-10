@@ -19,11 +19,11 @@ ArithmeticCoderBase::ArithmeticCoderBase(int stateSize) {
 		throw std::domain_error("State size out of range");
 	STATE_SIZE = stateSize;
 	MAX_RANGE = static_cast<decltype(MAX_RANGE)>(1) << STATE_SIZE;
+	TOP_MASK = MAX_RANGE >> 1;
+	SECOND_MASK = TOP_MASK >> 1;
 	MIN_RANGE = (MAX_RANGE >> 2) + 2;
 	MAX_TOTAL = std::min(std::numeric_limits<decltype(MAX_RANGE)>::max() / MAX_RANGE, MIN_RANGE);
 	MASK = MAX_RANGE - 1;
-	TOP_MASK = MAX_RANGE >> 1;
-	SECOND_MASK = TOP_MASK >> 1;
 	low = 0;
 	high = MASK;
 }
