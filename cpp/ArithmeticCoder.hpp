@@ -39,10 +39,10 @@ class ArithmeticCoderBase {
 	protected: std::uint64_t fullRange;
 	
 	// The top bit at width numStateBits, which is 0100...000.
-	protected: std::uint64_t TOP_MASK;
+	protected: std::uint64_t halfRange;
 	
 	// The second highest bit at width numStateBits, which is 0010...000. This is zero when numStateBits=1.
-	protected: std::uint64_t SECOND_MASK;
+	protected: std::uint64_t quarterRange;
 	
 	// Minimum range (high+1-low) during coding (non-trivial), which is 0010...010.
 	protected: std::uint64_t MIN_RANGE;

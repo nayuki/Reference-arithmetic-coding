@@ -35,9 +35,9 @@ class ArithmeticCoderBase(object):
 		# Maximum range (high+1-low) during coding (trivial), which is 2^num_state_bits = 1000...000.
 		self.full_range = 1 << self.num_state_bits
 		# The top bit at width num_state_bits, which is 0100...000.
-		self.TOP_MASK = self.full_range >> 1
+		self.half_range = self.full_range >> 1
 		# The second highest bit at width num_state_bits, which is 0010...000. This is zero when num_state_bits=1.
-		self.SECOND_MASK = self.TOP_MASK >> 1
+		self.quarter_range = self.half_range >> 1
 		# Minimum range (high+1-low) during coding (non-trivial), which is 0010...010.
 		self.MIN_RANGE = (self.full_range >> 2) + 2
 		# Maximum allowed total from a frequency table at all times during coding. This differs from Java
@@ -91,16 +91,16 @@ class ArithmeticCoderBase(object):
 		self.high = newhigh
 		
 		# While the highest bits are equal
-		while ((self.low ^ self.high) & self.TOP_MASK) == 0:
+		while ((self.low ^ self.high) & self.half_range) == 0:
 			self.shift()
 			self.low = (self.low << 1) & self.MASK
 			self.high = ((self.high << 1) & self.MASK) | 1
 		
 		# While the second highest bit of low is 1 and the second highest bit of high is 0
-		while (self.low & ~self.high & self.SECOND_MASK) != 0:
+		while (self.low & ~self.high & self.quarter_range) != 0:
 			self.underflow()
 			self.low = (self.low << 1) & (self.MASK >> 1)
-			self.high = ((self.high << 1) & (self.MASK >> 1)) | self.TOP_MASK | 1
+			self.high = ((self.high << 1) & (self.MASK >> 1)) | self.half_range | 1
 	
 	
 	# Called to handle the situation when the top bit of 'low' and 'high' are equal.
@@ -211,7 +211,7 @@ class ArithmeticDecoder(ArithmeticCoderBase):
 	
 	
 	def underflow(self):
-		self.code = (self.code & self.TOP_MASK) | ((self.code << 1) & (self.MASK >> 1)) | self.read_code_bit()
+		self.code = (self.code & self.half_range) | ((self.code << 1) & (self.MASK >> 1)) | self.read_code_bit()
 	
 	
 	# Returns the next bit (0 or 1) from the input stream. The end

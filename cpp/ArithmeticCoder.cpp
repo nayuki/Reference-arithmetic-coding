@@ -19,8 +19,8 @@ ArithmeticCoderBase::ArithmeticCoderBase(int stateSize) {
 		throw std::domain_error("State size out of range");
 	numStateBits = stateSize;
 	fullRange = static_cast<decltype(fullRange)>(1) << numStateBits;
-	TOP_MASK = fullRange >> 1;
-	SECOND_MASK = TOP_MASK >> 1;
+	halfRange = fullRange >> 1;
+	quarterRange = halfRange >> 1;
 	MIN_RANGE = (fullRange >> 2) + 2;
 	MAX_TOTAL = std::min(std::numeric_limits<decltype(fullRange)>::max() / fullRange, MIN_RANGE);
 	MASK = fullRange - 1;
@@ -56,17 +56,17 @@ void ArithmeticCoderBase::update(const FrequencyTable &freqs, uint32_t symbol) {
 	high = newHigh;
 	
 	// While the highest bits are equal
-	while (((low ^ high) & TOP_MASK) == 0) {
+	while (((low ^ high) & halfRange) == 0) {
 		shift();
 		low = (low << 1) & MASK;
 		high = ((high << 1) & MASK) | 1;
 	}
 	
 	// While the second highest bit of low is 1 and the second highest bit of high is 0
-	while ((low & ~high & SECOND_MASK) != 0) {
+	while ((low & ~high & quarterRange) != 0) {
 		underflow();
 		low = (low << 1) & (MASK >> 1);
-		high = ((high << 1) & (MASK >> 1)) | TOP_MASK | 1;
+		high = ((high << 1) & (MASK >> 1)) | halfRange | 1;
 	}
 }
 
@@ -122,7 +122,7 @@ void ArithmeticDecoder::shift() {
 
 
 void ArithmeticDecoder::underflow() {
-	code = (code & TOP_MASK) | ((code << 1) & (MASK >> 1)) | readCodeBit();
+	code = (code & halfRange) | ((code << 1) & (MASK >> 1)) | readCodeBit();
 }
 
 

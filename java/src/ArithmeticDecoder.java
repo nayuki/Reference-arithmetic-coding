@@ -113,7 +113,7 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	
 	
 	protected void underflow() throws IOException {
-		code = (code & TOP_MASK) | ((code << 1) & (MASK >>> 1)) | readCodeBit();
+		code = (code & halfRange) | ((code << 1) & (MASK >>> 1)) | readCodeBit();
 	}
 	
 	

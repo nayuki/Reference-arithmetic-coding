@@ -40,10 +40,10 @@ public abstract class ArithmeticCoderBase {
 	protected final long fullRange;
 	
 	/** The top bit at width numStateBits, which is 0100...000. */
-	protected final long TOP_MASK;
+	protected final long halfRange;
 	
 	/** The second highest bit at width numStateBits, which is 0010...000. This is zero when numStateBits=1. */
-	protected final long SECOND_MASK;
+	protected final long quarterRange;
 	
 	/** Minimum range (high+1-low) during coding (non-trivial), which is 0010...010. */
 	protected final long MIN_RANGE;
@@ -82,8 +82,8 @@ public abstract class ArithmeticCoderBase {
 			throw new IllegalArgumentException("State size out of range");
 		numStateBits = stateSize;
 		fullRange = 1L << numStateBits;
-		TOP_MASK = fullRange >>> 1;
-		SECOND_MASK = TOP_MASK >>> 1;
+		halfRange = fullRange >>> 1;
+		quarterRange = halfRange >>> 1;
 		MIN_RANGE = (fullRange >>> 2) + 2;
 		MAX_TOTAL = Math.min(Long.MAX_VALUE / fullRange, MIN_RANGE);
 		MASK = fullRange - 1;
@@ -139,17 +139,17 @@ public abstract class ArithmeticCoderBase {
 		high = newHigh;
 		
 		// While the highest bits are equal
-		while (((low ^ high) & TOP_MASK) == 0) {
+		while (((low ^ high) & halfRange) == 0) {
 			shift();
 			low = (low << 1) & MASK;
 			high = ((high << 1) & MASK) | 1;
 		}
 		
 		// While the second highest bit of low is 1 and the second highest bit of high is 0
-		while ((low & ~high & SECOND_MASK) != 0) {
+		while ((low & ~high & quarterRange) != 0) {
 			underflow();
 			low = (low << 1) & (MASK >>> 1);
-			high = ((high << 1) & (MASK >>> 1)) | TOP_MASK | 1;
+			high = ((high << 1) & (MASK >>> 1)) | halfRange | 1;
 		}
 	}
 	
