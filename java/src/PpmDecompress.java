@@ -63,12 +63,11 @@ public final class PpmDecompress {
 			model.incrementContexts(history, symbol);
 			
 			if (model.modelOrder >= 1) {
-				// Append current symbol or shift back by one
+				// Prepend current symbol, dropping oldest symbol if necessary
 				if (history.length < model.modelOrder)
 					history = Arrays.copyOf(history, history.length + 1);
-				else
-					System.arraycopy(history, 1, history, 0, history.length - 1);
-				history[history.length - 1] = symbol;
+				System.arraycopy(history, 0, history, 1, history.length - 1);
+				history[0] = symbol;
 			}
 		}
 	}
@@ -81,7 +80,7 @@ public final class PpmDecompress {
 		outer:
 		for (int order = history.length; order >= 0; order--) {
 			PpmModel.Context ctx = model.rootContext;
-			for (int i = history.length - order; i < history.length; i++) {
+			for (int i = 0; i < order; i++) {
 				if (ctx.subcontexts == null)
 					throw new AssertionError();
 				ctx = ctx.subcontexts[history[i]];

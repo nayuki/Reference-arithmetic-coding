@@ -32,19 +32,16 @@ class PpmModel(object):
 		if len(history) > self.model_order or not (0 <= symbol < self.symbol_limit):
 			raise ValueError()
 		
-		for order in range(len(history) + 1):
-			ctx = self.root_context
-			depth = 0
-			# Note: We can't simplify the slice start to just '-order' because order can be 0
-			for sym in history[len(history) - order : ]:
-				subctxs = ctx.subcontexts
-				assert subctxs is not None
-				
-				if subctxs[sym] is None:
-					subctxs[sym] = PpmModel.Context(self.symbol_limit, depth + 1 < self.model_order)
-					subctxs[sym].frequencies.increment(self.escape_symbol)
-				ctx = subctxs[sym]
-				depth += 1
+		ctx = self.root_context
+		ctx.frequencies.increment(symbol)
+		for (i, sym) in enumerate(history):
+			subctxs = ctx.subcontexts
+			assert subctxs is not None
+			
+			if subctxs[sym] is None:
+				subctxs[sym] = PpmModel.Context(self.symbol_limit, i + 1 < self.model_order)
+				subctxs[sym].frequencies.increment(self.escape_symbol)
+			ctx = subctxs[sym]
 			ctx.frequencies.increment(symbol)
 	
 	

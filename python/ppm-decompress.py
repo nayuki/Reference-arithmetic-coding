@@ -50,10 +50,10 @@ def decompress(bitin, out):
 		model.increment_contexts(history, symbol)
 		
 		if model.model_order >= 1:
-			# Append current symbol or shift back by one
+			# Prepend current symbol, dropping oldest symbol if necessary
 			if len(history) == model.model_order:
-				del history[0]
-			history.append(symbol)
+				history.pop()
+			history.insert(0, symbol)
 
 
 def decode_symbol(dec, model, history):
@@ -62,8 +62,7 @@ def decode_symbol(dec, model, history):
 	# with non-empty context". When symbol 256 is consumed at the order -1 context, it means "EOF".
 	for order in reversed(range(len(history) + 1)):
 		ctx = model.root_context
-		# Note: We can't simplify the slice start to just '-order' because order can be 0
-		for sym in history[len(history) - order : ]:
+		for sym in history[ : order]:
 			assert ctx.subcontexts is not None
 			ctx = ctx.subcontexts[sym]
 			if ctx is None:

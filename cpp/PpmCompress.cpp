@@ -79,10 +79,10 @@ static void compress(std::ifstream &in, BitOutputStream &out) {
 		model.incrementContexts(history, sym);
 		
 		if (model.modelOrder >= 1) {
-			// Append current symbol or shift back by one
+			// Prepend current symbol, dropping oldest symbol if necessary
 			if (history.size() >= static_cast<unsigned int>(model.modelOrder))
-				history.erase(history.begin());
-			history.push_back(sym);
+				history.erase(history.end() - 1);
+			history.insert(history.begin(), sym);
 		}
 	}
 	
@@ -98,7 +98,7 @@ static void encodeSymbol(PpmModel &model, const vector<uint32_t> &history, uint3
 	// context". When symbol 256 is produced at the order -1 context, it means "EOF".
 	for (int order = static_cast<int>(history.size()); order >= 0; order--) {
 		PpmModel::Context *ctx = model.rootContext.get();
-		for (std::size_t i = history.size() - static_cast<unsigned int>(order); i < history.size(); i++) {
+		for (int i = 0; i < order; i++) {
 			if (ctx->subcontexts.empty())
 				throw std::logic_error("Assertion error");
 			ctx = ctx->subcontexts.at(history.at(i)).get();

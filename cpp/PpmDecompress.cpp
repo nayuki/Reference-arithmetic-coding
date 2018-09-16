@@ -77,10 +77,10 @@ static void decompress(BitInputStream &in, std::ostream &out) {
 		model.incrementContexts(history, symbol);
 		
 		if (model.modelOrder >= 1) {
-			// Append current symbol or shift back by one
+			// Prepend current symbol, dropping oldest symbol if necessary
 			if (history.size() >= static_cast<unsigned int>(model.modelOrder))
-				history.erase(history.begin());
-			history.push_back(symbol);
+				history.erase(history.end() - 1);
+			history.insert(history.begin(), symbol);
 		}
 	}
 }
@@ -92,7 +92,7 @@ static uint32_t decodeSymbol(ArithmeticDecoder &dec, PpmModel &model, const vect
 	// with non-empty context". When symbol 256 is consumed at the order -1 context, it means "EOF".
 	for (int order = static_cast<int>(history.size()); order >= 0; order--) {
 		PpmModel::Context *ctx = model.rootContext.get();
-		for (std::size_t i = history.size() - static_cast<unsigned int>(order); i < history.size(); i++) {
+		for (int i = 0; i < order; i++) {
 			if (ctx->subcontexts.empty())
 				throw std::logic_error("Assertion error");
 			ctx = ctx->subcontexts.at(history.at(i)).get();

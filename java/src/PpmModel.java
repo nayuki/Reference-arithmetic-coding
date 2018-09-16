@@ -48,21 +48,21 @@ final class PpmModel {
 		if (history.length > modelOrder || symbol < 0 || symbol >= symbolLimit)
 			throw new IllegalArgumentException();
 		
-		for (int order = 0; order <= history.length; order++) {
-			Context ctx = rootContext;
-			for (int i = history.length - order, depth = 0; i < history.length; i++, depth++) {
-				Context[] subctxs = ctx.subcontexts;
-				if (subctxs == null)
-					throw new AssertionError();
-				
-				int sym = history[i];
-				if (subctxs[sym] == null) {
-					subctxs[sym] = new Context(symbolLimit, depth + 1 < modelOrder);
-					subctxs[sym].frequencies.increment(escapeSymbol);
-				}
-				ctx = subctxs[sym];
+		Context ctx = rootContext;
+		ctx.frequencies.increment(symbol);
+		int i = 0;
+		for (int sym : history) {
+			Context[] subctxs = ctx.subcontexts;
+			if (subctxs == null)
+				throw new AssertionError();
+			
+			if (subctxs[sym] == null) {
+				subctxs[sym] = new Context(symbolLimit, i + 1 < modelOrder);
+				subctxs[sym].frequencies.increment(escapeSymbol);
 			}
+			ctx = subctxs[sym];
 			ctx.frequencies.increment(symbol);
+			i++;
 		}
 	}
 	
