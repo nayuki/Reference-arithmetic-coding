@@ -503,7 +503,7 @@ class CheckedFrequencyTable(FrequencyTable):
 	
 	
 	def __str__(self):
-		return "CheckFrequencyTable (" + str(self.freqtable) + ")"
+		return "CheckedFrequencyTable (" + str(self.freqtable) + ")"
 	
 	
 	def set(self, symbol, freq):

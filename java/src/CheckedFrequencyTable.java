@@ -88,7 +88,7 @@ public final class CheckedFrequencyTable implements FrequencyTable {
 	
 	
 	public String toString() {
-		return "CheckFrequencyTable (" + freqTable.toString() + ")";
+		return "CheckedFrequencyTable (" + freqTable.toString() + ")";
 	}
 	
 	
