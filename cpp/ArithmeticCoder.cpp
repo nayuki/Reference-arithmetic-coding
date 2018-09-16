@@ -18,12 +18,12 @@ ArithmeticCoderBase::ArithmeticCoderBase(int stateSize) {
 	if (stateSize < 1 || stateSize > 63)
 		throw std::domain_error("State size out of range");
 	numStateBits = stateSize;
-	MAX_RANGE = static_cast<decltype(MAX_RANGE)>(1) << numStateBits;
-	TOP_MASK = MAX_RANGE >> 1;
+	fullRange = static_cast<decltype(fullRange)>(1) << numStateBits;
+	TOP_MASK = fullRange >> 1;
 	SECOND_MASK = TOP_MASK >> 1;
-	MIN_RANGE = (MAX_RANGE >> 2) + 2;
-	MAX_TOTAL = std::min(std::numeric_limits<decltype(MAX_RANGE)>::max() / MAX_RANGE, MIN_RANGE);
-	MASK = MAX_RANGE - 1;
+	MIN_RANGE = (fullRange >> 2) + 2;
+	MAX_TOTAL = std::min(std::numeric_limits<decltype(fullRange)>::max() / fullRange, MIN_RANGE);
+	MASK = fullRange - 1;
 	low = 0;
 	high = MASK;
 }
@@ -37,7 +37,7 @@ void ArithmeticCoderBase::update(const FrequencyTable &freqs, uint32_t symbol) {
 	if (low >= high || (low & MASK) != low || (high & MASK) != high)
 		throw std::logic_error("Assertion error: Low or high out of range");
 	uint64_t range = high - low + 1;
-	if (range < MIN_RANGE || range > MAX_RANGE)
+	if (range < MIN_RANGE || range > fullRange)
 		throw std::logic_error("Assertion error: Range out of range");
 	
 	// Frequency table values check

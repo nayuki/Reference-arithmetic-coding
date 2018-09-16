@@ -33,18 +33,18 @@ class ArithmeticCoderBase(object):
 		#   they have a recommended value of num_state_bits=32 as the most versatile setting.
 		self.num_state_bits = statesize
 		# Maximum range (high+1-low) during coding (trivial), which is 2^num_state_bits = 1000...000.
-		self.MAX_RANGE = 1 << self.num_state_bits
+		self.full_range = 1 << self.num_state_bits
 		# The top bit at width num_state_bits, which is 0100...000.
-		self.TOP_MASK = self.MAX_RANGE >> 1
+		self.TOP_MASK = self.full_range >> 1
 		# The second highest bit at width num_state_bits, which is 0010...000. This is zero when num_state_bits=1.
 		self.SECOND_MASK = self.TOP_MASK >> 1
 		# Minimum range (high+1-low) during coding (non-trivial), which is 0010...010.
-		self.MIN_RANGE = (self.MAX_RANGE >> 2) + 2
+		self.MIN_RANGE = (self.full_range >> 2) + 2
 		# Maximum allowed total from a frequency table at all times during coding. This differs from Java
 		# and C++ because Python's native bigint avoids constraining the size of intermediate computations.
 		self.MAX_TOTAL = self.MIN_RANGE
 		# Bit mask of num_state_bits ones, which is 0111...111.
-		self.MASK = self.MAX_RANGE - 1
+		self.MASK = self.full_range - 1
 		
 		# -- State fields --
 		# Low end of this arithmetic coder's current range. Conceptually has an infinite number of trailing 0s.
@@ -62,8 +62,8 @@ class ArithmeticCoderBase(object):
 	#   In other words, they are in different halves of the full range.
 	# - (low < 1/4 * 2^num_state_bits) || (high >= 3/4 * 2^num_state_bits).
 	#   In other words, they are not both in the middle two quarters.
-	# - Let range = high - low + 1, then MAX_RANGE/4 < MIN_RANGE <= range
-	#   <= MAX_RANGE = 2^num_state_bits. These invariants for 'range' essentially
+	# - Let range = high - low + 1, then full_range/4 < MIN_RANGE <= range
+	#   <= full_range = 2^num_state_bits. These invariants for 'range' essentially
 	#   dictate the maximum total that the incoming frequency table can have.
 	def update(self, freqs, symbol):
 		# State check
@@ -72,7 +72,7 @@ class ArithmeticCoderBase(object):
 		if low >= high or (low & self.MASK) != low or (high & self.MASK) != high:
 			raise AssertionError("Low or high out of range")
 		range = high - low + 1
-		if not (self.MIN_RANGE <= range <= self.MAX_RANGE):
+		if not (self.MIN_RANGE <= range <= self.full_range):
 			raise AssertionError("Range out of range")
 		
 		# Frequency table values check

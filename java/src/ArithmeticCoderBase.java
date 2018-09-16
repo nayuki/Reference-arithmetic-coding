@@ -37,7 +37,7 @@ public abstract class ArithmeticCoderBase {
 	protected final int numStateBits;
 	
 	/** Maximum range (high+1-low) during coding (trivial), which is 2^numStateBits = 1000...000. */
-	protected final long MAX_RANGE;
+	protected final long fullRange;
 	
 	/** The top bit at width numStateBits, which is 0100...000. */
 	protected final long TOP_MASK;
@@ -81,12 +81,12 @@ public abstract class ArithmeticCoderBase {
 		if (stateSize < 1 || stateSize > 62)
 			throw new IllegalArgumentException("State size out of range");
 		numStateBits = stateSize;
-		MAX_RANGE = 1L << numStateBits;
-		TOP_MASK = MAX_RANGE >>> 1;
+		fullRange = 1L << numStateBits;
+		TOP_MASK = fullRange >>> 1;
 		SECOND_MASK = TOP_MASK >>> 1;
-		MIN_RANGE = (MAX_RANGE >>> 2) + 2;
-		MAX_TOTAL = Math.min(Long.MAX_VALUE / MAX_RANGE, MIN_RANGE);
-		MASK = MAX_RANGE - 1;
+		MIN_RANGE = (fullRange >>> 2) + 2;
+		MAX_TOTAL = Math.min(Long.MAX_VALUE / fullRange, MIN_RANGE);
+		MASK = fullRange - 1;
 		
 		low = 0;
 		high = MASK;
@@ -107,8 +107,8 @@ public abstract class ArithmeticCoderBase {
 	 *   In other words, they are in different halves of the full range.</li>
 	 *   <li>(low &lt; 1/4 * 2<sup>numStateBits</sup>) || (high &ge; 3/4 * 2<sup>numStateBits</sup>).
 	 *   In other words, they are not both in the middle two quarters.</li>
-	 *   <li>Let range = high &minus; low + 1, then MAX_RANGE/4 &lt; MIN_RANGE &le; range
-	 *   &le; MAX_RANGE = 2<sup>numStateBits</sup>. These invariants for 'range' essentially dictate the maximum
+	 *   <li>Let range = high &minus; low + 1, then fullRange/4 &lt; MIN_RANGE &le; range
+	 *   &le; fullRange = 2<sup>numStateBits</sup>. These invariants for 'range' essentially dictate the maximum
 	 *   total that the incoming frequency table can have, such that intermediate calculations don't overflow.</li>
 	 * </ul>
 	 * @param freqs the frequency table to use
@@ -120,7 +120,7 @@ public abstract class ArithmeticCoderBase {
 		if (low >= high || (low & MASK) != low || (high & MASK) != high)
 			throw new AssertionError("Low or high out of range");
 		long range = high - low + 1;
-		if (range < MIN_RANGE || range > MAX_RANGE)
+		if (range < MIN_RANGE || range > fullRange)
 			throw new AssertionError("Range out of range");
 		
 		// Frequency table values check
