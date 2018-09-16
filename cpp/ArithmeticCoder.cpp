@@ -21,11 +21,11 @@ ArithmeticCoderBase::ArithmeticCoderBase(int stateSize) {
 	fullRange = static_cast<decltype(fullRange)>(1) << numStateBits;
 	halfRange = fullRange >> 1;
 	quarterRange = halfRange >> 1;
-	MIN_RANGE = (fullRange >> 2) + 2;
-	MAX_TOTAL = std::min(std::numeric_limits<decltype(fullRange)>::max() / fullRange, MIN_RANGE);
-	MASK = fullRange - 1;
+	minimumRange = (fullRange >> 2) + 2;
+	maximumTotal = std::min(std::numeric_limits<decltype(fullRange)>::max() / fullRange, minimumRange);
+	stateMask = fullRange - 1;
 	low = 0;
-	high = MASK;
+	high = stateMask;
 }
 
 
@@ -34,10 +34,10 @@ ArithmeticCoderBase::~ArithmeticCoderBase() {}
 
 void ArithmeticCoderBase::update(const FrequencyTable &freqs, uint32_t symbol) {
 	// State check
-	if (low >= high || (low & MASK) != low || (high & MASK) != high)
+	if (low >= high || (low & stateMask) != low || (high & stateMask) != high)
 		throw std::logic_error("Assertion error: Low or high out of range");
 	uint64_t range = high - low + 1;
-	if (range < MIN_RANGE || range > fullRange)
+	if (range < minimumRange || range > fullRange)
 		throw std::logic_error("Assertion error: Range out of range");
 	
 	// Frequency table values check
@@ -46,7 +46,7 @@ void ArithmeticCoderBase::update(const FrequencyTable &freqs, uint32_t symbol) {
 	uint32_t symHigh = freqs.getHigh(symbol);
 	if (symLow == symHigh)
 		throw std::invalid_argument("Symbol has zero frequency");
-	if (total > MAX_TOTAL)
+	if (total > maximumTotal)
 		throw std::invalid_argument("Cannot code symbol because total is too large");
 	
 	// Update range
@@ -58,15 +58,15 @@ void ArithmeticCoderBase::update(const FrequencyTable &freqs, uint32_t symbol) {
 	// While the highest bits are equal
 	while (((low ^ high) & halfRange) == 0) {
 		shift();
-		low = (low << 1) & MASK;
-		high = ((high << 1) & MASK) | 1;
+		low = (low << 1) & stateMask;
+		high = ((high << 1) & stateMask) | 1;
 	}
 	
 	// While the second highest bit of low is 1 and the second highest bit of high is 0
 	while ((low & ~high & quarterRange) != 0) {
 		underflow();
-		low = (low << 1) & (MASK >> 1);
-		high = ((high << 1) & (MASK >> 1)) | halfRange | 1;
+		low = (low << 1) & (stateMask >> 1);
+		high = ((high << 1) & (stateMask >> 1)) | halfRange | 1;
 	}
 }
 
@@ -83,7 +83,7 @@ ArithmeticDecoder::ArithmeticDecoder(int stateSize, BitInputStream &in) :
 uint32_t ArithmeticDecoder::read(const FrequencyTable &freqs) {
 	// Translate from coding range scale to frequency table scale
 	uint32_t total = freqs.getTotal();
-	if (total > MAX_TOTAL)
+	if (total > maximumTotal)
 		throw std::invalid_argument("Cannot decode symbol because total is too large");
 	uint64_t range = high - low + 1;
 	uint64_t offset = code - low;
@@ -117,12 +117,12 @@ uint32_t ArithmeticDecoder::read(const FrequencyTable &freqs) {
 
 
 void ArithmeticDecoder::shift() {
-	code = ((code << 1) & MASK) | readCodeBit();
+	code = ((code << 1) & stateMask) | readCodeBit();
 }
 
 
 void ArithmeticDecoder::underflow() {
-	code = (code & halfRange) | ((code << 1) & (MASK >> 1)) | readCodeBit();
+	code = (code & halfRange) | ((code << 1) & (stateMask >> 1)) | readCodeBit();
 }
 
 

@@ -74,7 +74,7 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	public int read(CheckedFrequencyTable freqs) throws IOException {
 		// Translate from coding range scale to frequency table scale
 		long total = freqs.getTotal();
-		if (total > MAX_TOTAL)
+		if (total > maximumTotal)
 			throw new IllegalArgumentException("Cannot decode symbol because total is too large");
 		long range = high - low + 1;
 		long offset = code - low;
@@ -108,12 +108,12 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 	
 	
 	protected void shift() throws IOException {
-		code = ((code << 1) & MASK) | readCodeBit();
+		code = ((code << 1) & stateMask) | readCodeBit();
 	}
 	
 	
 	protected void underflow() throws IOException {
-		code = (code & halfRange) | ((code << 1) & (MASK >>> 1)) | readCodeBit();
+		code = (code & halfRange) | ((code << 1) & (stateMask >>> 1)) | readCodeBit();
 	}
 	
 	

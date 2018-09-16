@@ -23,15 +23,15 @@ class ArithmeticCoderBase {
 	
 	// Number of bits for the 'low' and 'high' state variables. Must be in the range [1, 63].
 	// - For state sizes less than the midpoint of around 32, larger values are generally better -
-	//   they allow a larger maximum frequency total (MAX_TOTAL), and they reduce the approximation
+	//   they allow a larger maximum frequency total (maximumTotal), and they reduce the approximation
 	//   error inherent in adapting fractions to integers; both effects reduce the data encoding loss
 	//   and asymptotically approach the efficiency of arithmetic coding using exact fractions.
 	// - But for state sizes greater than the midpoint, because intermediate computations are limited
 	//   to the long integer type's 63-bit unsigned precision, larger state sizes will decrease the
 	//   maximum frequency total, which might constrain the user-supplied probability model.
 	// - Therefore numStateBits=32 is recommended as the most versatile setting
-	//   because it maximizes MAX_TOTAL (which ends up being slightly over 2^30).
-	// - Note that numStateBits=63 is legal but useless because it implies MAX_TOTAL=1,
+	//   because it maximizes maximumTotal (which ends up being slightly over 2^30).
+	// - Note that numStateBits=63 is legal but useless because it implies maximumTotal=1,
 	//   which means a frequency table can only support one symbol with non-zero frequency.
 	protected: int numStateBits;
 	
@@ -45,13 +45,13 @@ class ArithmeticCoderBase {
 	protected: std::uint64_t quarterRange;
 	
 	// Minimum range (high+1-low) during coding (non-trivial), which is 0010...010.
-	protected: std::uint64_t MIN_RANGE;
+	protected: std::uint64_t minimumRange;
 	
 	// Maximum allowed total from a frequency table at all times during coding.
-	protected: std::uint64_t MAX_TOTAL;
+	protected: std::uint64_t maximumTotal;
 	
 	// Bit mask of numStateBits ones, which is 0111...111.
-	protected: std::uint64_t MASK;
+	protected: std::uint64_t stateMask;
 	
 	
 	/*---- State fields ----*/
@@ -83,7 +83,7 @@ class ArithmeticCoderBase {
 	//   In other words, they are in different halves of the full range.
 	// * (low < 1/4 * 2^numStateBits) || (high >= 3/4 * 2^numStateBits).
 	//   In other words, they are not both in the middle two quarters.
-	// * Let range = high - low + 1, then fullRange/4 < MIN_RANGE <= range
+	// * Let range = high - low + 1, then fullRange/4 < minimumRange <= range
 	//   <= fullRange = 2^numStateBits. These invariants for 'range' essentially dictate the maximum
 	//   total that the incoming frequency table can have, such that intermediate calculations don't overflow.
 	protected: virtual void update(const FrequencyTable &freqs, std::uint32_t symbol);

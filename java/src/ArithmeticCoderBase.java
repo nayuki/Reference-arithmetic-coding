@@ -22,15 +22,15 @@ public abstract class ArithmeticCoderBase {
 	 * Number of bits for the 'low' and 'high' state variables. Must be in the range [1, 62].
 	 * <ul>
 	 *   <li>For state sizes less than the midpoint of around 32, larger values are generally better -
-	 *   they allow a larger maximum frequency total (MAX_TOTAL), and they reduce the approximation
+	 *   they allow a larger maximum frequency total (maximumTotal), and they reduce the approximation
 	 *   error inherent in adapting fractions to integers; both effects reduce the data encoding loss
 	 *   and asymptotically approach the efficiency of arithmetic coding using exact fractions.</li>
 	 *   <li>But for state sizes greater than the midpoint, because intermediate computations are limited
 	 *   to the long integer type's 63-bit unsigned precision, larger state sizes will decrease the
 	 *   maximum frequency total, which might constrain the user-supplied probability model.</li>
 	 *   <li>Therefore numStateBits=32 is recommended as the most versatile setting
-	 *   because it maximizes MAX_TOTAL (which ends up being slightly over 2^30).</li>
-	 *   <li>Note that numStateBits=62 is legal but useless because it implies MAX_TOTAL=1,
+	 *   because it maximizes maximumTotal (which ends up being slightly over 2^30).</li>
+	 *   <li>Note that numStateBits=62 is legal but useless because it implies maximumTotal=1,
 	 *   which means a frequency table can only support one symbol with non-zero frequency.</li>
 	 * </ul>
 	 */
@@ -46,13 +46,13 @@ public abstract class ArithmeticCoderBase {
 	protected final long quarterRange;
 	
 	/** Minimum range (high+1-low) during coding (non-trivial), which is 0010...010. */
-	protected final long MIN_RANGE;
+	protected final long minimumRange;
 	
 	/** Maximum allowed total from a frequency table at all times during coding. */
-	protected final long MAX_TOTAL;
+	protected final long maximumTotal;
 	
 	/** Bit mask of numStateBits ones, which is 0111...111. */
-	protected final long MASK;
+	protected final long stateMask;
 	
 	
 	
@@ -84,12 +84,12 @@ public abstract class ArithmeticCoderBase {
 		fullRange = 1L << numStateBits;
 		halfRange = fullRange >>> 1;
 		quarterRange = halfRange >>> 1;
-		MIN_RANGE = (fullRange >>> 2) + 2;
-		MAX_TOTAL = Math.min(Long.MAX_VALUE / fullRange, MIN_RANGE);
-		MASK = fullRange - 1;
+		minimumRange = (fullRange >>> 2) + 2;
+		maximumTotal = Math.min(Long.MAX_VALUE / fullRange, minimumRange);
+		stateMask = fullRange - 1;
 		
 		low = 0;
-		high = MASK;
+		high = stateMask;
 	}
 	
 	
@@ -107,7 +107,7 @@ public abstract class ArithmeticCoderBase {
 	 *   In other words, they are in different halves of the full range.</li>
 	 *   <li>(low &lt; 1/4 * 2<sup>numStateBits</sup>) || (high &ge; 3/4 * 2<sup>numStateBits</sup>).
 	 *   In other words, they are not both in the middle two quarters.</li>
-	 *   <li>Let range = high &minus; low + 1, then fullRange/4 &lt; MIN_RANGE &le; range
+	 *   <li>Let range = high &minus; low + 1, then fullRange/4 &lt; minimumRange &le; range
 	 *   &le; fullRange = 2<sup>numStateBits</sup>. These invariants for 'range' essentially dictate the maximum
 	 *   total that the incoming frequency table can have, such that intermediate calculations don't overflow.</li>
 	 * </ul>
@@ -117,10 +117,10 @@ public abstract class ArithmeticCoderBase {
 	 */
 	protected void update(CheckedFrequencyTable freqs, int symbol) throws IOException {
 		// State check
-		if (low >= high || (low & MASK) != low || (high & MASK) != high)
+		if (low >= high || (low & stateMask) != low || (high & stateMask) != high)
 			throw new AssertionError("Low or high out of range");
 		long range = high - low + 1;
-		if (range < MIN_RANGE || range > fullRange)
+		if (range < minimumRange || range > fullRange)
 			throw new AssertionError("Range out of range");
 		
 		// Frequency table values check
@@ -129,7 +129,7 @@ public abstract class ArithmeticCoderBase {
 		long symHigh = freqs.getHigh(symbol);
 		if (symLow == symHigh)
 			throw new IllegalArgumentException("Symbol has zero frequency");
-		if (total > MAX_TOTAL)
+		if (total > maximumTotal)
 			throw new IllegalArgumentException("Cannot code symbol because total is too large");
 		
 		// Update range
@@ -141,15 +141,15 @@ public abstract class ArithmeticCoderBase {
 		// While the highest bits are equal
 		while (((low ^ high) & halfRange) == 0) {
 			shift();
-			low = (low << 1) & MASK;
-			high = ((high << 1) & MASK) | 1;
+			low = (low << 1) & stateMask;
+			high = ((high << 1) & stateMask) | 1;
 		}
 		
 		// While the second highest bit of low is 1 and the second highest bit of high is 0
 		while ((low & ~high & quarterRange) != 0) {
 			underflow();
-			low = (low << 1) & (MASK >>> 1);
-			high = ((high << 1) & (MASK >>> 1)) | halfRange | 1;
+			low = (low << 1) & (stateMask >>> 1);
+			high = ((high << 1) & (stateMask >>> 1)) | halfRange | 1;
 		}
 	}
 	
