@@ -91,13 +91,14 @@ class ArithmeticCoderBase(object):
 		self.low = newlow
 		self.high = newhigh
 		
-		# While the highest bits are equal
+		# While low and high have the same top bit value, shift them out
 		while ((self.low ^ self.high) & self.half_range) == 0:
 			self.shift()
 			self.low = (self.low << 1) & self.state_mask
 			self.high = ((self.high << 1) & self.state_mask) | 1
+		# Now low's top bit must be 0 and high's top bit must be 1
 		
-		# While the second highest bit of low is 1 and the second highest bit of high is 0
+		# While low's top two bits are 01 and high's are 10, delete the second highest bit of both
 		while (self.low & ~self.high & self.quarter_range) != 0:
 			self.underflow()
 			self.low = (self.low << 1) & (self.state_mask >> 1)

@@ -55,14 +55,15 @@ void ArithmeticCoderBase::update(const FrequencyTable &freqs, uint32_t symbol) {
 	low = newLow;
 	high = newHigh;
 	
-	// While the highest bits are equal
+	// While low and high have the same top bit value, shift them out
 	while (((low ^ high) & halfRange) == 0) {
 		shift();
 		low = (low << 1) & stateMask;
 		high = ((high << 1) & stateMask) | 1;
 	}
+	// Now low's top bit must be 0 and high's top bit must be 1
 	
-	// While the second highest bit of low is 1 and the second highest bit of high is 0
+	// While low's top two bits are 01 and high's are 10, delete the second highest bit of both
 	while ((low & ~high & quarterRange) != 0) {
 		underflow();
 		low = (low << 1) & (stateMask >> 1);
