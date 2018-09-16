@@ -82,9 +82,9 @@ public abstract class ArithmeticCoderBase {
 			throw new IllegalArgumentException("State size out of range");
 		numStateBits = numBits;
 		fullRange = 1L << numStateBits;
-		halfRange = fullRange >>> 1;
-		quarterRange = halfRange >>> 1;
-		minimumRange = (fullRange >>> 2) + 2;
+		halfRange = fullRange >>> 1;  // Non-zero
+		quarterRange = halfRange >>> 1;  // Can be zero
+		minimumRange = (fullRange >>> 2) + 2;  // At least 2
 		maximumTotal = Math.min(Long.MAX_VALUE / fullRange, minimumRange);
 		stateMask = fullRange - 1;
 		

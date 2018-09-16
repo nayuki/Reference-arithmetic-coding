@@ -19,9 +19,9 @@ ArithmeticCoderBase::ArithmeticCoderBase(int numBits) {
 		throw std::domain_error("State size out of range");
 	numStateBits = numBits;
 	fullRange = static_cast<decltype(fullRange)>(1) << numStateBits;
-	halfRange = fullRange >> 1;
-	quarterRange = halfRange >> 1;
-	minimumRange = (fullRange >> 2) + 2;
+	halfRange = fullRange >> 1;  // Non-zero
+	quarterRange = halfRange >> 1;  // Can be zero
+	minimumRange = (fullRange >> 2) + 2;  // At least 2
 	maximumTotal = std::min(std::numeric_limits<decltype(fullRange)>::max() / fullRange, minimumRange);
 	stateMask = fullRange - 1;
 	low = 0;
