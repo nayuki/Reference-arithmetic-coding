@@ -76,16 +76,17 @@ class ArithmeticCoderBase {
 	
 	// Updates the code range (low and high) of this arithmetic coder as a result
 	// of processing the given symbol with the given frequency table.
-	// Invariants that are true before and after encoding/decoding each symbol:
-	// * 0 <= low <= code <= high < 2^numStateBits. ('code' exists only in the decoder.)
+	// Invariants that are true before and after encoding/decoding each symbol
+	// (letting fullRange = 2^numStateBits):
+	// * 0 <= low <= code <= high < fullRange. ('code' exists only in the decoder.)
 	//   Therefore these variables are unsigned integers of numStateBits bits.
-	// * (low < 1/2 * 2^numStateBits) && (high >= 1/2 * 2^numStateBits).
+	// * low < 1/2 * fullRange <= high.
 	//   In other words, they are in different halves of the full range.
-	// * (low < 1/4 * 2^numStateBits) || (high >= 3/4 * 2^numStateBits).
+	// * (low < 1/4 * fullRange) || (high >= 3/4 * fullRange).
 	//   In other words, they are not both in the middle two quarters.
-	// * Let range = high - low + 1, then fullRange/4 < minimumRange <= range
-	//   <= fullRange = 2^numStateBits. These invariants for 'range' essentially dictate the maximum
-	//   total that the incoming frequency table can have, such that intermediate calculations don't overflow.
+	// * Let range = high - low + 1, then fullRange/4 < minimumRange <= range <= fullRange.
+	//   These invariants for 'range' essentially dictate the maximum total that the incoming
+	//   frequency table can have, such that intermediate calculations don't overflow.
 	protected: virtual void update(const FrequencyTable &freqs, std::uint32_t symbol);
 	
 	

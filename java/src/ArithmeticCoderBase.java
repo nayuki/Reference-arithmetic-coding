@@ -99,17 +99,18 @@ public abstract class ArithmeticCoderBase {
 	/**
 	 * Updates the code range (low and high) of this arithmetic coder as a result
 	 * of processing the specified symbol with the specified frequency table.
-	 * <p>Invariants that are true before and after encoding/decoding each symbol:</p>
+	 * <p>Invariants that are true before and after encoding/decoding each symbol
+	 * (letting fullRange = 2<sup>numStateBits</sup>):</p>
 	 * <ul>
-	 *   <li>0 &le; low &le; code &le; high &lt; 2<sup>numStateBits</sup>. ('code' exists only in the decoder.)
+	 *   <li>0 &le; low &le; code &le; high &lt; fullRange. ('code' exists only in the decoder.)
 	 *   Therefore these variables are unsigned integers of numStateBits bits.</li>
-	 *   <li>(low &lt; 1/2 * 2<sup>numStateBits</sup>) && (high &ge; 1/2 * 2<sup>numStateBits</sup>).
+	 *   <li>low &lt; 1/2 &times; fullRange &le; high.
 	 *   In other words, they are in different halves of the full range.</li>
-	 *   <li>(low &lt; 1/4 * 2<sup>numStateBits</sup>) || (high &ge; 3/4 * 2<sup>numStateBits</sup>).
+	 *   <li>(low &lt; 1/4 &times; fullRange) || (high &ge; 3/4 &times; fullRange).
 	 *   In other words, they are not both in the middle two quarters.</li>
-	 *   <li>Let range = high &minus; low + 1, then fullRange/4 &lt; minimumRange &le; range
-	 *   &le; fullRange = 2<sup>numStateBits</sup>. These invariants for 'range' essentially dictate the maximum
-	 *   total that the incoming frequency table can have, such that intermediate calculations don't overflow.</li>
+	 *   <li>Let range = high &minus; low + 1, then fullRange/4 &lt; minimumRange &le; range &le;
+	 *   fullRange. These invariants for 'range' essentially dictate the maximum total that the
+	 *   incoming frequency table can have, such that intermediate calculations don't overflow.</li>
 	 * </ul>
 	 * @param freqs the frequency table to use
 	 * @param symbol the symbol that was processed

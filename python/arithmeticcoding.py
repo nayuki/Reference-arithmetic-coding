@@ -55,15 +55,16 @@ class ArithmeticCoderBase(object):
 	
 	# Updates the code range (low and high) of this arithmetic coder as a result
 	# of processing the given symbol with the given frequency table.
-	# Invariants that are true before and after encoding/decoding each symbol:
-	# - 0 <= low <= code <= high < 2^num_state_bits. ('code' exists only in the decoder.)
+	# Invariants that are true before and after encoding/decoding each symbol
+	# (letting full_range = 2^num_state_bits):
+	# - 0 <= low <= code <= high < full_range. ('code' exists only in the decoder.)
 	#   Therefore these variables are unsigned integers of num_state_bits bits.
-	# - (low < 1/2 * 2^num_state_bits) && (high >= 1/2 * 2^num_state_bits).
+	# - low < 1/2 * full_range <= high.
 	#   In other words, they are in different halves of the full range.
-	# - (low < 1/4 * 2^num_state_bits) || (high >= 3/4 * 2^num_state_bits).
+	# - (low < 1/4 * full_range) || (high >= 3/4 * full_range).
 	#   In other words, they are not both in the middle two quarters.
-	# - Let range = high - low + 1, then full_range/4 < minimum_range <= range
-	#   <= full_range = 2^num_state_bits. These invariants for 'range' essentially
+	# - Let range = high - low + 1, then full_range/4 < minimum_range
+	#   <= range <= full_range. These invariants for 'range' essentially
 	#   dictate the maximum total that the incoming frequency table can have.
 	def update(self, freqs, symbol):
 		# State check
