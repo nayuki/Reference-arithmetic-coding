@@ -94,7 +94,7 @@ class ArithmeticCoderBase(object):
 		# While low and high have the same top bit value, shift them out
 		while ((self.low ^ self.high) & self.half_range) == 0:
 			self.shift()
-			self.low = (self.low << 1) & self.state_mask
+			self.low  = ((self.low  << 1) & self.state_mask)
 			self.high = ((self.high << 1) & self.state_mask) | 1
 		# Now low's top bit must be 0 and high's top bit must be 1
 		
