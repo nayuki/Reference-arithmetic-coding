@@ -101,8 +101,8 @@ class ArithmeticCoderBase(object):
 		# While low's top two bits are 01 and high's are 10, delete the second highest bit of both
 		while (self.low & ~self.high & self.quarter_range) != 0:
 			self.underflow()
-			self.low = (self.low << 1) & (self.state_mask >> 1)
-			self.high = ((self.high << 1) & (self.state_mask >> 1)) | self.half_range | 1
+			self.low = (self.low << 1) ^ self.half_range
+			self.high = ((self.high ^ self.half_range) << 1) | self.half_range | 1
 	
 	
 	# Called to handle the situation when the top bit of 'low' and 'high' are equal.
