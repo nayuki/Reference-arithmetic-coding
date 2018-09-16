@@ -84,7 +84,7 @@ public abstract class ArithmeticCoderBase {
 		fullRange = 1L << numStateBits;
 		halfRange = fullRange >>> 1;  // Non-zero
 		quarterRange = halfRange >>> 1;  // Can be zero
-		minimumRange = (fullRange >>> 2) + 2;  // At least 2
+		minimumRange = quarterRange + 2;  // At least 2
 		maximumTotal = Math.min(Long.MAX_VALUE / fullRange, minimumRange);
 		stateMask = fullRange - 1;
 		

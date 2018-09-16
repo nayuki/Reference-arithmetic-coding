@@ -39,7 +39,7 @@ class ArithmeticCoderBase(object):
 		# The second highest bit at width num_state_bits, which is 0010...000. This is zero when num_state_bits=1.
 		self.quarter_range = self.half_range >> 1  # Can be zero
 		# Minimum range (high+1-low) during coding (non-trivial), which is 0010...010.
-		self.minimum_range = (self.full_range >> 2) + 2  # At least 2
+		self.minimum_range = self.quarter_range + 2  # At least 2
 		# Maximum allowed total from a frequency table at all times during coding. This differs from Java
 		# and C++ because Python's native bigint avoids constraining the size of intermediate computations.
 		self.maximum_total = self.minimum_range
