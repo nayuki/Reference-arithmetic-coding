@@ -17,8 +17,8 @@ using std::uint64_t;
 ArithmeticCoderBase::ArithmeticCoderBase(int stateSize) {
 	if (stateSize < 1 || stateSize > 63)
 		throw std::domain_error("State size out of range");
-	STATE_SIZE = stateSize;
-	MAX_RANGE = static_cast<decltype(MAX_RANGE)>(1) << STATE_SIZE;
+	numStateBits = stateSize;
+	MAX_RANGE = static_cast<decltype(MAX_RANGE)>(1) << numStateBits;
 	TOP_MASK = MAX_RANGE >> 1;
 	SECOND_MASK = TOP_MASK >> 1;
 	MIN_RANGE = (MAX_RANGE >> 2) + 2;
@@ -75,7 +75,7 @@ ArithmeticDecoder::ArithmeticDecoder(int stateSize, BitInputStream &in) :
 		ArithmeticCoderBase(stateSize),
 		input(in),
 		code(0) {
-	for (int i = 0; i < STATE_SIZE; i++)
+	for (int i = 0; i < numStateBits; i++)
 		code = code << 1 | readCodeBit();
 }
 
@@ -151,7 +151,7 @@ void ArithmeticEncoder::finish() {
 
 
 void ArithmeticEncoder::shift() {
-	int bit = static_cast<int>(low >> (STATE_SIZE - 1));
+	int bit = static_cast<int>(low >> (numStateBits - 1));
 	output.write(bit);
 	
 	// Write out the saved underflow bits

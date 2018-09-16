@@ -41,7 +41,7 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 		super(stateSize);
 		input = Objects.requireNonNull(in);
 		code = 0;
-		for (int i = 0; i < STATE_SIZE; i++)
+		for (int i = 0; i < numStateBits; i++)
 			code = code << 1 | readCodeBit();
 	}
 	

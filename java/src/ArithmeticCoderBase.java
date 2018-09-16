@@ -28,21 +28,21 @@ public abstract class ArithmeticCoderBase {
 	 *   <li>But for state sizes greater than the midpoint, because intermediate computations are limited
 	 *   to the long integer type's 63-bit unsigned precision, larger state sizes will decrease the
 	 *   maximum frequency total, which might constrain the user-supplied probability model.</li>
-	 *   <li>Therefore STATE_SIZE=32 is recommended as the most versatile setting
+	 *   <li>Therefore numStateBits=32 is recommended as the most versatile setting
 	 *   because it maximizes MAX_TOTAL (which ends up being slightly over 2^30).</li>
-	 *   <li>Note that STATE_SIZE=62 is legal but useless because it implies MAX_TOTAL=1,
+	 *   <li>Note that numStateBits=62 is legal but useless because it implies MAX_TOTAL=1,
 	 *   which means a frequency table can only support one symbol with non-zero frequency.</li>
 	 * </ul>
 	 */
-	protected final int STATE_SIZE;
+	protected final int numStateBits;
 	
-	/** Maximum range (high+1-low) during coding (trivial), which is 2^STATE_SIZE = 1000...000. */
+	/** Maximum range (high+1-low) during coding (trivial), which is 2^numStateBits = 1000...000. */
 	protected final long MAX_RANGE;
 	
-	/** The top bit at width STATE_SIZE, which is 0100...000. */
+	/** The top bit at width numStateBits, which is 0100...000. */
 	protected final long TOP_MASK;
 	
-	/** The second highest bit at width STATE_SIZE, which is 0010...000. This is zero when STATE_SIZE=1. */
+	/** The second highest bit at width numStateBits, which is 0010...000. This is zero when numStateBits=1. */
 	protected final long SECOND_MASK;
 	
 	/** Minimum range (high+1-low) during coding (non-trivial), which is 0010...010. */
@@ -51,7 +51,7 @@ public abstract class ArithmeticCoderBase {
 	/** Maximum allowed total from a frequency table at all times during coding. */
 	protected final long MAX_TOTAL;
 	
-	/** Bit mask of STATE_SIZE ones, which is 0111...111. */
+	/** Bit mask of numStateBits ones, which is 0111...111. */
 	protected final long MASK;
 	
 	
@@ -80,8 +80,8 @@ public abstract class ArithmeticCoderBase {
 	public ArithmeticCoderBase(int stateSize) {
 		if (stateSize < 1 || stateSize > 62)
 			throw new IllegalArgumentException("State size out of range");
-		STATE_SIZE = stateSize;
-		MAX_RANGE = 1L << STATE_SIZE;
+		numStateBits = stateSize;
+		MAX_RANGE = 1L << numStateBits;
 		TOP_MASK = MAX_RANGE >>> 1;
 		SECOND_MASK = TOP_MASK >>> 1;
 		MIN_RANGE = (MAX_RANGE >>> 2) + 2;
@@ -101,14 +101,14 @@ public abstract class ArithmeticCoderBase {
 	 * of processing the specified symbol with the specified frequency table.
 	 * <p>Invariants that are true before and after encoding/decoding each symbol:</p>
 	 * <ul>
-	 *   <li>0 &le; low &le; code &le; high &lt; 2<sup>STATE_SIZE</sup>. ('code' exists only in the decoder.)
-	 *   Therefore these variables are unsigned integers of STATE_SIZE bits.</li>
-	 *   <li>(low &lt; 1/2 * 2<sup>STATE_SIZE</sup>) && (high &ge; 1/2 * 2<sup>STATE_SIZE</sup>).
+	 *   <li>0 &le; low &le; code &le; high &lt; 2<sup>numStateBits</sup>. ('code' exists only in the decoder.)
+	 *   Therefore these variables are unsigned integers of numStateBits bits.</li>
+	 *   <li>(low &lt; 1/2 * 2<sup>numStateBits</sup>) && (high &ge; 1/2 * 2<sup>numStateBits</sup>).
 	 *   In other words, they are in different halves of the full range.</li>
-	 *   <li>(low &lt; 1/4 * 2<sup>STATE_SIZE</sup>) || (high &ge; 3/4 * 2<sup>STATE_SIZE</sup>).
+	 *   <li>(low &lt; 1/4 * 2<sup>numStateBits</sup>) || (high &ge; 3/4 * 2<sup>numStateBits</sup>).
 	 *   In other words, they are not both in the middle two quarters.</li>
 	 *   <li>Let range = high &minus; low + 1, then MAX_RANGE/4 &lt; MIN_RANGE &le; range
-	 *   &le; MAX_RANGE = 2<sup>STATE_SIZE</sup>. These invariants for 'range' essentially dictate the maximum
+	 *   &le; MAX_RANGE = 2<sup>numStateBits</sup>. These invariants for 'range' essentially dictate the maximum
 	 *   total that the incoming frequency table can have, such that intermediate calculations don't overflow.</li>
 	 * </ul>
 	 * @param freqs the frequency table to use

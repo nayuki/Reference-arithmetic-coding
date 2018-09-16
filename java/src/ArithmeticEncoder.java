@@ -88,7 +88,7 @@ public final class ArithmeticEncoder extends ArithmeticCoderBase {
 	
 	
 	protected void shift() throws IOException {
-		int bit = (int)(low >>> (STATE_SIZE - 1));
+		int bit = (int)(low >>> (numStateBits - 1));
 		output.write(bit);
 		
 		// Write out the saved underflow bits

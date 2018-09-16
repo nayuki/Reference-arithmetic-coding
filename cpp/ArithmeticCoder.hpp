@@ -29,19 +29,19 @@ class ArithmeticCoderBase {
 	// - But for state sizes greater than the midpoint, because intermediate computations are limited
 	//   to the long integer type's 63-bit unsigned precision, larger state sizes will decrease the
 	//   maximum frequency total, which might constrain the user-supplied probability model.
-	// - Therefore STATE_SIZE=32 is recommended as the most versatile setting
+	// - Therefore numStateBits=32 is recommended as the most versatile setting
 	//   because it maximizes MAX_TOTAL (which ends up being slightly over 2^30).
-	// - Note that STATE_SIZE=63 is legal but useless because it implies MAX_TOTAL=1,
+	// - Note that numStateBits=63 is legal but useless because it implies MAX_TOTAL=1,
 	//   which means a frequency table can only support one symbol with non-zero frequency.
-	protected: int STATE_SIZE;
+	protected: int numStateBits;
 	
-	// Maximum range (high+1-low) during coding (trivial), which is 2^STATE_SIZE = 1000...000.
+	// Maximum range (high+1-low) during coding (trivial), which is 2^numStateBits = 1000...000.
 	protected: std::uint64_t MAX_RANGE;
 	
-	// The top bit at width STATE_SIZE, which is 0100...000.
+	// The top bit at width numStateBits, which is 0100...000.
 	protected: std::uint64_t TOP_MASK;
 	
-	// The second highest bit at width STATE_SIZE, which is 0010...000. This is zero when STATE_SIZE=1.
+	// The second highest bit at width numStateBits, which is 0010...000. This is zero when numStateBits=1.
 	protected: std::uint64_t SECOND_MASK;
 	
 	// Minimum range (high+1-low) during coding (non-trivial), which is 0010...010.
@@ -50,7 +50,7 @@ class ArithmeticCoderBase {
 	// Maximum allowed total from a frequency table at all times during coding.
 	protected: std::uint64_t MAX_TOTAL;
 	
-	// Bit mask of STATE_SIZE ones, which is 0111...111.
+	// Bit mask of numStateBits ones, which is 0111...111.
 	protected: std::uint64_t MASK;
 	
 	
@@ -77,14 +77,14 @@ class ArithmeticCoderBase {
 	// Updates the code range (low and high) of this arithmetic coder as a result
 	// of processing the given symbol with the given frequency table.
 	// Invariants that are true before and after encoding/decoding each symbol:
-	// * 0 <= low <= code <= high < 2^STATE_SIZE. ('code' exists only in the decoder.)
-	//   Therefore these variables are unsigned integers of STATE_SIZE bits.
-	// * (low < 1/2 * 2^STATE_SIZE) && (high >= 1/2 * 2^STATE_SIZE).
+	// * 0 <= low <= code <= high < 2^numStateBits. ('code' exists only in the decoder.)
+	//   Therefore these variables are unsigned integers of numStateBits bits.
+	// * (low < 1/2 * 2^numStateBits) && (high >= 1/2 * 2^numStateBits).
 	//   In other words, they are in different halves of the full range.
-	// * (low < 1/4 * 2^STATE_SIZE) || (high >= 3/4 * 2^STATE_SIZE).
+	// * (low < 1/4 * 2^numStateBits) || (high >= 3/4 * 2^numStateBits).
 	//   In other words, they are not both in the middle two quarters.
 	// * Let range = high - low + 1, then MAX_RANGE/4 < MIN_RANGE <= range
-	//   <= MAX_RANGE = 2^STATE_SIZE. These invariants for 'range' essentially dictate the maximum
+	//   <= MAX_RANGE = 2^numStateBits. These invariants for 'range' essentially dictate the maximum
 	//   total that the incoming frequency table can have, such that intermediate calculations don't overflow.
 	protected: virtual void update(const FrequencyTable &freqs, std::uint32_t symbol);
 	

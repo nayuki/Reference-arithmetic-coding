@@ -30,20 +30,20 @@ class ArithmeticCoderBase(object):
 		#   and compression gains beyond ~30 bits essentially zero in real-world applications.
 		# - Python has native bigint arithmetic, so there is no upper limit to the state size.
 		#   For Java and C++ where using native machine-sized integers makes the most sense,
-		#   they have a recommended value of STATE_SIZE=32 as the most versatile setting.
-		self.STATE_SIZE = statesize
-		# Maximum range (high+1-low) during coding (trivial), which is 2^STATE_SIZE = 1000...000.
-		self.MAX_RANGE = 1 << self.STATE_SIZE
-		# The top bit at width STATE_SIZE, which is 0100...000.
+		#   they have a recommended value of num_state_bits=32 as the most versatile setting.
+		self.num_state_bits = statesize
+		# Maximum range (high+1-low) during coding (trivial), which is 2^num_state_bits = 1000...000.
+		self.MAX_RANGE = 1 << self.num_state_bits
+		# The top bit at width num_state_bits, which is 0100...000.
 		self.TOP_MASK = self.MAX_RANGE >> 1
-		# The second highest bit at width STATE_SIZE, which is 0010...000. This is zero when STATE_SIZE=1.
+		# The second highest bit at width num_state_bits, which is 0010...000. This is zero when num_state_bits=1.
 		self.SECOND_MASK = self.TOP_MASK >> 1
 		# Minimum range (high+1-low) during coding (non-trivial), which is 0010...010.
 		self.MIN_RANGE = (self.MAX_RANGE >> 2) + 2
 		# Maximum allowed total from a frequency table at all times during coding. This differs from Java
 		# and C++ because Python's native bigint avoids constraining the size of intermediate computations.
 		self.MAX_TOTAL = self.MIN_RANGE
-		# Bit mask of STATE_SIZE ones, which is 0111...111.
+		# Bit mask of num_state_bits ones, which is 0111...111.
 		self.MASK = self.MAX_RANGE - 1
 		
 		# -- State fields --
@@ -56,14 +56,14 @@ class ArithmeticCoderBase(object):
 	# Updates the code range (low and high) of this arithmetic coder as a result
 	# of processing the given symbol with the given frequency table.
 	# Invariants that are true before and after encoding/decoding each symbol:
-	# - 0 <= low <= code <= high < 2^STATE_SIZE. ('code' exists only in the decoder.)
-	#   Therefore these variables are unsigned integers of STATE_SIZE bits.
-	# - (low < 1/2 * 2^STATE_SIZE) && (high >= 1/2 * 2^STATE_SIZE).
+	# - 0 <= low <= code <= high < 2^num_state_bits. ('code' exists only in the decoder.)
+	#   Therefore these variables are unsigned integers of num_state_bits bits.
+	# - (low < 1/2 * 2^num_state_bits) && (high >= 1/2 * 2^num_state_bits).
 	#   In other words, they are in different halves of the full range.
-	# - (low < 1/4 * 2^STATE_SIZE) || (high >= 3/4 * 2^STATE_SIZE).
+	# - (low < 1/4 * 2^num_state_bits) || (high >= 3/4 * 2^num_state_bits).
 	#   In other words, they are not both in the middle two quarters.
 	# - Let range = high - low + 1, then MAX_RANGE/4 < MIN_RANGE <= range
-	#   <= MAX_RANGE = 2^STATE_SIZE. These invariants for 'range' essentially
+	#   <= MAX_RANGE = 2^num_state_bits. These invariants for 'range' essentially
 	#   dictate the maximum total that the incoming frequency table can have.
 	def update(self, freqs, symbol):
 		# State check
@@ -142,7 +142,7 @@ class ArithmeticEncoder(ArithmeticCoderBase):
 	
 	
 	def shift(self):
-		bit = self.low >> (self.STATE_SIZE - 1)
+		bit = self.low >> (self.num_state_bits - 1)
 		self.output.write(bit)
 		
 		# Write out the saved underflow bits
@@ -167,7 +167,7 @@ class ArithmeticDecoder(ArithmeticCoderBase):
 		self.input = bitin
 		# The current raw code bits being buffered, which is always in the range [low, high].
 		self.code = 0
-		for _ in range(self.STATE_SIZE):
+		for _ in range(self.num_state_bits):
 			self.code = self.code << 1 | self.read_code_bit()
 	
 	
