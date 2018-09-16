@@ -14,10 +14,10 @@ using std::uint32_t;
 using std::uint64_t;
 
 
-ArithmeticCoderBase::ArithmeticCoderBase(int stateSize) {
-	if (stateSize < 1 || stateSize > 63)
+ArithmeticCoderBase::ArithmeticCoderBase(int numBits) {
+	if (numBits < 1 || numBits > 63)
 		throw std::domain_error("State size out of range");
-	numStateBits = stateSize;
+	numStateBits = numBits;
 	fullRange = static_cast<decltype(fullRange)>(1) << numStateBits;
 	halfRange = fullRange >> 1;
 	quarterRange = halfRange >> 1;
@@ -71,8 +71,8 @@ void ArithmeticCoderBase::update(const FrequencyTable &freqs, uint32_t symbol) {
 }
 
 
-ArithmeticDecoder::ArithmeticDecoder(int stateSize, BitInputStream &in) :
-		ArithmeticCoderBase(stateSize),
+ArithmeticDecoder::ArithmeticDecoder(int numBits, BitInputStream &in) :
+		ArithmeticCoderBase(numBits),
 		input(in),
 		code(0) {
 	for (int i = 0; i < numStateBits; i++)
@@ -134,8 +134,8 @@ int ArithmeticDecoder::readCodeBit() {
 }
 
 
-ArithmeticEncoder::ArithmeticEncoder(int stateSize, BitOutputStream &out) :
-	ArithmeticCoderBase(stateSize),
+ArithmeticEncoder::ArithmeticEncoder(int numBits, BitOutputStream &out) :
+	ArithmeticCoderBase(numBits),
 	output(out),
 	numUnderflow(0) {}
 

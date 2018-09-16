@@ -74,13 +74,13 @@ public abstract class ArithmeticCoderBase {
 	
 	/**
 	 * Constructs an arithmetic coder, which initializes the code range.
-	 * @param stateSize the number of bits for the arithmetic coding range
+	 * @param numBits the number of bits for the arithmetic coding range
 	 * @throws IllegalArgumentException if stateSize is outside the range [1, 62]
 	 */
-	public ArithmeticCoderBase(int stateSize) {
-		if (stateSize < 1 || stateSize > 62)
+	public ArithmeticCoderBase(int numBits) {
+		if (numBits < 1 || numBits > 62)
 			throw new IllegalArgumentException("State size out of range");
-		numStateBits = stateSize;
+		numStateBits = numBits;
 		fullRange = 1L << numStateBits;
 		halfRange = fullRange >>> 1;
 		quarterRange = halfRange >>> 1;

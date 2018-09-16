@@ -31,13 +31,13 @@ public final class ArithmeticEncoder extends ArithmeticCoderBase {
 	
 	/**
 	 * Constructs an arithmetic coding encoder based on the specified bit output stream.
-	 * @param stateSize the number of bits for the arithmetic coding range
+	 * @param numBits the number of bits for the arithmetic coding range
 	 * @param out the bit output stream to write to
 	 * @throws NullPointerException if the output stream is {@code null}
 	 * @throws IllegalArgumentException if stateSize is outside the range [1, 62]
 	 */
-	public ArithmeticEncoder(int stateSize, BitOutputStream out) {
-		super(stateSize);
+	public ArithmeticEncoder(int numBits, BitOutputStream out) {
+		super(numBits);
 		output = Objects.requireNonNull(out);
 		numUnderflow = 0;
 	}

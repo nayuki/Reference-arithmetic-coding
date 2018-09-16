@@ -16,8 +16,8 @@ python3 = sys.version_info.major >= 3
 class ArithmeticCoderBase(object):
 	
 	# Constructs an arithmetic coder, which initializes the code range.
-	def __init__(self, statesize):
-		if statesize < 1:
+	def __init__(self, numbits):
+		if numbits < 1:
 			raise ValueError("State size out of range")
 		
 		# -- Configuration fields --
@@ -31,7 +31,7 @@ class ArithmeticCoderBase(object):
 		# - Python has native bigint arithmetic, so there is no upper limit to the state size.
 		#   For Java and C++ where using native machine-sized integers makes the most sense,
 		#   they have a recommended value of num_state_bits=32 as the most versatile setting.
-		self.num_state_bits = statesize
+		self.num_state_bits = numbits
 		# Maximum range (high+1-low) during coding (trivial), which is 2^num_state_bits = 1000...000.
 		self.full_range = 1 << self.num_state_bits
 		# The top bit at width num_state_bits, which is 0100...000.
@@ -118,8 +118,8 @@ class ArithmeticCoderBase(object):
 class ArithmeticEncoder(ArithmeticCoderBase):
 	
 	# Constructs an arithmetic coding encoder based on the given bit output stream.
-	def __init__(self, statesize, bitout):
-		super(ArithmeticEncoder, self).__init__(statesize)
+	def __init__(self, numbits, bitout):
+		super(ArithmeticEncoder, self).__init__(numbits)
 		# The underlying bit output stream.
 		self.output = bitout
 		# Number of saved underflow bits. This value can grow without bound.
@@ -161,8 +161,8 @@ class ArithmeticDecoder(ArithmeticCoderBase):
 	
 	# Constructs an arithmetic coding decoder based on the
 	# given bit input stream, and fills the code bits.
-	def __init__(self, statesize, bitin):
-		super(ArithmeticDecoder, self).__init__(statesize)
+	def __init__(self, numbits, bitin):
+		super(ArithmeticDecoder, self).__init__(numbits)
 		# The underlying bit input stream.
 		self.input = bitin
 		# The current raw code bits being buffered, which is always in the range [low, high].
