@@ -13,7 +13,7 @@ python3 = sys.version_info.major >= 3
 # ---- Arithmetic coding core classes ----
 
 # Provides the state and behaviors that arithmetic coding encoders and decoders share.
-class ArithmeticCoderBase(object):
+class ArithmeticCoderBase:
 	
 	# Constructs an arithmetic coder, which initializes the code range.
 	def __init__(self, numbits):
@@ -232,7 +232,7 @@ class ArithmeticDecoder(ArithmeticCoderBase):
 # to get_symbol_limit()-1. Each symbol has a frequency, which is a non-negative integer.
 # Frequency table objects are primarily used for getting cumulative symbol
 # frequencies. These objects can be mutable depending on the implementation.
-class FrequencyTable(object):
+class FrequencyTable:
 	
 	# Returns the number of symbols in this frequency table, which is a positive number.
 	def get_symbol_limit(self):
@@ -527,7 +527,7 @@ class CheckedFrequencyTable(FrequencyTable):
 
 # A stream of bits that can be read. Because they come from an underlying byte stream,
 # the total number of bits is always a multiple of 8. The bits are read in big endian.
-class BitInputStream(object):
+class BitInputStream:
 	
 	# Constructs a bit input stream based on the given byte input stream.
 	def __init__(self, inp):
@@ -577,7 +577,7 @@ class BitInputStream(object):
 # A stream where bits can be written to. Because they are written to an underlying
 # byte stream, the end of the stream is padded with 0's up to a multiple of 8 bits.
 # The bits are written in big endian.
-class BitOutputStream(object):
+class BitOutputStream:
 	
 	# Constructs a bit output stream based on the given byte output stream.
 	def __init__(self, out):

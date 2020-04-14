@@ -9,7 +9,7 @@
 import arithmeticcoding
 
 
-class PpmModel(object):
+class PpmModel:
 	
 	def __init__(self, order, symbollimit, escapesymbol):
 		if order < -1 or symbollimit <= 0 or not (0 <= escapesymbol < symbollimit):
@@ -47,7 +47,7 @@ class PpmModel(object):
 	
 	
 	# Helper structure
-	class Context(object):
+	class Context:
 		
 		def __init__(self, symbols, hassubctx):
 			self.frequencies = arithmeticcoding.SimpleFrequencyTable([0] * symbols)
