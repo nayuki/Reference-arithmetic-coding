@@ -6,9 +6,6 @@
 # https://github.com/nayuki/Reference-arithmetic-coding
 # 
 
-import sys
-python3 = sys.version_info.major >= 3
-
 
 # ---- Arithmetic coding core classes ----
 
@@ -549,7 +546,7 @@ class BitInputStream:
 			if len(temp) == 0:
 				self.currentbyte = -1
 				return -1
-			self.currentbyte = temp[0] if python3 else ord(temp)
+			self.currentbyte = temp[0]
 			self.numbitsremaining = 8
 		assert self.numbitsremaining > 0
 		self.numbitsremaining -= 1
@@ -593,7 +590,7 @@ class BitOutputStream:
 		self.currentbyte = (self.currentbyte << 1) | b
 		self.numbitsfilled += 1
 		if self.numbitsfilled == 8:
-			towrite = bytes((self.currentbyte,)) if python3 else chr(self.currentbyte)
+			towrite = bytes((self.currentbyte,))
 			self.output.write(towrite)
 			self.currentbyte = 0
 			self.numbitsfilled = 0

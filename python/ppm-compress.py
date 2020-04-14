@@ -14,7 +14,6 @@
 
 import contextlib, sys
 import arithmeticcoding, ppmmodel
-python3 = sys.version_info.major >= 3
 
 
 # Must be at least -1 and match ppm-decompress.py. Warning: Exponential memory usage at O(257^n).
@@ -48,7 +47,7 @@ def compress(inp, bitout):
 		symbol = inp.read(1)
 		if len(symbol) == 0:
 			break
-		symbol = symbol[0] if python3 else ord(symbol)
+		symbol = symbol[0]
 		encode_symbol(model, history, symbol, enc)
 		model.increment_contexts(history, symbol)
 		

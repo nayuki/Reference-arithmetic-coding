@@ -12,7 +12,6 @@
 
 import sys
 import arithmeticcoding
-python3 = sys.version_info.major >= 3
 
 
 # Command line main application function.
@@ -47,7 +46,7 @@ def decompress(freqs, bitin, out):
 		symbol = dec.read(freqs)
 		if symbol == 256:  # EOF symbol
 			break
-		out.write(bytes((symbol,)) if python3 else chr(symbol))
+		out.write(bytes((symbol,)))
 
 
 # Main launcher

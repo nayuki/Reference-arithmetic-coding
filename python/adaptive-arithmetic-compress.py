@@ -16,7 +16,6 @@
 
 import contextlib, sys
 import arithmeticcoding
-python3 = sys.version_info.major >= 3
 
 
 # Command line main application function.
@@ -41,9 +40,8 @@ def compress(inp, bitout):
 		symbol = inp.read(1)
 		if len(symbol) == 0:
 			break
-		symbol = symbol[0] if python3 else ord(symbol)
-		enc.write(freqs, symbol)
-		freqs.increment(symbol)
+		enc.write(freqs, symbol[0])
+		freqs.increment(symbol[0])
 	enc.write(freqs, 256)  # EOF
 	enc.finish()  # Flush remaining code bits
 

@@ -15,7 +15,6 @@
 
 import contextlib, sys
 import arithmeticcoding
-python3 = sys.version_info.major >= 3
 
 
 # Command line main application function.
@@ -45,8 +44,7 @@ def get_frequencies(filepath):
 			b = input.read(1)
 			if len(b) == 0:
 				break
-			b = b[0] if python3 else ord(b)
-			freqs.increment(b)
+			freqs.increment(b[0])
 	return freqs
 
 
@@ -61,8 +59,7 @@ def compress(freqs, inp, bitout):
 		symbol = inp.read(1)
 		if len(symbol) == 0:
 			break
-		symbol = symbol[0] if python3 else ord(symbol)
-		enc.write(freqs, symbol)
+		enc.write(freqs, symbol[0])
 	enc.write(freqs, 256)  # EOF
 	enc.finish()  # Flush remaining code bits
 
