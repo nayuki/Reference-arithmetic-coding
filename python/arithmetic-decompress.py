@@ -12,6 +12,7 @@
 
 import sys
 import arithmeticcoding
+import time
 
 
 # Command line main application function.
@@ -41,12 +42,20 @@ def read_frequencies(bitin):
 
 
 def decompress(freqs, bitin, out):
+
+	t1 = time.time()
+
 	dec = arithmeticcoding.ArithmeticDecoder(32, bitin)
+	
 	while True:
 		symbol = dec.read(freqs)
 		if symbol == 256:  # EOF symbol
 			break
 		out.write(bytes((symbol,)))
+	
+	t2 = time.time()
+	
+	print("[+] Decompression finished in %.5f seconds"% (t2-t1) )
 
 
 # Main launcher

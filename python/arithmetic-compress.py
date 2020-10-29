@@ -16,6 +16,8 @@
 import contextlib, sys
 import arithmeticcoding
 
+import time
+import os
 
 # Command line main application function.
 def main(args):
@@ -33,6 +35,12 @@ def main(args):
 			contextlib.closing(arithmeticcoding.BitOutputStream(open(outputfile, "wb"))) as bitout:
 		write_frequencies(bitout, freqs)
 		compress(freqs, inp, bitout)
+
+	input_size = os.stat(inputfile).st_size
+	output_size = os.stat(outputfile).st_size
+	ratio = output_size * 100 /input_size
+	print("[+] Compression ratio  %.1f"% ratio )
+	
 
 
 # Returns a frequency table based on the bytes in the given file.
@@ -54,7 +62,11 @@ def write_frequencies(bitout, freqs):
 
 
 def compress(freqs, inp, bitout):
+
+	t1 = time.time()
+
 	enc = arithmeticcoding.ArithmeticEncoder(32, bitout)
+
 	while True:
 		symbol = inp.read(1)
 		if len(symbol) == 0:
@@ -62,7 +74,9 @@ def compress(freqs, inp, bitout):
 		enc.write(freqs, symbol[0])
 	enc.write(freqs, 256)  # EOF
 	enc.finish()  # Flush remaining code bits
+	t2 = time.time()
 
+	print("[+] Compression finished in %.5f seconds"% (t2-t1) )
 
 # Writes an unsigned integer of the given bit width to the given stream.
 def write_int(bitout, numbits, value):
