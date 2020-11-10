@@ -18,9 +18,10 @@ import time
 # Command line main application function.
 def main(args):
 	# Handle command line arguments
-	if len(args) != 2:
-		sys.exit("Usage: python arithmetic-decompress.py InputFile OutputFile")
-	inputfile, outputfile = args
+	if len(args) != 1:
+		sys.exit("Usage: python arithmetic-decompress.py InputFile")
+	inputfile = args[0]
+	outputfile = inputfile+'decoded'
 	
 	# Perform file decompression
 	with open(outputfile, "wb") as out, open(inputfile, "rb") as inp:

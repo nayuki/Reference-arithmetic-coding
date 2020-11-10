@@ -22,10 +22,11 @@ import os
 # Command line main application function.
 def main(args):
 	# Handle command line arguments
-	if len(args) != 2:
-		sys.exit("Usage: python arithmetic-compress.py InputFile OutputFile")
-	inputfile, outputfile = args
-	
+	if len(args) != 1:
+		sys.exit("Usage: python arithmetic-compress.py InputFile")
+	inputfile = args[0]
+	outputfile = inputfile + '.arithmetic'
+
 	# Read input file once to compute symbol frequencies
 	freqs = get_frequencies(inputfile)
 	freqs.increment(256)  # EOF symbol gets a frequency of 1
