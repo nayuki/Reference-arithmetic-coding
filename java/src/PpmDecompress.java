@@ -51,7 +51,7 @@ public final class PpmDecompress {
 		// its frequency is 1 in the order -1 context but its frequency
 		// is 0 in all other contexts (which have non-negative order).
 		ArithmeticDecoder dec = new ArithmeticDecoder(32, in);
-		PpmModel model = new PpmModel(MODEL_ORDER, 257, 256);
+		PpmModel model = new PpmModel(MODEL_ORDER, 256);
 		int[] history = new int[0];
 		
 		while (true) {

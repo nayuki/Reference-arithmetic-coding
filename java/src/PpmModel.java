@@ -23,12 +23,12 @@ final class PpmModel {
 	
 	/*---- Constructors ----*/
 	
-	public PpmModel(int order, int symbolLimit, int escapeSymbol) {
-		if (order < -1 || symbolLimit <= 0 || escapeSymbol < 0 || escapeSymbol >= symbolLimit)
+	public PpmModel(int order, int numSymbols) {
+		if (order < -1 || numSymbols <= 1)
 			throw new IllegalArgumentException();
 		this.modelOrder = order;
-		this.symbolLimit = symbolLimit;
-		this.escapeSymbol = escapeSymbol;
+		this.symbolLimit = numSymbols + 1;
+		this.escapeSymbol = numSymbols;
 		
 		if (order >= 0) {
 			rootContext = new Context(symbolLimit, order >= 1);
