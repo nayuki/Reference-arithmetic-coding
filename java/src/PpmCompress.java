@@ -73,7 +73,7 @@ public final class PpmCompress {
 			}
 		}
 		
-		encodeSymbol(model, history, 256, enc);  // EOF
+		encodeSymbol(model, history, model.escapeSymbol, enc);  // EOF
 		enc.finish();  // Flush remaining code bits
 	}
 	
@@ -93,12 +93,12 @@ public final class PpmCompress {
 				if (ctx == null)
 					continue outer;
 			}
-			if (symbol != 256 && ctx.frequencies.get(symbol) > 0) {
+			if (symbol != model.escapeSymbol && ctx.frequencies.get(symbol) > 0) {
 				enc.write(ctx.frequencies, symbol);
 				return;
 			}
 			// Else write context escape symbol and continue decrementing the order
-			enc.write(ctx.frequencies, 256);
+			enc.write(ctx.frequencies, model.escapeSymbol);
 		}
 		// Logic for order = -1
 		enc.write(model.orderMinus1Freqs, symbol);

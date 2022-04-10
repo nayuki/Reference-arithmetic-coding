@@ -57,7 +57,7 @@ public final class PpmDecompress {
 		while (true) {
 			// Decode and write one byte
 			int symbol = decodeSymbol(dec, model, history);
-			if (symbol == 256)  // EOF symbol
+			if (symbol == model.escapeSymbol)  // EOF symbol
 				break;
 			out.write(symbol);
 			model.incrementContexts(history, symbol);
@@ -88,7 +88,7 @@ public final class PpmDecompress {
 					continue outer;
 			}
 			int symbol = dec.read(ctx.frequencies);
-			if (symbol < 256)
+			if (symbol < model.escapeSymbol)
 				return symbol;
 			// Else we read the context escape symbol, so continue decrementing the order
 		}

@@ -14,7 +14,7 @@ final class PpmModel {
 	public final int modelOrder;
 	
 	private final int symbolLimit;
-	private final int escapeSymbol;
+	final int escapeSymbol;
 	
 	public final Context rootContext;
 	public final FrequencyTable orderMinus1Freqs;
