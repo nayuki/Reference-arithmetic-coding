@@ -111,8 +111,8 @@ public abstract class ArithmeticCodingTest {
 	// Tests that the given byte array can be compressed and decompressed to the same data, and not throw any exceptions.
 	private void test(byte[] b) {
 		try {
-			byte[] compressed = compress(b);
-			byte[] decompressed = decompress(compressed);
+			byte[] compressed = getCompressor().transformByteArray(b);
+			byte[] decompressed = getDecompressor().transformByteArray(compressed);
 			assertArrayEquals(b, decompressed);
 		} catch (EOFException e) {
 			fail("Unexpected EOF");
@@ -129,9 +129,8 @@ public abstract class ArithmeticCodingTest {
 	/*---- Abstract methods ----*/
 	
 	// Compression method that needs to be supplied by a subclass.
-	protected abstract byte[] compress(byte[] b) throws IOException;
+	protected abstract ByteTransformer getCompressor();
 	
 	// Decompression method that needs to be supplied by a subclass.
-	protected abstract byte[] decompress(byte[] b) throws IOException;
-	
+	protected abstract ByteTransformer getDecompressor();
 }

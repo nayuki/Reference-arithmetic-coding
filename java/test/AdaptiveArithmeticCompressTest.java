@@ -17,21 +17,14 @@ import java.io.InputStream;
  */
 public class AdaptiveArithmeticCompressTest extends ArithmeticCodingTest {
 	
-	protected byte[] compress(byte[] b) throws IOException {
-		InputStream in = new ByteArrayInputStream(b);
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		try (BitOutputStream bitOut = new BitOutputStream(out)) {
-			AdaptiveArithmeticCompress.compress(in, bitOut);
-		}
-		return out.toByteArray();
+	@Override
+	protected ByteTransformer getCompressor() {
+		return new AdaptiveArithmeticCompress();
 	}
 	
-	
-	protected byte[] decompress(byte[] b) throws IOException {
-		InputStream in = new ByteArrayInputStream(b);
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		AdaptiveArithmeticDecompress.decompress(new BitInputStream(in), out);
-		return out.toByteArray();
+	@Override
+	protected ByteTransformer getDecompressor() {
+		return new AdaptiveArithmeticDecompress();
 	}
 	
 }

@@ -6,13 +6,9 @@
  * https://github.com/nayuki/Reference-arithmetic-coding
  */
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import inputstreams.InputStreamFactory;
+
+import java.io.*;
 
 
 /**
@@ -24,21 +20,16 @@ import java.io.InputStream;
  * frequency table and updates it after each byte decoded. It is by design that the compressor and
  * decompressor have synchronized states, so that the data can be decompressed properly.</p>
  */
-public class AdaptiveArithmeticCompress {
+public class AdaptiveArithmeticCompress extends ByteTransformer {
 	
 	public static void main(String[] args) throws IOException {
-		// Handle command line arguments
-		if (args.length != 2) {
-			System.err.println("Usage: java AdaptiveArithmeticCompress InputFile OutputFile");
-			System.exit(1);
-			return;
-		}
-		File inputFile  = new File(args[0]);
-		File outputFile = new File(args[1]);
-		
-		// Perform file compression
-		try (InputStream in = new BufferedInputStream(new FileInputStream(inputFile));
-				BitOutputStream out = new BitOutputStream(new BufferedOutputStream(new FileOutputStream(outputFile)))) {
+		new AdaptiveArithmeticCompress().commandLineMain(args);
+	}
+
+	@Override
+	public void transformStream(InputStreamFactory inputStreamFactory, OutputStream outputStream) throws IOException {
+		try (InputStream in = inputStreamFactory.getStream();
+				BitOutputStream out = new BitOutputStream(outputStream)) {
 			compress(in, out);
 		}
 	}

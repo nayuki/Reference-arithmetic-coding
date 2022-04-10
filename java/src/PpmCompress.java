@@ -6,13 +6,9 @@
  * https://github.com/nayuki/Reference-arithmetic-coding
  */
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import inputstreams.InputStreamFactory;
+
+import java.io.*;
 import java.util.Arrays;
 
 
@@ -23,25 +19,21 @@ import java.util.Arrays;
  * <p>Note that both the compressor and decompressor need to use the same PPM context modeling logic.
  * The PPM algorithm can be thought of as a powerful generalization of adaptive arithmetic coding.</p>
  */
-public final class PpmCompress {
+public final class PpmCompress extends ByteTransformer {
 	
 	// Must be at least -1 and match PpmDecompress. Warning: Exponential memory usage at O(257^n).
 	private static final int MODEL_ORDER = 3;
 	
 	
 	public static void main(String[] args) throws IOException {
-		// Handle command line arguments
-		if (args.length != 2) {
-			System.err.println("Usage: java PpmCompress InputFile OutputFile");
-			System.exit(1);
-			return;
-		}
-		File inputFile  = new File(args[0]);
-		File outputFile = new File(args[1]);
-		
-		// Perform file compression
-		try (InputStream in = new BufferedInputStream(new FileInputStream(inputFile));
-				BitOutputStream out = new BitOutputStream(new BufferedOutputStream(new FileOutputStream(outputFile)))) {
+		new PpmCompress().commandLineMain(args);
+	}
+	
+	
+	@Override
+	public void transformStream(InputStreamFactory inputStreamFactory, OutputStream outputStream) throws IOException {
+		try (InputStream in = inputStreamFactory.getStream();
+				BitOutputStream out = new BitOutputStream(outputStream)) {
 			compress(in, out);
 		}
 	}
