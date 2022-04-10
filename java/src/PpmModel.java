@@ -31,7 +31,7 @@ final class PpmModel {
 		this.escapeSymbol = numSymbols;
 		
 		if (order >= 0) {
-			rootContext = new Context(symbolLimit, order >= 1);
+			rootContext = new Context(symbolLimit);
 		} else
 			rootContext = null;
 		orderMinus1Freqs = new FlatFrequencyTable(symbolLimit);
@@ -49,18 +49,14 @@ final class PpmModel {
 		
 		Context ctx = rootContext;
 		ctx.frequencies.increment(symbol);
-		int i = 0;
 		for (int sym : history) {
-			Context[] subctxs = ctx.subcontexts;
-			if (subctxs == null)
-				throw new AssertionError();
+			Context[] subctxs = ctx.getSubcontexts();
 			
 			if (subctxs[sym] == null) {
-				subctxs[sym] = new Context(symbolLimit, i + 1 < modelOrder);
+				subctxs[sym] = new Context(symbolLimit);
 			}
 			ctx = subctxs[sym];
 			ctx.frequencies.increment(symbol);
-			i++;
 		}
 	}
 	
@@ -72,18 +68,19 @@ final class PpmModel {
 		
 		public final FrequencyTable frequencies;
 		
-		public final Context[] subcontexts;
+		private Context[] subcontexts;
 		
-		
-		public Context(int symbols, boolean hasSubctx) {
+		public Context(int symbols) {
 			frequencies = new SimpleFrequencyTable(new int[symbols]);
 			frequencies.increment(symbols - 1);
-			if (hasSubctx)
-				subcontexts = new Context[symbols];
-			else
-				subcontexts = null;
 		}
 		
+		public Context[] getSubcontexts() {
+			if (subcontexts == null) {
+				subcontexts = new Context[frequencies.getSymbolLimit()];
+			}
+			return subcontexts;
+		}
 	}
 	
 }

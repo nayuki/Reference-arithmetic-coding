@@ -81,9 +81,7 @@ public final class PpmDecompress {
 		for (int order = history.length; order >= 0; order--) {
 			PpmModel.Context ctx = model.rootContext;
 			for (int i = 0; i < order; i++) {
-				if (ctx.subcontexts == null)
-					throw new AssertionError();
-				ctx = ctx.subcontexts[history[i]];
+				ctx = ctx.getSubcontexts()[history[i]];
 				if (ctx == null)
 					continue outer;
 			}
