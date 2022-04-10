@@ -13,7 +13,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
 
 
 /**
@@ -61,14 +60,7 @@ public final class PpmDecompress {
 				break;
 			out.write(symbol);
 			model.incrementContexts(history, symbol);
-			
-			if (model.modelOrder >= 1) {
-				// Prepend current symbol, dropping oldest symbol if necessary
-				if (history.length < model.modelOrder)
-					history = Arrays.copyOf(history, history.length + 1);
-				System.arraycopy(history, 0, history, 1, history.length - 1);
-				history[0] = symbol;
-			}
+			history = model.addToHistory(history, symbol);
 		}
 	}
 	

@@ -7,6 +7,8 @@
  */
 
 
+import java.util.Arrays;
+
 final class PpmModel {
 	
 	/*---- Fields ----*/
@@ -60,6 +62,16 @@ final class PpmModel {
 		}
 	}
 	
+	public int[] addToHistory(int[] history, int symbol) {
+		if (modelOrder >= 1) {
+			// Prepend current symbol, dropping oldest symbol if necessary
+			if (history.length < modelOrder)
+				history = Arrays.copyOf(history, history.length + 1);
+			System.arraycopy(history, 0, history, 1, history.length - 1);
+			history[0] = symbol;
+		}
+		return history;
+	}
 	
 	
 	/*---- Helper structure ----*/

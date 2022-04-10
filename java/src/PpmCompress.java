@@ -13,7 +13,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 
 
 /**
@@ -63,14 +62,7 @@ public final class PpmCompress {
 				break;
 			encodeSymbol(model, history, symbol, enc);
 			model.incrementContexts(history, symbol);
-			
-			if (model.modelOrder >= 1) {
-				// Prepend current symbol, dropping oldest symbol if necessary
-				if (history.length < model.modelOrder)
-					history = Arrays.copyOf(history, history.length + 1);
-				System.arraycopy(history, 0, history, 1, history.length - 1);
-				history[0] = symbol;
-			}
+			history = model.addToHistory(history, symbol);
 		}
 		
 		encodeSymbol(model, history, model.escapeSymbol, enc);  // EOF
