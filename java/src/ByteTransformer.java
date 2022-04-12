@@ -2,7 +2,11 @@ import inputstreams.ByteInputStreamFactory;
 import inputstreams.FileInputStreamFactory;
 import inputstreams.InputStreamFactory;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 public abstract class ByteTransformer {
 	public void commandLineMain(String[] args) throws IOException {
