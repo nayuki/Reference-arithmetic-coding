@@ -53,7 +53,7 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 		for (int x : frequencies) {
 			if (x < 0)
 				throw new IllegalArgumentException("Negative frequency");
-			total = checkedAdd(x, total);
+			total = Math.addExact(x, total);
 		}
 		cumulative = null;
 	}
@@ -80,7 +80,7 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 			if (x < 0)
 				throw new IllegalArgumentException("Negative frequency");
 			frequencies[i] = x;
-			total = checkedAdd(x, total);
+			total = Math.addExact(x, total);
 		}
 		cumulative = null;
 	}
@@ -126,7 +126,7 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 		int temp = total - frequencies[symbol];
 		if (temp < 0)
 			throw new AssertionError();
-		total = checkedAdd(temp, freq);
+		total = Math.addExact(temp, freq);
 		frequencies[symbol] = freq;
 		cumulative = null;
 	}
@@ -141,7 +141,7 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 		checkSymbol(symbol);
 		if (frequencies[symbol] == Integer.MAX_VALUE)
 			throw new ArithmeticException("Arithmetic overflow");
-		total = checkedAdd(total, 1);
+		total = Math.addExact(total, 1);
 		frequencies[symbol]++;
 		cumulative = null;
 	}
@@ -194,7 +194,7 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 		for (int i = 0; i < frequencies.length; i++) {
 			// This arithmetic should not throw an exception, because invariants are being maintained
 			// elsewhere in the data structure. This implementation is just a defensive measure.
-			sum = checkedAdd(frequencies[i], sum);
+			sum = Math.addExact(frequencies[i], sum);
 			cumulative[i + 1] = sum;
 		}
 		if (sum != total)
@@ -219,16 +219,6 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 		for (int i = 0; i < frequencies.length; i++)
 			sb.append(String.format("%d\t%d%n", i, frequencies[i]));
 		return sb.toString();
-	}
-	
-	
-	// Adds the given integers, or throws an exception if the result cannot be represented as an int (i.e. overflow).
-	private static int checkedAdd(int x, int y) {
-		int z = x + y;
-		if (y > 0 && z < x || y < 0 && z > x)
-			throw new ArithmeticException("Arithmetic overflow");
-		else
-			return z;
 	}
 	
 }
