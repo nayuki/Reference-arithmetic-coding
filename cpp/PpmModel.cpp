@@ -30,7 +30,7 @@ PpmModel::PpmModel(int order, uint32_t symLimit, uint32_t escapeSym) :
 		escapeSymbol(escapeSym),
 		rootContext(std::unique_ptr<Context>(nullptr)),
 		orderMinus1Freqs(FlatFrequencyTable(symbolLimit)) {
-	if (order < -1 || escapeSym >= symLimit)
+	if (!(order >= -1 && escapeSym < symLimit))
 		throw std::domain_error("Illegal argument");
 	if (order >= 0) {
 		rootContext.reset(new Context(symbolLimit, order >= 1));
@@ -42,7 +42,7 @@ PpmModel::PpmModel(int order, uint32_t symLimit, uint32_t escapeSym) :
 void PpmModel::incrementContexts(const vector<uint32_t> &history, uint32_t symbol) {
 	if (modelOrder == -1)
 		return;
-	if (history.size() > static_cast<unsigned int>(modelOrder) || symbol >= symbolLimit)
+	if (!(history.size() <= static_cast<unsigned int>(modelOrder) && symbol < symbolLimit))
 		throw std::invalid_argument("Illegal argument");
 	
 	Context *ctx = rootContext.get();

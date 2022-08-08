@@ -24,7 +24,7 @@ final class PpmModel {
 	/*---- Constructors ----*/
 	
 	public PpmModel(int order, int symbolLimit, int escapeSymbol) {
-		if (order < -1 || symbolLimit <= 0 || escapeSymbol < 0 || escapeSymbol >= symbolLimit)
+		if (!(order >= -1 && 0 <= escapeSymbol && escapeSymbol < symbolLimit))
 			throw new IllegalArgumentException();
 		this.modelOrder = order;
 		this.symbolLimit = symbolLimit;
@@ -45,7 +45,7 @@ final class PpmModel {
 	public void incrementContexts(int[] history, int symbol) {
 		if (modelOrder == -1)
 			return;
-		if (history.length > modelOrder || symbol < 0 || symbol >= symbolLimit)
+		if (!(history.length <= modelOrder && 0 <= symbol && symbol < symbolLimit))
 			throw new IllegalArgumentException();
 		
 		Context ctx = rootContext;

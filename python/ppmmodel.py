@@ -12,7 +12,7 @@ import arithmeticcoding
 class PpmModel:
 	
 	def __init__(self, order, symbollimit, escapesymbol):
-		if order < -1 or symbollimit <= 0 or not (0 <= escapesymbol < symbollimit):
+		if not ((order >= -1) and (0 <= escapesymbol < symbollimit)):
 			raise ValueError()
 		self.model_order = order
 		self.symbol_limit = symbollimit
@@ -29,7 +29,7 @@ class PpmModel:
 	def increment_contexts(self, history, symbol):
 		if self.model_order == -1:
 			return
-		if len(history) > self.model_order or not (0 <= symbol < self.symbol_limit):
+		if not ((len(history) <= self.model_order) and (0 <= symbol < self.symbol_limit)):
 			raise ValueError()
 		
 		ctx = self.root_context
