@@ -305,9 +305,7 @@ class FlatFrequencyTable(FrequencyTable):
 	
 	# Returns silently if 0 <= symbol < numsymbols, otherwise raises an exception.
 	def _check_symbol(self, symbol):
-		if 0 <= symbol < self.numsymbols:
-			return
-		else:
+		if not (0 <= symbol < self.numsymbols):
 			raise ValueError("Symbol out of range")
 	
 	# Returns a string representation of this frequency table. The format is subject to change.
@@ -427,9 +425,7 @@ class SimpleFrequencyTable(FrequencyTable):
 	
 	# Returns silently if 0 <= symbol < len(frequencies), otherwise raises an exception.
 	def _check_symbol(self, symbol):
-		if 0 <= symbol < len(self.frequencies):
-			return
-		else:
+		if not (0 <= symbol < len(self.frequencies)):
 			raise ValueError("Symbol out of range")
 	
 	
