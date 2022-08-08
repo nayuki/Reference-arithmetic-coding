@@ -96,7 +96,7 @@ public final class FlatFrequencyTable implements FrequencyTable {
 	
 	// Returns silently if 0 <= symbol < numSymbols, otherwise throws an exception.
 	private void checkSymbol(int symbol) {
-		if (symbol < 0 || symbol >= numSymbols)
+		if (!(0 <= symbol && symbol < numSymbols))
 			throw new IllegalArgumentException("Symbol out of range");
 	}
 	

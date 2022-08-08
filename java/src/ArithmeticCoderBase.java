@@ -78,7 +78,7 @@ public abstract class ArithmeticCoderBase {
 	 * @throws IllegalArgumentException if stateSize is outside the range [1, 62]
 	 */
 	public ArithmeticCoderBase(int numBits) {
-		if (numBits < 1 || numBits > 62)
+		if (!(1 <= numBits && numBits <= 62))
 			throw new IllegalArgumentException("State size out of range");
 		numStateBits = numBits;
 		fullRange = 1L << numStateBits;
@@ -121,7 +121,7 @@ public abstract class ArithmeticCoderBase {
 		if (low >= high || (low & stateMask) != low || (high & stateMask) != high)
 			throw new AssertionError("Low or high out of range");
 		long range = high - low + 1;
-		if (range < minimumRange || range > fullRange)
+		if (!(minimumRange <= range && range <= fullRange))
 			throw new AssertionError("Range out of range");
 		
 		// Frequency table values check

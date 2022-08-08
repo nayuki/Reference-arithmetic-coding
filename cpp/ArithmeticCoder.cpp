@@ -15,7 +15,7 @@ using std::uint64_t;
 
 
 ArithmeticCoderBase::ArithmeticCoderBase(int numBits) {
-	if (numBits < 1 || numBits > 63)
+	if (!(1 <= numBits && numBits <= 63))
 		throw std::domain_error("State size out of range");
 	numStateBits = numBits;
 	fullRange = static_cast<decltype(fullRange)>(1) << numStateBits;
@@ -37,7 +37,7 @@ void ArithmeticCoderBase::update(const FrequencyTable &freqs, uint32_t symbol) {
 	if (low >= high || (low & stateMask) != low || (high & stateMask) != high)
 		throw std::logic_error("Assertion error: Low or high out of range");
 	uint64_t range = high - low + 1;
-	if (range < minimumRange || range > fullRange)
+	if (!(minimumRange <= range && range <= fullRange))
 		throw std::logic_error("Assertion error: Range out of range");
 	
 	// Frequency table values check
@@ -108,10 +108,10 @@ uint32_t ArithmeticDecoder::read(const FrequencyTable &freqs) {
 		throw std::logic_error("Assertion error");
 	
 	uint32_t symbol = start;
-	if (offset < freqs.getLow(symbol) * range / total || freqs.getHigh(symbol) * range / total <= offset)
+	if (!(freqs.getLow(symbol) * range / total <= offset && offset < freqs.getHigh(symbol) * range / total))
 		throw std::logic_error("Assertion error");
 	update(freqs, symbol);
-	if (code < low || code > high)
+	if (!(low <= code && code <= high))
 		throw std::logic_error("Assertion error: Code out of range");
 	return symbol;
 }

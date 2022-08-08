@@ -24,7 +24,7 @@ int BitInputStream::read() {
 		currentByte = input.get();  // Note: istream.get() returns int, not char
 		if (currentByte == EOF)
 			return -1;
-		if (currentByte < 0 || currentByte > 255)
+		if (!(0 <= currentByte && currentByte <= 255))
 			throw std::logic_error("Assertion error");
 		numBitsRemaining = 8;
 	}

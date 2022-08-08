@@ -81,7 +81,7 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 		long value = ((offset + 1) * total - 1) / range;
 		if (value * range / total > offset)
 			throw new AssertionError();
-		if (value < 0 || value >= total)
+		if (!(0 <= value && value < total))
 			throw new AssertionError();
 		
 		// A kind of binary search. Find highest symbol such that freqs.getLow(symbol) <= value.
@@ -98,10 +98,10 @@ public final class ArithmeticDecoder extends ArithmeticCoderBase {
 			throw new AssertionError();
 		
 		int symbol = start;
-		if (offset < freqs.getLow(symbol) * range / total || freqs.getHigh(symbol) * range / total <= offset)
+		if (!(freqs.getLow(symbol) * range / total <= offset && offset < freqs.getHigh(symbol) * range / total))
 			throw new AssertionError();
 		update(freqs, symbol);
-		if (code < low || code > high)
+		if (!(low <= code && code <= high))
 			throw new AssertionError("Code out of range");
 		return symbol;
 	}

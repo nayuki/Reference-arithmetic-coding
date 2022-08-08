@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
 			int symbol = in.get();
 			if (symbol == EOF)
 				break;
-			if (symbol < 0 || symbol > 255)
+			if (!(0 <= symbol && symbol <= 255))
 				throw std::logic_error("Assertion error");
 			enc.write(freqs, static_cast<uint32_t>(symbol));
 		}

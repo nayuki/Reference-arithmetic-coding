@@ -204,7 +204,7 @@ public final class SimpleFrequencyTable implements FrequencyTable {
 	
 	// Returns silently if 0 <= symbol < frequencies.length, otherwise throws an exception.
 	private void checkSymbol(int symbol) {
-		if (symbol < 0 || symbol >= frequencies.length)
+		if (!(0 <= symbol && symbol < frequencies.length))
 			throw new IllegalArgumentException("Symbol out of range");
 	}
 	

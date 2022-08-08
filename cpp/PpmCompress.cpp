@@ -72,7 +72,7 @@ static void compress(std::ifstream &in, BitOutputStream &out) {
 		int symbol = in.get();
 		if (symbol == EOF)
 			break;
-		if (symbol < 0 || symbol > 255)
+		if (!(0 <= symbol && symbol <= 255))
 			throw std::logic_error("Assertion error");
 		uint32_t sym = static_cast<uint32_t>(symbol);
 		encodeSymbol(model, history, sym, enc);
