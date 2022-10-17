@@ -147,8 +147,11 @@ void ArithmeticEncoder::write(const FrequencyTable &freqs, uint32_t symbol) {
 
 
 void ArithmeticEncoder::finish() {
-	shift();
-	output.write(1);
+	numUnderflow++;
+	bool bit = static_cast<bool>(low >= quarterRange);
+	output.write(bit);
+	for (; numUnderflow > 0; numUnderflow--)
+		output.write(!bit);
 }
 
 
