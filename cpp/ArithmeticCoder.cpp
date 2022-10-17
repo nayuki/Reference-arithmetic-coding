@@ -147,6 +147,7 @@ void ArithmeticEncoder::write(const FrequencyTable &freqs, uint32_t symbol) {
 
 
 void ArithmeticEncoder::finish() {
+	shift();
 	output.write(1);
 }
 
