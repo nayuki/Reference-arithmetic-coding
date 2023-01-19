@@ -18,7 +18,7 @@ BitInputStream::BitInputStream(std::istream &in) :
 	
 	
 int BitInputStream::read() {
-	if (currentByte == -1)
+	if (currentByte == EOF)
 		return -1;
 	if (numBitsRemaining == 0) {
 		currentByte = input.get();  // Note: istream.get() returns int, not char
