@@ -9,9 +9,8 @@
  * decompressor have synchronized states, so that the data can be decompressed properly.
  * 
  * Copyright (c) Project Nayuki
- * 
+ * MIT License. See readme file.
  * https://www.nayuki.io/page/reference-arithmetic-coding
- * https://github.com/nayuki/Reference-arithmetic-coding
  */
 
 #include <cstdint>

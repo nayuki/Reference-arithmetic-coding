@@ -8,9 +8,8 @@
 # of 256 symbol frequencies, and then followed by the arithmetic-coded data.
 # 
 # Copyright (c) Project Nayuki
-# 
+# MIT License. See readme file.
 # https://www.nayuki.io/page/reference-arithmetic-coding
-# https://github.com/nayuki/Reference-arithmetic-coding
 # 
 
 import contextlib, sys

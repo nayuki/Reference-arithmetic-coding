@@ -1,9 +1,9 @@
 /* 
  * Reference arithmetic coding
- * Copyright (c) Project Nayuki
  * 
+ * Copyright (c) Project Nayuki
+ * MIT License. See readme file.
  * https://www.nayuki.io/page/reference-arithmetic-coding
- * https://github.com/nayuki/Reference-arithmetic-coding
  */
 
 #include <stdexcept>
