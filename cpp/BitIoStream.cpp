@@ -8,6 +8,7 @@
 
 #include <limits>
 #include <stdexcept>
+#include <string>
 #include "BitIoStream.hpp"
 
 
@@ -18,11 +19,11 @@ BitInputStream::BitInputStream(std::istream &in) :
 	
 	
 int BitInputStream::read() {
-	if (currentByte == EOF)
+	if (currentByte == std::char_traits<char>::eof())
 		return -1;
 	if (numBitsRemaining == 0) {
 		currentByte = input.get();  // Note: istream.get() returns int, not char
-		if (currentByte == EOF)
+		if (currentByte == std::char_traits<char>::eof())
 			return -1;
 		if (!(0 <= currentByte && currentByte <= 255))
 			throw std::logic_error("Assertion error");

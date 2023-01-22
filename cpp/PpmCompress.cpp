@@ -17,6 +17,7 @@
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
+#include <string>
 #include <vector>
 #include "ArithmeticCoder.hpp"
 #include "BitIoStream.hpp"
@@ -69,7 +70,7 @@ static void compress(std::ifstream &in, BitOutputStream &out) {
 	while (true) {
 		// Read and encode one byte
 		int symbol = in.get();
-		if (symbol == EOF)
+		if (symbol == std::char_traits<char>::eof())
 			break;
 		if (!(0 <= symbol && symbol <= 255))
 			throw std::logic_error("Assertion error");

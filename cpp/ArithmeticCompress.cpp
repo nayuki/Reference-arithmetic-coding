@@ -17,6 +17,7 @@
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
+#include <string>
 #include <vector>
 #include "ArithmeticCoder.hpp"
 #include "BitIoStream.hpp"
@@ -40,7 +41,7 @@ int main(int argc, char *argv[]) {
 	freqs.increment(256);  // EOF symbol gets a frequency of 1
 	while (true) {
 		int b = in.get();
-		if (b == EOF)
+		if (b == std::char_traits<char>::eof())
 			break;
 		if (b < 0 || b > 255)
 			throw std::logic_error("Assertion error");
@@ -65,7 +66,7 @@ int main(int argc, char *argv[]) {
 		while (true) {
 			// Read and encode one byte
 			int symbol = in.get();
-			if (symbol == EOF)
+			if (symbol == std::char_traits<char>::eof())
 				break;
 			if (!(0 <= symbol && symbol <= 255))
 				throw std::logic_error("Assertion error");
