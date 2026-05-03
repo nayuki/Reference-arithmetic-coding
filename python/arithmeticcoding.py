@@ -118,7 +118,7 @@ class ArithmeticEncoder(ArithmeticCoderBase):
 	
 	# Constructs an arithmetic coding encoder based on the given bit output stream.
 	def __init__(self, numbits, bitout):
-		super(ArithmeticEncoder, self).__init__(numbits)
+		super(ArithmeticEncoder).__init__(numbits)
 		# The underlying bit output stream.
 		self.output = bitout
 		# Number of saved underflow bits. This value can grow without bound.
@@ -161,7 +161,7 @@ class ArithmeticDecoder(ArithmeticCoderBase):
 	# Constructs an arithmetic coding decoder based on the
 	# given bit input stream, and fills the code bits.
 	def __init__(self, numbits, bitin):
-		super(ArithmeticDecoder, self).__init__(numbits)
+		super(ArithmeticDecoder).__init__(numbits)
 		# The underlying bit input stream.
 		self.input = bitin
 		# The current raw code bits being buffered, which is always in the range [low, high].
